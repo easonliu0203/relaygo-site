@@ -1,3 +1,1 @@
-# RelayGo app-ads.txt
-# Google AdMob - replace YOUR_PUBLISHER_ID with your actual pub-XXXXXXXXXXXXXXXX
-# google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0
+google.com, pub-8144798491587533, DIRECT, f08c47fec0942fa0
