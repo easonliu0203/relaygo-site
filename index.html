@@ -61,12 +61,50 @@
       transition: background 0.3s;
     }
     .badge:hover { background: rgba(255,255,255,0.25); }
+    .features {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+      margin-bottom: 40px;
+    }
+    .feature {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 16px;
+      width: 160px;
+      text-align: center;
+    }
+    .feature-icon { font-size: 32px; margin-bottom: 8px; }
+    .feature-title { font-size: 14px; font-weight: 600; }
+    .feature-desc { font-size: 12px; opacity: 0.8; margin-top: 4px; }
+    .links {
+      margin-top: 32px;
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      font-size: 14px;
+    }
+    .links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .links a:hover { color: #fff; text-decoration: underline; }
     .contact {
-      margin-top: 48px;
+      margin-top: 24px;
       font-size: 14px;
       opacity: 0.7;
     }
     .contact a { color: #fff; }
+    .copyright {
+      margin-top: 16px;
+      font-size: 12px;
+      opacity: 0.5;
+    }
   </style>
 </head>
 <body>
@@ -83,9 +121,31 @@
         Google Play
       </a>
     </div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🚗</div>
+        <div class="feature-title">Professional Drivers</div>
+        <div class="feature-desc">Verified & experienced</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📍</div>
+        <div class="feature-title">Real-time Tracking</div>
+        <div class="feature-desc">Know where your ride is</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💳</div>
+        <div class="feature-title">Secure Payment</div>
+        <div class="feature-desc">Multiple payment options</div>
+      </div>
+    </div>
+    <div class="links">
+      <a href="https://easonliu0203.github.io/relaygo-privacy-policy/customer.html" target="_blank" rel="noopener">Privacy Policy</a>
+      <a href="mailto:support@relaygo.pro">Support</a>
+    </div>
     <p class="contact">
       Contact: <a href="mailto:support@relaygo.pro">support@relaygo.pro</a>
     </p>
+    <p class="copyright">&copy; 2025 RelayGo. All rights reserved.</p>
   </div>
 </body>
 </html>
