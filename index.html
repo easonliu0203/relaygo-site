@@ -21,7 +21,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -50,6 +50,7 @@
     }
     html[lang="zh-TW"] body { font-family: 'Noto Sans TC', 'Inter', -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
     html[lang="ja"] body { font-family: 'Noto Sans JP', 'Inter', -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif; }
+    html[lang="ko"] body { font-family: 'Noto Sans KR', 'Inter', -apple-system, 'Malgun Gothic', sans-serif; }
 
     /* ===== Navigation ===== */
     .navbar {
@@ -729,6 +730,7 @@
             <button class="lang-option active" data-lang="zh-TW">繁體中文</button>
             <button class="lang-option" data-lang="en">English</button>
             <button class="lang-option" data-lang="ja">日本語</button>
+            <button class="lang-option" data-lang="ko">한국어</button>
           </div>
         </div>
       </div>
@@ -1156,10 +1158,73 @@
         footer_driver_privacy: 'ドライバープライバシーポリシー',
         footer_contact: 'お問い合わせ',
         footer_made: '台湾から心を込めて'
+      },
+      'ko': {
+        nav_features: '특징',
+        nav_how: '이용 방법',
+        nav_download: '앱 다운로드',
+        hero_badge: 'iOS & Android 지원',
+        hero_title: '프리미엄<br>차터 서비스<br><span class="highlight">간편 예약</span>',
+        hero_subtitle: '공항 픽업, 시내 관광, 비즈니스 이동을 위한 전문 드라이버를 예약하세요. 안전하고 편리한 대만 여행.',
+        store_apple_label: '다운로드',
+        store_google_label: '다운로드',
+        phone_tagline: '나만의 차터 서비스',
+        phone_current_trip: '현재 여정',
+        phone_active: '진행 중',
+        phone_origin: '타이베이역',
+        phone_dest: '타오위안공항 T1',
+        phone_driver: '드라이버',
+        phone_driver_info: 'Toyota Alphard · 블랙<br>약 5분 후 도착',
+        phone_home: '홈',
+        phone_orders: '예약',
+        phone_chat: '채팅',
+        phone_profile: '마이',
+        float_confirmed: '예약 확정',
+        float_en_route: '드라이버 출발',
+        float_tracking: '실시간 추적',
+        float_eta: '도착까지 5분',
+        stat_rides: '완료된 여정',
+        stat_drivers: '전문 드라이버',
+        stat_rating: '평균 평점',
+        stat_support: '고객 지원',
+        features_label: '특징',
+        features_title: '완벽한 탑승 경험을 위한 모든 것',
+        features_desc: '예약부터 도착까지, RelayGo는 최신 기술로 원활한 차터 서비스 경험을 제공합니다.',
+        f1_title: '인증된 드라이버',
+        f1_desc: '모든 드라이버는 신원 조회, 면허 확인, 안전 교육을 거쳐 플랫폼에 참여합니다.',
+        f2_title: '실시간 추적',
+        f2_desc: '가족과 친구에게 실시간 위치를 공유하세요. 탑승부터 하차까지 드라이버를 추적할 수 있습니다.',
+        f3_title: '다양한 결제 수단',
+        f3_desc: '신용카드, 모바일 결제, 현금을 지원합니다. 숨겨진 수수료 없이 투명한 요금.',
+        f4_title: 'AI 여행 플래너',
+        f4_desc: 'AI 어시스턴트가 완벽한 여행 일정을 계획해 드립니다. 관광지와 맛집을 개인 맞춤 추천.',
+        f5_title: '다국어 지원',
+        f5_desc: '앱은 다국어를 지원하며, 승객과 드라이버 간 실시간 번역 기능을 제공합니다.',
+        f6_title: '평가 시스템',
+        f6_desc: '다른 승객의 실제 후기를 읽고, 탑승 경험을 평가하여 서비스 품질을 유지하세요.',
+        how_label: '이용 방법',
+        how_title: '4단계 간편 예약',
+        how_desc: 'RelayGo 사용법은 간단합니다. 프로 차터 서비스가 바로 시작됩니다.',
+        s1_title: '앱 다운로드',
+        s1_desc: 'App Store 또는 Google Play에서 RelayGo를 무료 다운로드',
+        s2_title: '경로 설정',
+        s2_desc: '탑승 장소, 목적지, 날짜와 시간을 입력',
+        s3_title: '드라이버 매칭',
+        s3_desc: '인증된 전문 드라이버가 배정됩니다',
+        s4_title: '여행을 즐기세요',
+        s4_desc: '편하게 앉아서 안전하게 목적지에 도착',
+        cta_title: '프리미엄 이동 경험을<br>시작하시겠습니까?',
+        cta_desc: '지금 RelayGo를 다운로드하고 첫 번째 여행을 예약하세요. 프로 차터 서비스가 원탭으로.',
+        footer_desc: '대만에서 신뢰할 수 있는 전문 차터 서비스 파트너. 안전하고 정시에 도착.',
+        footer_legal: '법적 정보',
+        footer_customer_privacy: '고객 개인정보 처리방침',
+        footer_driver_privacy: '드라이버 개인정보 처리방침',
+        footer_contact: '문의',
+        footer_made: '대만에서 정성을 담아'
       }
     };
 
-    var LANG_LABELS = { 'zh-TW': '繁中', 'en': 'EN', 'ja': '日本語' };
+    var LANG_LABELS = { 'zh-TW': '繁中', 'en': 'EN', 'ja': '日本語', 'ko': '한국어' };
 
     // ===== Language Detection & Switching =====
     function detectLang() {
@@ -1174,6 +1239,7 @@
 
       // 3. Browser language
       var nav = (navigator.language || '').toLowerCase();
+      if (nav.startsWith('ko')) return 'ko';
       if (nav.startsWith('ja')) return 'ja';
       if (nav.startsWith('zh')) return 'zh-TW';
       return 'en';
@@ -1211,7 +1277,8 @@
       var titles = {
         'zh-TW': 'RelayGo - 專業包車服務平台',
         'en': 'RelayGo - Professional Charter Service',
-        'ja': 'RelayGo - プロフェッショナルチャーターサービス'
+        'ja': 'RelayGo - プロフェッショナルチャーターサービス',
+        'ko': 'RelayGo - 프리미엄 차터 서비스'
       };
       document.title = titles[lang] || titles['en'];
 
