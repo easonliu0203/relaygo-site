@@ -21,7 +21,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -49,6 +49,7 @@
       -webkit-font-smoothing: antialiased;
     }
     html[lang="zh-TW"] body { font-family: 'Noto Sans TC', 'Inter', -apple-system, 'PingFang TC', 'Microsoft JhengHei', sans-serif; }
+    html[lang="zh-CN"] body { font-family: 'Noto Sans SC', 'Inter', -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
     html[lang="ja"] body { font-family: 'Noto Sans JP', 'Inter', -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif; }
     html[lang="ko"] body { font-family: 'Noto Sans KR', 'Inter', -apple-system, 'Malgun Gothic', sans-serif; }
 
@@ -1037,6 +1038,7 @@
           </button>
           <div class="lang-dropdown" id="langDropdown">
             <button class="lang-option active" data-lang="zh-TW">繁體中文</button>
+            <button class="lang-option" data-lang="zh-CN">简体中文</button>
             <button class="lang-option" data-lang="en">English</button>
             <button class="lang-option" data-lang="ja">日本語</button>
             <button class="lang-option" data-lang="ko">한국어</button>
@@ -1635,6 +1637,124 @@
         pricing_note: '實際費用依上車地點與目的地計算，下載 App 即可查看精確報價。',
         pricing_cta: '下載 App 查看報價'
       },
+      'zh-CN': {
+        nav_services: '服务项目',
+        nav_fleet: '车型介绍',
+        nav_pricing: '价格方案',
+        nav_download: '下载 App',
+        hero_badge: 'iOS & Android 双平台上架',
+        hero_title: '专业包车服务<br><span class="highlight">轻松预约</span>',
+        hero_subtitle: '预约专业司机，享受机场接送、城市观光、商务出行。安全可靠，轻松无忧。',
+        store_apple_label: '下载于',
+        store_google_label: '下载于',
+        phone_tagline: '您的专属包车服务',
+        phone_current_trip: '当前行程',
+        phone_active: '进行中',
+        phone_origin: '台北车站',
+        phone_dest: '桃园机场 T1',
+        phone_driver: '司机',
+        phone_driver_info: 'Toyota Alphard · 黑色<br>预计 5 分钟到达',
+        phone_home: '首页',
+        phone_orders: '订单',
+        phone_chat: '聊天',
+        phone_profile: '我的',
+        float_confirmed: '预约已确认',
+        float_en_route: '司机已出发',
+        float_tracking: '实时追踪',
+        float_eta: '预计 5 分钟',
+        stat_drivers: '专业司机',
+        stat_legal: '合法司机',
+        stat_licensed: '专业证照',
+        features_label: '功能特色',
+        features_title: '打造完美乘车体验',
+        features_desc: '从预约到抵达，RelayGo 以先进技术为您提供无缝的包车服务体验。',
+        f1_title: '认证司机',
+        f1_desc: '每位司机均通过背景调查、驾照验证及安全培训，确保您的行车安全。',
+        f2_title: '实时追踪',
+        f2_desc: '与亲友分享实时位置，从上车到下车全程追踪司机动态。',
+        f3_title: '多元支付',
+        f3_desc: '支持信用卡、移动支付、现金等多种付款方式，价格透明无隐藏费用。',
+        f4_title: 'AI 行程规划师',
+        f4_desc: '让 AI 助手为您规划完美行程，提供景点与美食的个性化推荐。',
+        f5_title: '多语言支持',
+        f5_desc: 'App 支持多国语言，乘客与司机之间提供实时翻译功能。',
+        f6_title: '评价系统',
+        f6_desc: '阅读其他乘客的真实评价，为您的乘车体验评分以维护服务品质。',
+        how_label: '使用方式',
+        how_title: '4 步骤轻松预约',
+        how_desc: '使用 RelayGo 快速上手，您的专业包车即刻启程。',
+        s1_title: '下载 App',
+        s1_desc: '在 App Store 或 Google Play 免费下载 RelayGo',
+        s2_title: '设定路线',
+        s2_desc: '输入上车地点、目的地、日期与时间',
+        s3_title: '匹配司机',
+        s3_desc: '系统为您分配经过认证的专业司机',
+        s4_title: '享受旅程',
+        s4_desc: '轻松上车，安心抵达目的地',
+        cta_title: '准备好体验<br>顶级包车服务了吗？',
+        cta_desc: '立即下载 RelayGo，预约您的第一趟旅程。专业包车服务，一键即达。',
+        footer_desc: '您在台湾值得信赖的专业包车伙伴。安全可靠，准时到达。',
+        footer_legal: '法律条款',
+        footer_customer_privacy: '客户隐私权政策',
+        footer_driver_privacy: '司机隐私权政策',
+        footer_contact: '联系我们',
+        footer_made: '用心打造于台湾',
+        services_label: '服务项目',
+        services_title: '全方位包车服务',
+        services_desc: '无论是机场接送、包车旅游或商务出行，RelayGo 都能满足您的需求。',
+        svc1_title: '机场接送',
+        svc1_desc: '专业司机准时接送，行李协助搬运，航班延误免费等候。',
+        svc2_title: '包车旅游',
+        svc2_desc: '6 或 8 小时包车方案，司机兼向导，带您畅游全台热门景点。',
+        svc2_tag1: '北部景点',
+        svc2_tag2: '中南部',
+        svc2_tag3: '东部花莲',
+        svc2_tag4: '定制路线',
+        svc3_title: '商务出行',
+        svc3_desc: '高端车款、专业司机、准时可靠，满足您的商务接待与会议用车需求。',
+        svc3_tag1: '会议接送',
+        svc3_tag2: '企业用车',
+        svc3_tag3: 'VIP 接待',
+        fleet_img_label: '示意图',
+        fleet_label: '车型介绍',
+        fleet_title: '多元车型任您选',
+        fleet_desc: '从经济轿车到豪华商务车，总有一款适合您的出行需求。',
+        fleet_s_name: '五人座轿车',
+        fleet_s_detail: '扣除 1 位司机，乘客最多 3 位（含大人儿童婴儿）',
+        fleet_m_name: '五人座休旅车',
+        fleet_m_detail: '扣除 1 位司机，乘客最多 4 位（含大人儿童婴儿）',
+        fleet_l_name: '九人座休旅车',
+        fleet_l_detail: '扣除 1 位司机，乘客最多 8 位（含大人儿童婴儿）',
+        fleet_xl_detail: '顶级商务体验，座位与行李弹性配置',
+        fleet_pax: '乘客',
+        fleet_pax_unit: '位',
+        fleet_luggage: '行李',
+        fleet_luggage_28: '28寸行李',
+        fleet_xl_lug1: '6×24" 或 5×28" 行李（收起第三排座椅）',
+        fleet_xl_lug2: '4×24" 行李（收起第三排一张座椅）',
+        fleet_xl_lug3: '2×24" 行李',
+        pricing_label: '价格方案',
+        pricing_title: '透明合理的价格',
+        pricing_desc: '无隐藏费用，价格公开透明。下载 App 即可查看精确报价。',
+        pricing_tab_airport: '机场接送',
+        pricing_tab_charter: '包车旅游',
+        pricing_airport: '机场',
+        pricing_vehicle: '车型',
+        pricing_s: '五人座轿车',
+        pricing_m: '五人座休旅车',
+        pricing_l: '九人座休旅车',
+        pricing_xl: 'Toyota Alphard',
+        pricing_tpe: '桃园 TPE',
+        pricing_tsa: '松山 TSA',
+        pricing_rmq: '台中 RMQ',
+        pricing_khh: '高雄 KHH',
+        pricing_from: '起',
+        pricing_6h: '6 小时',
+        pricing_8h: '8 小时',
+        pricing_overtime: '超时 / 小时',
+        pricing_note: '实际费用依上车地点与目的地计算，下载 App 即可查看精确报价。',
+        pricing_cta: '下载 App 查看报价'
+      },
       'en': {
         nav_services: 'Services',
         nav_fleet: 'Fleet',
@@ -1991,7 +2111,7 @@
       }
     };
 
-    var LANG_LABELS = { 'zh-TW': '繁中', 'en': 'EN', 'ja': '日本語', 'ko': '한국어' };
+    var LANG_LABELS = { 'zh-TW': '繁中', 'zh-CN': '简中', 'en': 'EN', 'ja': '日本語', 'ko': '한국어' };
 
     // ===== Language Detection & Switching =====
     function detectLang() {
@@ -2008,6 +2128,7 @@
       var nav = (navigator.language || '').toLowerCase();
       if (nav.startsWith('ko')) return 'ko';
       if (nav.startsWith('ja')) return 'ja';
+      if (nav === 'zh-cn' || nav === 'zh-sg' || nav.startsWith('zh-hans')) return 'zh-CN';
       if (nav.startsWith('zh')) return 'zh-TW';
       return 'en';
     }
@@ -2043,6 +2164,7 @@
       // Update page title
       var titles = {
         'zh-TW': 'RelayGo - 專業包車服務平台',
+        'zh-CN': 'RelayGo - 专业包车服务平台',
         'en': 'RelayGo - Professional Charter Service',
         'ja': 'RelayGo - プロフェッショナルチャーターサービス',
         'ko': 'RelayGo - 프리미엄 차터 서비스'
