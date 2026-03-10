@@ -621,6 +621,26 @@
       font-size: 42px;
       margin-bottom: 12px;
     }
+    .fleet-img-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+    .fleet-img-wrap img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    .fleet-img-label {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      font-size: 10px;
+      color: var(--white);
+      background: rgba(0,0,0,0.5);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
     .fleet-card h3 {
       font-size: 18px;
       font-weight: 700;
@@ -1113,20 +1133,16 @@
   <div class="stats-bar">
     <div class="stats-inner">
       <div class="stat-item fade-up">
-        <div class="stat-number">5,000+</div>
-        <div class="stat-label" data-i18n="stat_rides">完成行程</div>
-      </div>
-      <div class="stat-item fade-up">
         <div class="stat-number">500+</div>
         <div class="stat-label" data-i18n="stat_drivers">專業司機</div>
       </div>
       <div class="stat-item fade-up">
-        <div class="stat-number">4.9</div>
-        <div class="stat-label" data-i18n="stat_rating">平均評分</div>
+        <div class="stat-number">✅</div>
+        <div class="stat-label" data-i18n="stat_legal">合法司機</div>
       </div>
       <div class="stat-item fade-up">
-        <div class="stat-number">24/7</div>
-        <div class="stat-label" data-i18n="stat_support">客服支援</div>
+        <div class="stat-number">🏅</div>
+        <div class="stat-label" data-i18n="stat_licensed">專業證照</div>
       </div>
     </div>
   </div>
@@ -1229,7 +1245,10 @@
       </div>
       <div class="fleet-grid">
         <div class="fleet-card fade-up">
-          <div class="fleet-icon">🚗</div>
+          <div class="fleet-img-wrap">
+            <img src="5人座轎車.webp" alt="五人座轎車">
+            <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
+          </div>
           <h3 data-i18n="fleet_s_name">五人座轎車</h3>
           <div class="fleet-detail" data-i18n="fleet_s_detail">扣除 1 位司機，乘客最多 3 位（含大人孩童嬰兒）</div>
           <div class="fleet-specs">
@@ -1246,7 +1265,10 @@
           </div>
         </div>
         <div class="fleet-card fade-up">
-          <div class="fleet-icon">🚙</div>
+          <div class="fleet-img-wrap">
+            <img src="5人座休旅車.webp" alt="五人座休旅車">
+            <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
+          </div>
           <h3 data-i18n="fleet_m_name">五人座休旅車</h3>
           <div class="fleet-detail" data-i18n="fleet_m_detail">扣除 1 位司機，乘客最多 4 位（含大人孩童嬰兒）</div>
           <div class="fleet-specs">
@@ -1263,7 +1285,10 @@
           </div>
         </div>
         <div class="fleet-card popular fade-up">
-          <div class="fleet-icon">🚐</div>
+          <div class="fleet-img-wrap">
+            <img src="9人座.webp" alt="九人座休旅車">
+            <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
+          </div>
           <h3 data-i18n="fleet_l_name">九人座休旅車</h3>
           <div class="fleet-detail" data-i18n="fleet_l_detail">扣除 1 位司機，乘客最多 8 位（含大人孩童嬰兒）</div>
           <div class="fleet-specs">
@@ -1280,7 +1305,10 @@
           </div>
         </div>
         <div class="fleet-card fade-up">
-          <div class="fleet-icon">🚘</div>
+          <div class="fleet-img-wrap">
+            <img src="Toyota Alphard.webp" alt="Toyota Alphard">
+            <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
+          </div>
           <h3>Toyota Alphard</h3>
           <div class="fleet-detail" data-i18n="fleet_xl_detail">頂級商務體驗，座位與行李彈性配置</div>
           <div class="fleet-config-list">
@@ -1514,10 +1542,9 @@
         float_en_route: '司機已出發',
         float_tracking: '即時追蹤',
         float_eta: '預計 5 分鐘',
-        stat_rides: '完成行程',
         stat_drivers: '專業司機',
-        stat_rating: '平均評分',
-        stat_support: '客服支援',
+        stat_legal: '合法司機',
+        stat_licensed: '專業證照',
         features_label: '功能特色',
         features_title: '打造完美乘車體驗',
         features_desc: '從預約到抵達，RelayGo 以先進技術為您提供無縫的包車服務體驗。',
@@ -1568,6 +1595,7 @@
         svc3_tag1: '會議接送',
         svc3_tag2: '企業用車',
         svc3_tag3: 'VIP 接待',
+        fleet_img_label: '示意圖',
         fleet_label: '車型介紹',
         fleet_title: '多元車型任您選',
         fleet_desc: '從經濟轎車到豪華商務車，總有一款適合您的出行需求。',
@@ -1632,10 +1660,9 @@
         float_en_route: 'Driver en route',
         float_tracking: 'Live Tracking',
         float_eta: 'ETA: 5 minutes',
-        stat_rides: 'Completed Rides',
         stat_drivers: 'Professional Drivers',
-        stat_rating: 'Average Rating',
-        stat_support: 'Customer Support',
+        stat_legal: 'Licensed Drivers',
+        stat_licensed: 'Certified',
         features_label: 'Features',
         features_title: 'Everything You Need for a Perfect Ride',
         features_desc: 'From booking to destination, RelayGo delivers a seamless charter experience powered by modern technology.',
@@ -1686,6 +1713,7 @@
         svc3_tag1: 'Meetings',
         svc3_tag2: 'Corporate',
         svc3_tag3: 'VIP Service',
+        fleet_img_label: 'For illustration',
         fleet_label: 'Our Fleet',
         fleet_title: 'Choose Your Perfect Ride',
         fleet_desc: 'From economy sedans to luxury MPVs, find the right vehicle for your journey.',
@@ -1750,10 +1778,9 @@
         float_en_route: 'ドライバー出発済み',
         float_tracking: 'リアルタイム追跡',
         float_eta: '到着まで5分',
-        stat_rides: '完了した旅程',
         stat_drivers: 'プロドライバー',
-        stat_rating: '平均評価',
-        stat_support: 'カスタマーサポート',
+        stat_legal: '合法ドライバー',
+        stat_licensed: '専門資格',
         features_label: '特徴',
         features_title: '最高の乗車体験を実現',
         features_desc: '予約から到着まで、RelayGoは最新技術でシームレスなチャーターサービス体験をお届けします。',
@@ -1804,6 +1831,7 @@
         svc3_tag1: '会議送迎',
         svc3_tag2: '法人利用',
         svc3_tag3: 'VIPサービス',
+        fleet_img_label: 'イメージ',
         fleet_label: '車両紹介',
         fleet_title: 'お好みの車両をお選びください',
         fleet_desc: 'エコノミーセダンから高級ミニバンまで、旅に最適な車両をご用意。',
@@ -1868,10 +1896,9 @@
         float_en_route: '드라이버 출발',
         float_tracking: '실시간 추적',
         float_eta: '도착까지 5분',
-        stat_rides: '완료된 여정',
         stat_drivers: '전문 드라이버',
-        stat_rating: '평균 평점',
-        stat_support: '고객 지원',
+        stat_legal: '합법 드라이버',
+        stat_licensed: '전문 자격증',
         features_label: '특징',
         features_title: '완벽한 탑승 경험을 위한 모든 것',
         features_desc: '예약부터 도착까지, RelayGo는 최신 기술로 원활한 차터 서비스 경험을 제공합니다.',
@@ -1922,6 +1949,7 @@
         svc3_tag1: '회의 픽업',
         svc3_tag2: '기업 이용',
         svc3_tag3: 'VIP 서비스',
+        fleet_img_label: '참고 이미지',
         fleet_label: '차량 소개',
         fleet_title: '취향에 맞는 차량을 선택하세요',
         fleet_desc: '이코노미 세단부터 럭셔리 미니밴까지, 여행에 딱 맞는 차량을 준비했습니다.',
