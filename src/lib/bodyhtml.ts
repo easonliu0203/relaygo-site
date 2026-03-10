@@ -337,27 +337,27 @@ export const bodyHTML = `<!-- Navigation -->
             <tbody>
               <tr>
                 <td data-i18n="pricing_tpe">桃園 TPE</td>
-                <td><span class="price-val">NT$1,000</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
-                <td><span class="price-val">NT$1,300</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
-                <td><span class="price-val">NT$1,800</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-tpe-S">NT$1,000</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-tpe-M">NT$1,300</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-tpe-L">NT$1,800</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
               </tr>
               <tr>
                 <td data-i18n="pricing_tsa">松山 TSA</td>
-                <td><span class="price-val">NT$900</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
-                <td><span class="price-val">NT$1,200</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
-                <td><span class="price-val">NT$1,800</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-tsa-S">NT$900</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-tsa-M">NT$1,200</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-tsa-L">NT$1,800</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
               </tr>
               <tr>
                 <td data-i18n="pricing_rmq">台中 RMQ</td>
-                <td><span class="price-val">NT$3,700</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
-                <td><span class="price-val">NT$3,900</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
-                <td><span class="price-val">NT$4,600</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-rmq-S">NT$3,700</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-rmq-M">NT$3,900</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-rmq-L">NT$4,600</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
               </tr>
               <tr>
                 <td data-i18n="pricing_khh">高雄 KHH</td>
-                <td><span class="price-val">NT$7,200</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
-                <td><span class="price-val">NT$7,500</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
-                <td><span class="price-val">NT$8,500</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-khh-S">NT$7,200</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-khh-M">NT$7,500</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
+                <td><span class="price-val" data-price="airport-khh-L">NT$8,500</span> <span class="price-from" data-i18n="pricing_from">起</span></td>
               </tr>
             </tbody>
           </table>
@@ -378,28 +378,27 @@ export const bodyHTML = `<!-- Navigation -->
             <tbody>
               <tr>
                 <td data-i18n="pricing_s">五人座轎車</td>
-                <td><span class="price-val">NT$3,000</span></td>
-                <td><span class="price-val">NT$3,900</span></td>
-                <td><span class="price-val">NT$350</span></td>
+                <td><span class="price-val" data-price="charter-S-6h">NT$3,000</span></td>
+                <td><span class="price-val" data-price="charter-S-8h">NT$3,900</span></td>
+                <td><span class="price-val" data-price="charter-S-ot">NT$350</span></td>
               </tr>
               <tr>
                 <td data-i18n="pricing_m">五人座休旅車</td>
-                <td><span class="price-na">—</span></td>
-                <td><span class="price-val">NT$4,500</span></td>
-                <td><span class="price-val">NT$450</span></td>
+                <td><span data-price="charter-M-6h" class="price-na">—</span></td>
+                <td><span class="price-val" data-price="charter-M-8h">NT$4,500</span></td>
+                <td><span class="price-val" data-price="charter-M-ot">NT$450</span></td>
               </tr>
               <tr>
                 <td data-i18n="pricing_l">九人座休旅車</td>
-                <td><span class="price-na">—</span></td>
-                <td><span class="price-val">NT$7,500</span></td>
-                <td><span class="price-val">NT$600</span></td>
+                <td><span data-price="charter-L-6h" class="price-na">—</span></td>
+                <td><span class="price-val" data-price="charter-L-8h">NT$7,500</span></td>
+                <td><span class="price-val" data-price="charter-L-ot">NT$600</span></td>
               </tr>
               <tr>
                 <td data-i18n="pricing_xl">Toyota Alphard</td>
-
-                <td><span class="price-na">—</span></td>
-                <td><span class="price-val">NT$10,000</span></td>
-                <td><span class="price-val">NT$800</span></td>
+                <td><span data-price="charter-XL-6h" class="price-na">—</span></td>
+                <td><span class="price-val" data-price="charter-XL-8h">NT$10,000</span></td>
+                <td><span class="price-val" data-price="charter-XL-ot">NT$800</span></td>
               </tr>
             </tbody>
           </table>
