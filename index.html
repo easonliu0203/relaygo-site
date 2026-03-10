@@ -654,14 +654,39 @@
       font-size: 11px;
       color: var(--gray-500);
     }
-    .fleet-use {
+    .fleet-detail {
+      font-size: 13px;
+      color: var(--gray-500);
+      line-height: 1.5;
+      margin-bottom: 16px;
+      min-height: 40px;
+    }
+    .fleet-config-list {
+      text-align: left;
+      margin-top: 8px;
+    }
+    .fleet-config-item {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-300);
+      font-size: 13px;
+      color: var(--gray-700);
+      line-height: 1.4;
+    }
+    .fleet-config-item:last-child {
+      border-bottom: none;
+    }
+    .fleet-config-pax {
+      white-space: nowrap;
+      font-weight: 700;
+      color: var(--dark);
+      min-width: 70px;
+    }
+    .fleet-config-lug {
       font-size: 12px;
-      color: var(--accent-dark);
-      font-weight: 600;
-      background: rgba(0,214,143,0.08);
-      padding: 4px 12px;
-      border-radius: 12px;
-      display: inline-block;
+      color: var(--gray-500);
     }
 
     /* ===== Pricing Section ===== */
@@ -1206,8 +1231,26 @@
         <div class="fleet-card fade-up">
           <span class="fleet-type-badge">S</span>
           <div class="fleet-icon">🚗</div>
-          <h3 data-i18n="fleet_s_name">轎車</h3>
-          <div class="fleet-model" data-i18n="fleet_s_model">Toyota Camry 等</div>
+          <h3 data-i18n="fleet_s_name">五人座轎車</h3>
+          <div class="fleet-detail" data-i18n="fleet_s_detail">扣除 1 位司機，乘客最多 3 位（含大人孩童嬰兒）</div>
+          <div class="fleet-specs">
+            <div class="fleet-spec">
+              <div class="fleet-spec-icon">👤</div>
+              <div class="fleet-spec-val">1-3</div>
+              <div class="fleet-spec-label" data-i18n="fleet_pax">乘客</div>
+            </div>
+            <div class="fleet-spec">
+              <div class="fleet-spec-icon">🧳</div>
+              <div class="fleet-spec-val">2</div>
+              <div class="fleet-spec-label" data-i18n="fleet_luggage_28">28吋行李</div>
+            </div>
+          </div>
+        </div>
+        <div class="fleet-card fade-up">
+          <span class="fleet-type-badge">M</span>
+          <div class="fleet-icon">🚙</div>
+          <h3 data-i18n="fleet_m_name">五人座休旅車</h3>
+          <div class="fleet-detail" data-i18n="fleet_m_detail">扣除 1 位司機，乘客最多 4 位（含大人孩童嬰兒）</div>
           <div class="fleet-specs">
             <div class="fleet-spec">
               <div class="fleet-spec-icon">👤</div>
@@ -1216,36 +1259,16 @@
             </div>
             <div class="fleet-spec">
               <div class="fleet-spec-icon">🧳</div>
-              <div class="fleet-spec-val">2</div>
+              <div class="fleet-spec-val">4×20" / 3×28"</div>
               <div class="fleet-spec-label" data-i18n="fleet_luggage">行李</div>
             </div>
           </div>
-          <span class="fleet-use" data-i18n="fleet_s_use">商務 / 個人</span>
-        </div>
-        <div class="fleet-card fade-up">
-          <span class="fleet-type-badge">M</span>
-          <div class="fleet-icon">🚙</div>
-          <h3 data-i18n="fleet_m_name">休旅車</h3>
-          <div class="fleet-model" data-i18n="fleet_m_model">Toyota Wish 等</div>
-          <div class="fleet-specs">
-            <div class="fleet-spec">
-              <div class="fleet-spec-icon">👤</div>
-              <div class="fleet-spec-val">1-5</div>
-              <div class="fleet-spec-label" data-i18n="fleet_pax">乘客</div>
-            </div>
-            <div class="fleet-spec">
-              <div class="fleet-spec-icon">🧳</div>
-              <div class="fleet-spec-val">4</div>
-              <div class="fleet-spec-label" data-i18n="fleet_luggage">行李</div>
-            </div>
-          </div>
-          <span class="fleet-use" data-i18n="fleet_m_use">小家庭 / 出遊</span>
         </div>
         <div class="fleet-card popular fade-up">
           <span class="fleet-type-badge">L</span>
           <div class="fleet-icon">🚐</div>
-          <h3 data-i18n="fleet_l_name">大型車</h3>
-          <div class="fleet-model" data-i18n="fleet_l_model">九人座休旅車</div>
+          <h3 data-i18n="fleet_l_name">九人座休旅車</h3>
+          <div class="fleet-detail" data-i18n="fleet_l_detail">扣除 1 位司機，乘客最多 8 位（含大人孩童嬰兒）</div>
           <div class="fleet-specs">
             <div class="fleet-spec">
               <div class="fleet-spec-icon">👤</div>
@@ -1254,30 +1277,30 @@
             </div>
             <div class="fleet-spec">
               <div class="fleet-spec-icon">🧳</div>
-              <div class="fleet-spec-val">6</div>
+              <div class="fleet-spec-val">8×28"</div>
               <div class="fleet-spec-label" data-i18n="fleet_luggage">行李</div>
             </div>
           </div>
-          <span class="fleet-use" data-i18n="fleet_l_use">團體旅遊</span>
         </div>
         <div class="fleet-card fade-up">
           <span class="fleet-type-badge">XL</span>
           <div class="fleet-icon">🚘</div>
-          <h3 data-i18n="fleet_xl_name">豪華車</h3>
-          <div class="fleet-model">Toyota Alphard</div>
-          <div class="fleet-specs">
-            <div class="fleet-spec">
-              <div class="fleet-spec-icon">👤</div>
-              <div class="fleet-spec-val">1-6</div>
-              <div class="fleet-spec-label" data-i18n="fleet_pax">乘客</div>
+          <h3>Toyota Alphard</h3>
+          <div class="fleet-detail" data-i18n="fleet_xl_detail">頂級商務體驗，座位與行李彈性配置</div>
+          <div class="fleet-config-list">
+            <div class="fleet-config-item">
+              <span class="fleet-config-pax">👤 1-3 <span data-i18n="fleet_pax_unit">位</span></span>
+              <span class="fleet-config-lug" data-i18n="fleet_xl_lug1">6×24" 或 5×28" 行李（收起第三排座椅）</span>
             </div>
-            <div class="fleet-spec">
-              <div class="fleet-spec-icon">🧳</div>
-              <div class="fleet-spec-val">6</div>
-              <div class="fleet-spec-label" data-i18n="fleet_luggage">行李</div>
+            <div class="fleet-config-item">
+              <span class="fleet-config-pax">👤 4 <span data-i18n="fleet_pax_unit">位</span></span>
+              <span class="fleet-config-lug" data-i18n="fleet_xl_lug2">4×24" 行李（收起第三排一張座椅）</span>
+            </div>
+            <div class="fleet-config-item">
+              <span class="fleet-config-pax">👤 5-6 <span data-i18n="fleet_pax_unit">位</span></span>
+              <span class="fleet-config-lug" data-i18n="fleet_xl_lug3">2×24" 行李</span>
             </div>
           </div>
-          <span class="fleet-use" data-i18n="fleet_xl_use">VIP / 商務</span>
         </div>
       </div>
     </div>
@@ -1551,19 +1574,20 @@
         fleet_label: '車型介紹',
         fleet_title: '多元車型任您選',
         fleet_desc: '從經濟轎車到豪華商務車，總有一款適合您的出行需求。',
-        fleet_s_name: '轎車',
-        fleet_s_model: 'Toyota Camry 等',
-        fleet_m_name: '休旅車',
-        fleet_m_model: 'Toyota Wish 等',
-        fleet_l_name: '大型車',
-        fleet_l_model: '九人座休旅車',
-        fleet_xl_name: '豪華車',
+        fleet_s_name: '五人座轎車',
+        fleet_s_detail: '扣除 1 位司機，乘客最多 3 位（含大人孩童嬰兒）',
+        fleet_m_name: '五人座休旅車',
+        fleet_m_detail: '扣除 1 位司機，乘客最多 4 位（含大人孩童嬰兒）',
+        fleet_l_name: '九人座休旅車',
+        fleet_l_detail: '扣除 1 位司機，乘客最多 8 位（含大人孩童嬰兒）',
+        fleet_xl_detail: '頂級商務體驗，座位與行李彈性配置',
         fleet_pax: '乘客',
+        fleet_pax_unit: '位',
         fleet_luggage: '行李',
-        fleet_s_use: '商務 / 個人',
-        fleet_m_use: '小家庭 / 出遊',
-        fleet_l_use: '團體旅遊',
-        fleet_xl_use: 'VIP / 商務',
+        fleet_luggage_28: '28吋行李',
+        fleet_xl_lug1: '6×24" 或 5×28" 行李（收起第三排座椅）',
+        fleet_xl_lug2: '4×24" 行李（收起第三排一張座椅）',
+        fleet_xl_lug3: '2×24" 行李',
         pricing_label: '價格方案',
         pricing_title: '透明合理的價格',
         pricing_desc: '無隱藏費用，價格公開透明。下載 App 即可查看精確報價。',
@@ -1668,19 +1692,20 @@
         fleet_label: 'Our Fleet',
         fleet_title: 'Choose Your Perfect Ride',
         fleet_desc: 'From economy sedans to luxury MPVs, find the right vehicle for your journey.',
-        fleet_s_name: 'Sedan',
-        fleet_s_model: 'Toyota Camry etc.',
-        fleet_m_name: 'SUV',
-        fleet_m_model: 'Toyota Wish etc.',
-        fleet_l_name: 'Large Van',
-        fleet_l_model: '9-Seater Van',
-        fleet_xl_name: 'Luxury',
+        fleet_s_name: '5-Seat Sedan',
+        fleet_s_detail: 'Excluding driver, max 3 passengers (adults, children & infants)',
+        fleet_m_name: '5-Seat SUV',
+        fleet_m_detail: 'Excluding driver, max 4 passengers (adults, children & infants)',
+        fleet_l_name: '9-Seat Van',
+        fleet_l_detail: 'Excluding driver, max 8 passengers (adults, children & infants)',
+        fleet_xl_detail: 'Premium business experience with flexible seating & luggage',
         fleet_pax: 'Passengers',
+        fleet_pax_unit: 'pax',
         fleet_luggage: 'Luggage',
-        fleet_s_use: 'Business / Personal',
-        fleet_m_use: 'Family / Travel',
-        fleet_l_use: 'Group Tours',
-        fleet_xl_use: 'VIP / Business',
+        fleet_luggage_28: '28" luggage',
+        fleet_xl_lug1: '6×24" or 5×28" luggage (3rd row folded)',
+        fleet_xl_lug2: '4×24" luggage (1 seat of 3rd row folded)',
+        fleet_xl_lug3: '2×24" luggage',
         pricing_label: 'Pricing',
         pricing_title: 'Transparent & Fair Pricing',
         pricing_desc: 'No hidden fees. Download the app to get an exact quote for your trip.',
@@ -1785,19 +1810,20 @@
         fleet_label: '車両紹介',
         fleet_title: 'お好みの車両をお選びください',
         fleet_desc: 'エコノミーセダンから高級ミニバンまで、旅に最適な車両をご用意。',
-        fleet_s_name: 'セダン',
-        fleet_s_model: 'Toyota Camry 等',
-        fleet_m_name: 'SUV',
-        fleet_m_model: 'Toyota Wish 等',
-        fleet_l_name: '大型バン',
-        fleet_l_model: '9人乗りバン',
-        fleet_xl_name: 'ラグジュアリー',
+        fleet_s_name: '5人乗りセダン',
+        fleet_s_detail: 'ドライバーを除き、最大3名（大人・子供・乳児含む）',
+        fleet_m_name: '5人乗りSUV',
+        fleet_m_detail: 'ドライバーを除き、最大4名（大人・子供・乳児含む）',
+        fleet_l_name: '9人乗りバン',
+        fleet_l_detail: 'ドライバーを除き、最大8名（大人・子供・乳児含む）',
+        fleet_xl_detail: 'プレミアムビジネス体験、座席と荷物の柔軟な配置',
         fleet_pax: '乗客',
+        fleet_pax_unit: '名',
         fleet_luggage: '荷物',
-        fleet_s_use: 'ビジネス / 個人',
-        fleet_m_use: 'ファミリー / 旅行',
-        fleet_l_use: 'グループツアー',
-        fleet_xl_use: 'VIP / ビジネス',
+        fleet_luggage_28: '28インチ荷物',
+        fleet_xl_lug1: '6×24" または 5×28" 荷物（3列目を収納）',
+        fleet_xl_lug2: '4×24" 荷物（3列目の1席を収納）',
+        fleet_xl_lug3: '2×24" 荷物',
         pricing_label: '料金',
         pricing_title: '明朗で公正な料金',
         pricing_desc: '隠れた手数料はありません。アプリで正確な見積もりをご確認ください。',
@@ -1902,19 +1928,20 @@
         fleet_label: '차량 소개',
         fleet_title: '취향에 맞는 차량을 선택하세요',
         fleet_desc: '이코노미 세단부터 럭셔리 미니밴까지, 여행에 딱 맞는 차량을 준비했습니다.',
-        fleet_s_name: '세단',
-        fleet_s_model: 'Toyota Camry 등',
-        fleet_m_name: 'SUV',
-        fleet_m_model: 'Toyota Wish 등',
-        fleet_l_name: '대형 밴',
-        fleet_l_model: '9인승 밴',
-        fleet_xl_name: '럭셔리',
+        fleet_s_name: '5인승 세단',
+        fleet_s_detail: '드라이버 제외, 최대 3명 (성인·어린이·유아 포함)',
+        fleet_m_name: '5인승 SUV',
+        fleet_m_detail: '드라이버 제외, 최대 4명 (성인·어린이·유아 포함)',
+        fleet_l_name: '9인승 밴',
+        fleet_l_detail: '드라이버 제외, 최대 8명 (성인·어린이·유아 포함)',
+        fleet_xl_detail: '프리미엄 비즈니스 경험, 좌석과 수하물 유연한 배치',
         fleet_pax: '승객',
+        fleet_pax_unit: '명',
         fleet_luggage: '수하물',
-        fleet_s_use: '비즈니스 / 개인',
-        fleet_m_use: '가족 / 여행',
-        fleet_l_use: '단체 투어',
-        fleet_xl_use: 'VIP / 비즈니스',
+        fleet_luggage_28: '28인치 수하물',
+        fleet_xl_lug1: '6×24" 또는 5×28" 수하물 (3열 접기)',
+        fleet_xl_lug2: '4×24" 수하물 (3열 1석 접기)',
+        fleet_xl_lug3: '2×24" 수하물',
         pricing_label: '요금',
         pricing_title: '투명하고 합리적인 요금',
         pricing_desc: '숨겨진 수수료 없이 투명한 요금. 앱에서 정확한 견적을 확인하세요.',
