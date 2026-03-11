@@ -1,12 +1,8 @@
 import { NextResponse } from 'next/server';
 
-const SUPABASE_URL = 'https://vlyhwegpvpnjyocqmfqc.supabase.co/rest/v1';
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+export const dynamic = 'force-dynamic';
 
-const headers = {
-  apikey: SUPABASE_KEY,
-  Authorization: `Bearer ${SUPABASE_KEY}`,
-};
+const SUPABASE_URL = 'https://vlyhwegpvpnjyocqmfqc.supabase.co/rest/v1';
 
 interface AirportRow {
   vehicle_type: string;
@@ -24,13 +20,35 @@ interface CharterRow {
 }
 
 export async function GET() {
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  if (!key) {
+    return NextResponse.json({ error: 'Missing Supabase key' }, { status: 500 });
+  }
+
+  const headers = {
+    apikey: key,
+    Authorization: `Bearer ${key}`,
+  };
+
   try {
-    // Fetch airport pricing - get minimum price per vehicle type
-    const airportRes = await fetch(
-      `${SUPABASE_URL}/airport_transfer_pricing?is_active=eq.true&select=vehicle_type,tpe_price,tsa_price,rmq_price,khh_price`,
-      { headers, next: { revalidate: 300 } } // cache 5 min
-    );
+    const [airportRes, charterRes] = await Promise.all([
+      fetch(
+        `${SUPABASE_URL}/airport_transfer_pricing?is_active=eq.true&select=vehicle_type,tpe_price,tsa_price,rmq_price,khh_price`,
+        { headers }
+      ),
+      fetch(
+        `${SUPABASE_URL}/vehicle_pricing?is_active=eq.true&country=eq.TW&region=eq.default&select=vehicle_type,duration_hours,base_price,overtime_rate&order=vehicle_type,duration_hours`,
+        { headers }
+      ),
+    ]);
+
     const airportData: AirportRow[] = await airportRes.json();
+    const charterData: CharterRow[] = await charterRes.json();
+
+    if (!Array.isArray(airportData) || !Array.isArray(charterData)) {
+      console.error('Pricing API: unexpected response', { airportData, charterData });
+      return NextResponse.json({ error: 'Invalid data from Supabase' }, { status: 500 });
+    }
 
     // Group by vehicle_type and find minimum prices
     const airportByType: Record<string, { tpe: number; tsa: number; rmq: number; khh: number }> = {};
@@ -50,13 +68,6 @@ export async function GET() {
         airportByType[vt].khh = Math.min(airportByType[vt].khh, row.khh_price);
       }
     }
-
-    // Fetch charter pricing
-    const charterRes = await fetch(
-      `${SUPABASE_URL}/vehicle_pricing?is_active=eq.true&country=eq.TW&region=eq.default&select=vehicle_type,duration_hours,base_price,overtime_rate&order=vehicle_type,duration_hours`,
-      { headers, next: { revalidate: 300 } }
-    );
-    const charterData: CharterRow[] = await charterRes.json();
 
     // Group charter by vehicle_type
     const charterByType: Record<string, { h6: number | null; h8: number | null; overtime: number }> = {};
