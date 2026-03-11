@@ -604,15 +604,17 @@ export const LANG_TITLES: Record<string, string> = {
 export type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko';
 
 export function detectLang(): LangCode {
-  if (typeof window === 'undefined') return 'zh-TW';
-  
+  if (typeof window === 'undefined') return 'en';
+
   const params = new URLSearchParams(window.location.search);
   const p = params.get('lang');
   if (p && I18N[p]) return p as LangCode;
 
-  const stored = localStorage.getItem('relaygo_lang');
+  // Only use stored language if user manually selected it
+  const stored = localStorage.getItem('relaygo_lang_manual');
   if (stored && I18N[stored]) return stored as LangCode;
 
+  // Auto-detect from browser language
   const nav = (navigator.language || '').toLowerCase();
   if (nav.startsWith('ko')) return 'ko';
   if (nav.startsWith('ja')) return 'ja';

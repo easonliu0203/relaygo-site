@@ -38,7 +38,6 @@ export default function HomePage() {
       btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
     });
 
-    localStorage.setItem('relaygo_lang', lang);
   }, []);
 
   useEffect(() => {
@@ -64,6 +63,7 @@ export default function HomePage() {
         e.stopPropagation();
         const lang = btn.getAttribute('data-lang') as LangCode;
         applyLang(lang);
+        localStorage.setItem('relaygo_lang_manual', lang);
         langDropdown?.classList.remove('open');
       });
     });
