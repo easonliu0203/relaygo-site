@@ -22,13 +22,12 @@ interface CharterRow {
 export async function GET() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!key) {
-    // Debug: list env var names that contain SUPA
-    const supaKeys = Object.keys(process.env).filter(k => k.toUpperCase().includes('SUPA'));
+    // Debug: list ALL env var names to find the issue
+    const allKeys = Object.keys(process.env).sort();
     return NextResponse.json({
       error: 'Missing Supabase key',
       hint: 'SUPABASE_SERVICE_ROLE_KEY not found in env',
-      availableSupaKeys: supaKeys,
-      envCount: Object.keys(process.env).length,
+      allEnvKeys: allKeys,
     }, { status: 500 });
   }
 
