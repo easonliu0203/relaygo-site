@@ -22,13 +22,8 @@ interface CharterRow {
 export async function GET() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!key) {
-    // Debug: list ALL env var names to find the issue
-    const allKeys = Object.keys(process.env).sort();
-    return NextResponse.json({
-      error: 'Missing Supabase key',
-      hint: 'SUPABASE_SERVICE_ROLE_KEY not found in env',
-      allEnvKeys: allKeys,
-    }, { status: 500 });
+    console.error('SUPABASE_SERVICE_ROLE_KEY not configured');
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
 
   const headers = {
