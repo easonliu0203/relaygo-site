@@ -88,6 +88,34 @@ export default function HomePage() {
     }, { threshold: 0.1 });
     fadeEls.forEach((el) => observer.observe(el));
 
+    // Counter animation for stats
+    const statNumbers = document.querySelectorAll('.stat-number');
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const text = el.textContent || '';
+          const match = text.match(/(\d+)/);
+          if (match) {
+            const target = parseInt(match[1]);
+            const suffix = text.replace(match[1], '');
+            let current = 0;
+            const step = Math.ceil(target / 40);
+            const timer = setInterval(() => {
+              current += step;
+              if (current >= target) {
+                current = target;
+                clearInterval(timer);
+              }
+              el.textContent = current + suffix;
+            }, 30);
+          }
+          statsObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    statNumbers.forEach((el) => statsObserver.observe(el));
+
     const pricingTabs = document.querySelectorAll('.pricing-tab');
     pricingTabs.forEach((tab) => {
       tab.addEventListener('click', () => {
