@@ -11,9 +11,9 @@ const headers = {
 
 const PHOTOS = {
   sunmoonBoats: {
-    url: 'https://images.unsplash.com/photo-1559467709-7bc252b5400a?w=1200&q=80',
-    credit: 'Jane Tsai (@jane109033)',
-    creditUrl: 'https://unsplash.com/@jane109033?utm_source=relaygo&utm_medium=referral',
+    url: 'https://images.unsplash.com/photo-1722824634219-679c9fe9aa6d?w=1200&q=80',
+    credit: 'Winston Chen (@winstonchen)',
+    creditUrl: 'https://unsplash.com/@winstonchen?utm_source=relaygo&utm_medium=referral',
   },
   sunmoonDock: {
     url: 'https://images.unsplash.com/photo-1605961002058-06a4606c178c?w=1200&q=80',

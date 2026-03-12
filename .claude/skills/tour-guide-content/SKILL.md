@@ -30,6 +30,15 @@ A wall of text without images looks amateur compared to competitors. Each major 
 - Give exact photo angles ("豎崎路階梯傍晚16:30燈籠亮起"), not "take photos"
 - Cite realistic drive times between stops, not "a short drive"
 
+### Localize foreign-language content, don't just translate
+Each language version must read as if a native speaker wrote it from scratch. Avoid word-for-word translation — adapt idioms, cultural references, and sentence rhythm to each target audience. For example, Japanese readers prefer concise, polite phrasing (おすすめ, ～がおすすめです) while zh-TW should feel like a Taiwanese friend chatting (超好拍, 必吃). English should use travel-magazine tone, not textbook English. The goal is that a native reader never feels like they're reading a translation.
+
+### Verify photo locations on Unsplash
+Most Unsplash photographers tag their photo location. Always check the `location.name` field from the Unsplash API (`/napi/photos/{id}`) before using a photo. Reject any photo whose tagged location is clearly a different place (e.g., a Hualien coast photo used in a Jiufen guide). If a photo has no location tag, verify it matches the attraction by checking the `alt_description` and `description` fields. This avoids the embarrassing situation of showing a random scenic photo that has nothing to do with the attraction.
+
+### Use real distances and drive times in itineraries
+All drive times and distances in the itinerary must be based on actual routes (check Google Maps if unsure). Readers planning their trip will notice if times are unrealistic. For example, Taipei to Jiufen is ~1 hour via Highway 62, not "a short drive." Taichung to Sun Moon Lake is ~1.5 hours, not "about an hour." Getting this wrong undermines trust in the entire guide.
+
 ## Output Structure
 
 Each guide follows this markdown structure. Read `references/content-template.md` for the full annotated template.
