@@ -5,17 +5,9 @@ import type { TourGuide } from '@/lib/supabase';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko';
 
-const VEHICLE_LABELS: Record<string, Record<LangCode, string>> = {
-  S: { 'zh-TW': '五人座轎車', 'zh-CN': '五人座轿车', en: 'Sedan (5 seats)', ja: 'セダン（5人乗り）', ko: '세단 (5인승)' },
-  M: { 'zh-TW': '五人座休旅車', 'zh-CN': '五人座休旅车', en: 'SUV (5 seats)', ja: 'SUV（5人乗り）', ko: 'SUV (5인승)' },
-  L: { 'zh-TW': '九人座休旅車', 'zh-CN': '九人座休旅车', en: 'Van (9 seats)', ja: 'ミニバン（9人乗り）', ko: '밴 (9인승)' },
-  XL: { 'zh-TW': 'Toyota Alphard', 'zh-CN': 'Toyota Alphard', en: 'Toyota Alphard', ja: 'Toyota Alphard', ko: 'Toyota Alphard' },
-};
-
 const UI: Record<string, Record<LangCode, string>> = {
   back: { 'zh-TW': '返回攻略列表', 'zh-CN': '返回攻略列表', en: 'Back to Guides', ja: 'ガイド一覧へ', ko: '가이드 목록' },
   hours: { 'zh-TW': '小時行程', 'zh-CN': '小时行程', en: 'hour trip', ja: '時間の旅', ko: '시간 여행' },
-  recommend: { 'zh-TW': '推薦車型', 'zh-CN': '推荐车型', en: 'Vehicle', ja: 'おすすめ車種', ko: '추천 차량' },
   bookNow: { 'zh-TW': '立即預約包車', 'zh-CN': '立即预约包车', en: 'Book Charter Now', ja: '今すぐ予約する', ko: '지금 예약하기' },
   duration: { 'zh-TW': '建議時數', 'zh-CN': '建议时长', en: 'Duration', ja: '所要時間', ko: '소요 시간' },
   departure: { 'zh-TW': '出發地', 'zh-CN': '出发地', en: 'Departure', ja: '出発地', ko: '출발지' },
@@ -84,7 +76,6 @@ export default function GuideContent({ guide }: { guide: TourGuide }) {
   const title = t(guide.title, lang);
   const description = t(guide.description, lang);
   const contentHtml = useMemo(() => renderMarkdown(t(guide.content, lang)), [guide.content, lang]);
-  const vehicleLabel = VEHICLE_LABELS[guide.vehicle_type]?.[lang] || guide.vehicle_type;
   const cityIcon = CITY_ICONS[guide.city] || '📍';
 
   const handleCopy = () => {
@@ -117,10 +108,6 @@ export default function GuideContent({ guide }: { guide: TourGuide }) {
             <div className="guide-hero-stat">
               <span className="guide-hero-stat-icon">{cityIcon}</span>
               <span>{guide.city}</span>
-            </div>
-            <div className="guide-hero-stat">
-              <span className="guide-hero-stat-icon">🚗</span>
-              <span>{vehicleLabel}</span>
             </div>
           </div>
 
@@ -158,13 +145,6 @@ export default function GuideContent({ guide }: { guide: TourGuide }) {
                 {UI.departure[lang]}
               </span>
               <span className="guide-info-value">{guide.city}</span>
-            </div>
-            <div className="guide-info-row">
-              <span className="guide-info-label">
-                <span className="guide-info-icon">🚗</span>
-                {UI.recommend[lang]}
-              </span>
-              <span className="guide-info-value">{vehicleLabel}</span>
             </div>
             <a href="https://relaygo.pro/#download" className="guide-cta-btn">
               📱 {UI.bookNow[lang]}
