@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
 import './globals.css';
+import './guide/[slug]/guide.css';
 
 export const metadata: Metadata = {
   title: 'RelayGo - 專業包車服務平台 | Professional Charter Service',
