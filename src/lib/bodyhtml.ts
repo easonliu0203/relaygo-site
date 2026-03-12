@@ -7,6 +7,7 @@ export const bodyHTML = `<!-- Navigation -->
           <li><a href="#services" data-i18n="nav_services">服務項目</a></li>
           <li><a href="#fleet" data-i18n="nav_fleet">車型介紹</a></li>
           <li><a href="#pricing" data-i18n="nav_pricing">價格方案</a></li>
+          <li><a href="/guides" data-i18n="nav_guides">行程攻略</a></li>
           <li><a href="#download" class="nav-cta" data-i18n="nav_download">下載 App</a></li>
         </ul>
         <div class="lang-switcher">
