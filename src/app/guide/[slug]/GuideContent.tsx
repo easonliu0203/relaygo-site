@@ -98,7 +98,7 @@ export default function GuideContent({ guide }: { guide: TourGuide }) {
       {/* Hero */}
       <div
         className="guide-hero"
-        style={guide.cover_image ? { backgroundImage: `url(${guide.cover_image})` } : undefined}
+        style={guide.cover_image ? { backgroundImage: `url(${guide.cover_image})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
       >
         <div className="guide-hero-overlay" />
         <div className="guide-hero-content">
