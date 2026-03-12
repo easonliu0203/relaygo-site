@@ -717,6 +717,25 @@
   gap: 8px;
 }
 
+/* Photo Credit */
+.guide-photo-credit {
+  text-align: center;
+  padding: 20px 24px 32px;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+}
+
+.guide-photo-credit a {
+  color: var(--gray-500);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+
+.guide-photo-credit a:hover {
+  color: var(--primary);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .guide-hero {

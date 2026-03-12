@@ -177,6 +177,13 @@ export default function GuideContent({ guide }: { guide: TourGuide }) {
           </div>
         </aside>
       </div>
+
+      {/* Photo Credit */}
+      {guide.cover_image && guide.cover_image.includes('unsplash.com') && (
+        <div className="guide-photo-credit">
+          Photo by <a href="https://unsplash.com/?utm_source=relaygo&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a>
+        </div>
+      )}
     </div>
   );
 }

@@ -108,6 +108,9 @@ export default function GuidesListContent({ guides }: { guides: TourGuide[] }) {
             ))}
           </div>
         )}
+        <div className="guide-photo-credit">
+          Photos by <a href="https://unsplash.com/?utm_source=relaygo&utm_medium=referral" target="_blank" rel="noopener noreferrer">Unsplash</a>
+        </div>
       </div>
     </div>
   );
