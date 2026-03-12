@@ -327,8 +327,28 @@
 .guide-img {
   width: 100%;
   border-radius: 16px;
-  margin: 24px 0;
+  margin: 24px 0 4px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Photo credit below images */
+.guide-article .guide-img ~ em,
+.guide-article p > em:only-child {
+  display: block;
+  text-align: center;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin: -16px 0 24px;
+  font-style: normal;
+}
+.guide-article em a {
+  color: #94a3b8;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+}
+.guide-article em a:hover {
+  color: #6c63ff;
 }
 
 /* Sidebar */
