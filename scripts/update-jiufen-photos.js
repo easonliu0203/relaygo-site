@@ -17,9 +17,9 @@ const PHOTOS = {
     creditUrl: 'https://unsplash.com/@nat0408?utm_source=relaygo&utm_medium=referral',
   },
   jiufenTea: {
-    url: 'https://images.unsplash.com/photo-1591767589627-d4cb1b6333a4?w=1200&q=80',
-    credit: 'Clement Souchet (@windclems)',
-    creditUrl: 'https://unsplash.com/@windclems?utm_source=relaygo&utm_medium=referral',
+    url: 'https://images.unsplash.com/photo-1677628987592-c3ad2f546fef?w=1200&q=80',
+    credit: 'Ricky LK (@rickyrynselo)',
+    creditUrl: 'https://unsplash.com/@rickyrynselo?utm_source=relaygo&utm_medium=referral',
   },
   lantern: {
     url: 'https://images.unsplash.com/photo-1568119948624-ff9807d6be20?w=1200&q=80',
@@ -92,6 +92,8 @@ ${photoMd('shifenWaterfall', '十分瀑布 — 全台最大簾幕式瀑布')}
 
 十分瀑布寬度約40公尺、落差約20公尺，是全台最大的簾幕式瀑布。水量充沛時氣勢磅礡，站在觀景台上能感受到水霧撲面。從老街步行到瀑布約15-20分鐘，沿途步道平坦好走。
 
+**拍照秘訣：** 瀑布下方的觀景台是最佳拍攝點，可以拍到完整的簾幕狀水瀑。雨季（5-9月）水量最大最壯觀。建議帶防水袋保護手機，水霧很大。
+
 ### ✨ 黃金瀑布 & 陰陽海 — 大自然的調色盤
 
 ${photoMd('yinyangSea', '陰陽海 — 金黃與湛藍的交界')}
@@ -99,6 +101,8 @@ ${photoMd('yinyangSea', '陰陽海 — 金黃與湛藍的交界')}
 黃金瀑布因為礦物質氧化，整座瀑布呈現金黃色澤，在陽光下閃閃發光。附近的陰陽海則是因為酸礦水匯入海洋，形成一半金黃、一半湛藍的奇特景觀。這兩個景點距離很近，車停路邊就能欣賞，不需要走很多路。
 
 ${photoMd('yinyangSea2', '從山上俯瞰陰陽海全景')}
+
+**拍照秘訣：** 黃金瀑布在陽光直射時最金黃耀眼，建議下午時段前往。陰陽海的最佳觀景點在水湳洞停車場旁的高處，可以同時拍到金黃與湛藍的分界線。
 
 ## 建議行程安排
 
@@ -167,6 +171,8 @@ ${photoMd('shifenWaterfall', "Shifen Waterfall — Taiwan's largest curtain wate
 
 Shifen Waterfall spans about 40 meters wide with a 20-meter drop, making it Taiwan's largest curtain-type waterfall. When water flow is strong, the mist can be felt from the viewing platform. It's a 15-20 minute walk from the old street along a flat, easy trail.
 
+**Photo Tips:** The lower viewing platform gives the best full-width shot of the curtain falls. Rainy season (May-Sep) brings the most impressive water volume. Bring a waterproof bag — the mist is heavy.
+
 ### ✨ Golden Waterfall & Yin-Yang Sea
 
 ${photoMd('yinyangSea', 'Yin-Yang Sea — where golden meets deep blue')}
@@ -174,6 +180,8 @@ ${photoMd('yinyangSea', 'Yin-Yang Sea — where golden meets deep blue')}
 The Golden Waterfall gets its color from mineral oxidation, creating a shimmering golden cascade. Nearby, the Yin-Yang Sea shows a dramatic split between golden-brown and deep blue waters where mineral-rich streams meet the ocean.
 
 ${photoMd('yinyangSea2', 'Aerial view of the Yin-Yang Sea coastline')}
+
+**Photo Tips:** The Golden Waterfall shines brightest under direct afternoon sunlight. For the Yin-Yang Sea, the elevated viewpoint near the Shuinandong parking area captures the striking color divide between gold and blue.
 
 ## Suggested Itinerary
 
@@ -238,6 +246,8 @@ ${photoMd('shifenWaterfall', '十分瀑布 — 台湾最大のカーテン型瀑
 
 幅40m、落差20mの台湾最大のカーテン型瀑布。水量が多い時は迫力満点で、展望台から水しぶきを感じられます。老街から徒歩15-20分、平坦な遊歩道です。
 
+**撮影のコツ：** 下の展望台からカーテン状の滝を一望できます。雨季（5-9月）が最も迫力あり。水しぶきが多いため防水対策を。
+
 ### ✨ 黄金瀑布 & 陰陽海
 
 ${photoMd('yinyangSea', '陰陽海 — 金色と深い青の境界')}
@@ -245,6 +255,8 @@ ${photoMd('yinyangSea', '陰陽海 — 金色と深い青の境界')}
 鉱物の酸化で金色に輝く黄金瀑布と、酸性鉱水が海に流れ込んで半分金色・半分青色になる陰陽海。どちらも車を停めてすぐ見られます。
 
 ${photoMd('yinyangSea2', '山の上から陰陽海を一望')}
+
+**撮影のコツ：** 黄金瀑布は午後の直射日光で最も金色に輝きます。陰陽海は水湳洞駐車場近くの高台から、金色と青色の境界線を一枚に収められます。
 
 ## おすすめ行程
 

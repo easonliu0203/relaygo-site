@@ -121,6 +121,8 @@ ${photoMd('hehuanshanRoad', '合歡山公路 — 雲霧繚繞的高山公路')}
 
 ${photoMd('hehuanshanPanorama', '合歡山群峰 — 台灣的屋脊')}
 
+**拍照秘訣：** 武嶺停車場是最佳觀景點，清晨日出和傍晚雲海都是絕佳拍攝時機。冬天若遇到積雪，整片白雪覆蓋的山頭搭配藍天是台灣難得一見的雪景。
+
 > 小提醒：合歡山海拔高，部分人可能會有輕微高山反應（頭暈、頭痛），建議慢慢走、多喝水。冬天武嶺可能下雪，務必確認路況。
 
 ## 建議行程安排
@@ -217,6 +219,8 @@ If time allows, Wuling Pass is just 40 minutes up from Qingjing — at 3,275m, i
 
 ${photoMd('hehuanshanPanorama', 'Hehuanshan peaks — the rooftop of Taiwan')}
 
+**Photo Tips:** Wuling Pass parking lot is the prime viewpoint. Dawn and sunset cloud seas make for dramatic shots. If you catch a rare winter snowfall, the snow-capped peaks against blue sky are Taiwan's most extraordinary alpine scenery.
+
 > Note: Some visitors may experience mild altitude sickness (dizziness, headache). Walk slowly and stay hydrated. In winter, Wuling may have snow — check road conditions before heading up.
 
 ## Suggested Itinerary
@@ -304,6 +308,8 @@ ${photoMd('hehuanshanRoad', '合歡山の山岳道路 — 雲の中を走る')}
 時間があれば、清境から車で約40分の武嶺へ。標高3,275m、台湾の舗装道路最高地点です。足元に広がる雲海と山々のパノラマは圧巻。
 
 ${photoMd('hehuanshanPanorama', '合歡山連峰 — 台湾の屋根')}
+
+**撮影のコツ：** 武嶺駐車場がベストビューポイント。早朝の日の出や夕方の雲海が狙い目。冬に雪が積もれば、台湾では珍しい雪山の絶景を撮影できます。
 
 > 注意：高山病の症状（めまい、頭痛）が出る場合があります。ゆっくり歩き、水分補給を。冬季は積雪の可能性があるため、事前に路面状況をご確認ください。
 
