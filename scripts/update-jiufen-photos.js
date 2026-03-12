@@ -17,9 +17,9 @@ const PHOTOS = {
     creditUrl: 'https://unsplash.com/@nat0408?utm_source=relaygo&utm_medium=referral',
   },
   jiufenTea: {
-    url: 'https://plus.unsplash.com/premium_photo-1766315385796-46f969cea624?w=1200&q=80',
-    credit: 'Annie Spratt (@anniespratt)',
-    creditUrl: 'https://unsplash.com/@anniespratt?utm_source=relaygo&utm_medium=referral',
+    url: 'https://images.unsplash.com/photo-1591767589627-d4cb1b6333a4?w=1200&q=80',
+    credit: 'Clement Souchet (@windclems)',
+    creditUrl: 'https://unsplash.com/@windclems?utm_source=relaygo&utm_medium=referral',
   },
   lantern: {
     url: 'https://images.unsplash.com/photo-1568119948624-ff9807d6be20?w=1200&q=80',
@@ -32,9 +32,9 @@ const PHOTOS = {
     creditUrl: 'https://unsplash.com/@jamesvrtdz?utm_source=relaygo&utm_medium=referral',
   },
   yinyangSea: {
-    url: 'https://images.unsplash.com/photo-1653051010237-9b6f57eea095?w=1200&q=80',
-    credit: 'Cooley Lin (@maydaydreamer55555)',
-    creditUrl: 'https://unsplash.com/@maydaydreamer55555?utm_source=relaygo&utm_medium=referral',
+    url: 'https://images.unsplash.com/photo-1558251314-0164230213d4?w=1200&q=80',
+    credit: 'Chromatograph (@chromatograph)',
+    creditUrl: 'https://unsplash.com/@chromatograph?utm_source=relaygo&utm_medium=referral',
   },
   yinyangSea2: {
     url: 'https://images.unsplash.com/photo-1630562392536-0f203d3c9e97?w=1200&q=80',
