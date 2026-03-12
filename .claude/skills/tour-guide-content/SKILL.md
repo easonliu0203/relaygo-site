@@ -118,14 +118,22 @@ UTM parameters are required by Unsplash guidelines for commercial use.
 
 ## Multilingual Guidelines
 
+All 5 languages must be included. Each version must read as if written by a native speaker — never a word-for-word translation.
+
 ### zh-TW (Traditional Chinese) — Primary, most detailed
-Write as a Taiwanese local. Use colloquial expressions ("銅板價", "古早味", "拍到好照片"). This is the primary audience — most content, most personality.
+Write as a Taiwanese local. Use colloquial expressions ("銅板價", "古早味", "超好拍"). This is the primary audience — most content, most personality.
+
+### zh-CN (Simplified Chinese)
+Adapt from zh-TW but use mainland Chinese expressions and simplified characters. Replace Taiwan-specific slang with equivalents understood in mainland China (e.g., "打卡" instead of "拍照打卡", "性价比" instead of "CP值"). Target: mainland tourists visiting Taiwan.
 
 ### en (English) — International tourists
-Transliterate all names (e.g., "Jiufen Old Street 九份老街"). Include romanized food names. Slightly shorter than zh-TW but still substantive.
+Transliterate all names (e.g., "Jiufen Old Street 九份老街"). Use travel-magazine tone, not textbook English. Include romanized food names with brief descriptions. Slightly shorter than zh-TW but still substantive.
 
 ### ja (Japanese) — Largest inbound market
-Japanese tourists are Taiwan's #1 inbound market. Use polite form, appropriate travel vocabulary (おすすめ, 絶景, 散策). Most concise of the three — Japanese readers prefer dense, efficient information.
+Japanese tourists are Taiwan's #1 inbound market. Use polite form (です/ます), appropriate travel vocabulary (おすすめ, 絶景, 散策). Most concise version — Japanese readers prefer dense, efficient information.
+
+### ko (Korean) — Growing inbound market
+Korean tourists are a rapidly growing market for Taiwan travel. Use polite form (합니다/해요 체), natural Korean travel expressions (추천, 필수 코스, 맛집). Include Korean transliterations of attraction names (e.g., "지우펀 老街"). Similar length to Japanese — concise and practical.
 
 ## Supabase Update
 
@@ -135,7 +143,7 @@ Key fields:
 | Column | Type | Notes |
 |--------|------|-------|
 | slug | VARCHAR(100) | URL path segment, e.g., `taipei-jiufen-shifen` |
-| title | JSONB | `{"zh-TW": "...", "en": "...", "ja": "..."}` |
+| title | JSONB | `{"zh-TW": "...", "zh-CN": "...", "en": "...", "ja": "...", "ko": "..."}` |
 | description | JSONB | Short summary for cards/meta |
 | content | JSONB | Full markdown article body |
 | cover_image | TEXT | Hero image URL (best landscape photo from the guide) |
@@ -155,7 +163,7 @@ Run through before finalizing any guide:
 4. Photo tips mention specific times, angles, or conditions
 5. Itinerary drive times are realistic (check Google Maps if unsure)
 6. Practical tips cover: season, crowds, clothing, weather
-7. All 3 languages present with consistent structure
+7. All 5 languages present with consistent structure (zh-TW, zh-CN, en, ja, ko)
 8. Markdown renders correctly (test with the site's renderMarkdown function)
 
 ## Existing Routes

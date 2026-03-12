@@ -12,6 +12,26 @@ export const metadata: Metadata = {
     description: '安全可靠的專業包車服務，即時追蹤、多元支付、AI 旅遊規劃',
     type: 'website',
     url: 'https://relaygo.pro',
+    siteName: 'RelayGo',
+    locale: 'zh_TW',
+    images: [
+      {
+        url: 'https://relaygo.pro/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'RelayGo 專業包車服務平台',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'RelayGo - 專業包車服務平台',
+    description: '安全可靠的專業包車服務，即時追蹤、多元支付、AI 旅遊規劃',
+    images: ['https://relaygo.pro/og-image.png'],
+  },
+  metadataBase: new URL('https://relaygo.pro'),
+  alternates: {
+    canonical: '/',
   },
   other: {
     'agd-partner-manual-verification': '',

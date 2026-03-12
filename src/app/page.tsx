@@ -68,6 +68,21 @@ export default function HomePage() {
       });
     });
 
+    // Hamburger mobile menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const handleHamburger = () => {
+      hamburger?.classList.toggle('open');
+      mobileMenu?.classList.toggle('open');
+    };
+    hamburger?.addEventListener('click', handleHamburger);
+    document.querySelectorAll('.mobile-menu-link, .mobile-menu-cta').forEach((link) => {
+      link.addEventListener('click', () => {
+        hamburger?.classList.remove('open');
+        mobileMenu?.classList.remove('open');
+      });
+    });
+
     const navbar = document.getElementById('navbar');
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -176,6 +191,7 @@ export default function HomePage() {
 
     return () => {
       langBtn?.removeEventListener('click', handleLangBtn);
+      hamburger?.removeEventListener('click', handleHamburger);
       document.removeEventListener('click', handleDocClick);
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
