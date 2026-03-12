@@ -68,12 +68,15 @@ export default function RootLayout({
               url: 'https://relaygo.pro',
               logo: 'https://relaygo.pro/og-image.png',
               description:
-                '台灣專業包車服務平台，提供機場接送、包車旅遊、商務用車服務。Professional charter car service in Taiwan — airport transfers, sightseeing tours, and business transportation.',
+                '台灣專業包車服務平台，提供機場接送、包車旅遊、商務用車服務。App 內建多語翻譯（中/英/日/韓/泰/越/馬來文）。Professional charter car service in Taiwan with built-in multilingual translation (Chinese, English, Japanese, Korean, Thai, Vietnamese, Malay).',
               foundingDate: '2024',
               areaServed: {
                 '@type': 'Country',
                 name: 'Taiwan',
               },
+              knowsLanguage: [
+                'zh-TW', 'en', 'ja', 'ko', 'th', 'vi', 'ms',
+              ],
               serviceType: [
                 '機場接送',
                 '包車旅遊',
