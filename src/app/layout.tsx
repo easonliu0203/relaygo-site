@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import './globals.css';
 import './guide/[slug]/guide.css';
+import './faq/faq.css';
 
 export const metadata: Metadata = {
   title: 'RelayGo - 專業包車服務平台 | Professional Charter Service',
@@ -213,6 +214,22 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'Question',
+                  name: '車両は合法ですか？',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'すべての車両は正規のレンタカーまたは登録済みライドシェア車両で、保険も完備しています。無許可の白タクは一切使用しません。',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: '차량은 합법인가요?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: '모든 차량은 정식 등록된 렌터카 또는 다원택시로, 보험이 완비되어 있습니다. 무허가 차량은 절대 배정하지 않습니다.',
+                  },
+                },
+                {
+                  '@type': 'Question',
                   name: '費用是否包含停車費、過路費等額外費用？',
                   acceptedAnswer: {
                     '@type': 'Answer',
@@ -257,6 +274,22 @@ export default function RootLayout({
                   acceptedAnswer: {
                     '@type': 'Answer',
                     text: 'Tipping is not mandatory. It is entirely at your discretion — if you feel the driver provided excellent service, a tip is always appreciated.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'チップは必要ですか？',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'チップは義務ではありません。ドライバーのサービスにご満足いただけた場合、お気持ちとしてお渡しいただければ幸いです。',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: '기사님께 팁을 줘야 하나요?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: '팁은 필수가 아닙니다. 기사님의 서비스가 만족스러우셨다면 자유롭게 감사의 마음을 전하실 수 있습니다.',
                   },
                 },
                 {
@@ -341,6 +374,22 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'Question',
+                  name: '支払い方法は？',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'アプリ内でクレジットカード決済が可能です。予約確定にはデポジット（前金）が必要です。',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: '결제 방법은 어떻게 되나요?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: '앱 내 신용카드 온라인 결제를 지원하며, 예약 확정을 위해 보증금 선결제가 필요합니다.',
+                  },
+                },
+                {
+                  '@type': 'Question',
                   name: '出發前如何聯繫司機？',
                   acceptedAnswer: {
                     '@type': 'Answer',
@@ -353,6 +402,22 @@ export default function RootLayout({
                   acceptedAnswer: {
                     '@type': 'Answer',
                     text: 'You can message your driver directly through the in-app chat the day before departure to confirm pickup details.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: '出発前にドライバーと連絡できますか？',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: '出発前日からアプリ内チャットでドライバーと直接やり取りし、ピックアップの詳細を確認できます。',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: '출발 전에 기사님과 연락할 수 있나요?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: '출발 전날부터 앱 내 채팅으로 기사님과 직접 연락하여 픽업 세부사항을 확인할 수 있습니다.',
                   },
                 },
               ],
