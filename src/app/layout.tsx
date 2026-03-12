@@ -57,7 +57,72 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'RelayGo',
+              url: 'https://relaygo.pro',
+              logo: 'https://relaygo.pro/og-image.png',
+              description:
+                '台灣專業包車服務平台，提供機場接送、包車旅遊、商務用車服務。Professional charter car service in Taiwan — airport transfers, sightseeing tours, and business transportation.',
+              foundingDate: '2024',
+              areaServed: {
+                '@type': 'Country',
+                name: 'Taiwan',
+              },
+              serviceType: [
+                '機場接送',
+                '包車旅遊',
+                '商務用車',
+                'Airport Transfer',
+                'Charter Tour',
+                'Business Transportation',
+              ],
+              hasOfferCatalog: {
+                '@type': 'OfferCatalog',
+                name: 'RelayGo 包車服務',
+                itemListElement: [
+                  {
+                    '@type': 'Offer',
+                    itemOffered: {
+                      '@type': 'Service',
+                      name: '機場接送 Airport Transfer',
+                      description:
+                        '桃園(TPE)、松山(TSA)、台中(RMQ)、高雄(KHH) 四大機場接送',
+                    },
+                  },
+                  {
+                    '@type': 'Offer',
+                    itemOffered: {
+                      '@type': 'Service',
+                      name: '包車旅遊 Charter Tour',
+                      description:
+                        '6/8 小時包車旅遊，九份、日月潭、太魯閣、墾丁、阿里山等全台熱門景點',
+                    },
+                  },
+                  {
+                    '@type': 'Offer',
+                    itemOffered: {
+                      '@type': 'Service',
+                      name: '商務用車 Business Transportation',
+                      description: '企業用車、會議接送、VIP 商務包車',
+                    },
+                  },
+                ],
+              },
+              sameAs: [
+                'https://apps.apple.com/app/relaygo/id6670425865',
+                'https://play.google.com/store/apps/details?id=com.relaygo.customer',
+              ],
+            }),
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
