@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
+import { localePathMap, type Locale } from '@/lib/i18n-config';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms';
 
@@ -374,48 +375,29 @@ const LANGS: { code: LangCode; label: string }[] = [
   { code: 'ms', label: 'MS' },
 ];
 
-function detectLang(): LangCode {
-  if (typeof window === 'undefined') return 'zh-TW';
-  const stored = localStorage.getItem('relaygo-lang') as LangCode | null;
-  if (stored && LANGS.some((l) => l.code === stored)) return stored;
-  const nav = navigator.language || '';
-  if (nav.startsWith('ja')) return 'ja';
-  if (nav.startsWith('ko')) return 'ko';
-  if (nav.startsWith('th')) return 'th';
-  if (nav.startsWith('vi')) return 'vi';
-  if (nav.startsWith('ms') || nav.startsWith('my')) return 'ms';
-  if (nav.startsWith('zh') && nav.includes('CN')) return 'zh-CN';
-  if (nav.startsWith('en')) return 'en';
-  return 'zh-TW';
-}
-
-export default function FAQContent() {
-  const [lang, setLang] = useState<LangCode>('zh-TW');
+export default function FAQContent({ initialLang }: { initialLang: Locale }) {
+  const lang = initialLang as LangCode;
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    setLang(detectLang());
-  }, []);
-
-  const changeLang = useCallback((code: LangCode) => {
-    setLang(code);
-    localStorage.setItem('relaygo-lang', code);
-  }, []);
+  const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
 
   return (
     <div className="faq-page">
       <nav className="faq-nav">
-        <a href="/" className="faq-back">{UI.back[lang]}</a>
+        <a href={langPrefix || '/'} className="faq-back">{UI.back[lang]}</a>
         <div className="faq-lang-pills">
-          {LANGS.map((l) => (
-            <button
-              key={l.code}
-              className={`faq-lang-pill ${lang === l.code ? 'active' : ''}`}
-              onClick={() => changeLang(l.code)}
-            >
-              {l.label}
-            </button>
-          ))}
+          {LANGS.map((l) => {
+            const seg = localePathMap[l.code as Locale];
+            const href = seg ? `/${seg}/faq` : '/faq';
+            return (
+              <a
+                key={l.code}
+                href={href}
+                className={`faq-lang-pill ${lang === l.code ? 'active' : ''}`}
+              >
+                {l.label}
+              </a>
+            );
+          })}
         </div>
       </nav>
 

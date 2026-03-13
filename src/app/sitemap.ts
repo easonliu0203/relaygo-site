@@ -1,35 +1,46 @@
 import { MetadataRoute } from 'next';
 import { getPublishedGuides } from '@/lib/supabase';
+import { locales, localePathMap } from '@/lib/i18n-config';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const guides = await getPublishedGuides();
+  const base = 'https://relaygo.pro';
 
-  const guideEntries = guides.map((guide) => ({
-    url: `https://relaygo.pro/guide/${guide.slug}`,
-    lastModified: new Date(guide.updated_at),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+  const entries: MetadataRoute.Sitemap = [];
 
-  return [
-    {
-      url: 'https://relaygo.pro',
+  for (const locale of locales) {
+    const prefix = localePathMap[locale] ? `/${localePathMap[locale]}` : '';
+
+    entries.push({
+      url: `${base}${prefix || '/'}`,
       lastModified: new Date(),
       changeFrequency: 'daily',
-      priority: 1.0,
-    },
-    {
-      url: 'https://relaygo.pro/guides',
+      priority: locale === 'zh-TW' ? 1.0 : 0.9,
+    });
+
+    entries.push({
+      url: `${base}${prefix}/guides`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: 'https://relaygo.pro/faq',
+      priority: 0.8,
+    });
+
+    entries.push({
+      url: `${base}${prefix}/faq`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.7,
-    },
-    ...guideEntries,
-  ];
+    });
+
+    for (const guide of guides) {
+      entries.push({
+        url: `${base}${prefix}/guide/${guide.slug}`,
+        lastModified: new Date(guide.updated_at),
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      });
+    }
+  }
+
+  return entries;
 }

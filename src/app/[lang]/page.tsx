@@ -1,10 +1,16 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
-import { I18N, LANG_LABELS, LANG_TITLES, detectLang, type LangCode } from '@/lib/i18n';
-import { bodyHTML } from '@/lib/bodyhtml';
+import { I18N, LANG_LABELS, LANG_TITLES, type LangCode } from '@/lib/i18n';
+import { getBodyHTML } from '@/lib/bodyhtml';
+import { localePathMap, resolveLocale } from '@/lib/i18n-config';
+import { useParams } from 'next/navigation';
 
 export default function HomePage() {
+  const params = useParams();
+  const locale = resolveLocale(params.lang as string) as LangCode;
+  const langPrefix = localePathMap[locale] ? `/${localePathMap[locale]}` : '';
+
   const applyLang = useCallback((lang: LangCode) => {
     const dict = I18N[lang];
     if (!dict) return;
@@ -41,8 +47,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    const currentLang = detectLang();
-    applyLang(currentLang);
+    applyLang(locale);
 
     const langBtn = document.getElementById('langBtn');
     const langDropdown = document.getElementById('langDropdown');
@@ -58,13 +63,14 @@ export default function HomePage() {
     };
     document.addEventListener('click', handleDocClick);
 
+    // Language switcher: navigate to locale sub-path
     document.querySelectorAll('.lang-option').forEach((btn) => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
-        const lang = btn.getAttribute('data-lang') as LangCode;
-        applyLang(lang);
-        localStorage.setItem('relaygo_lang_manual', lang);
-        langDropdown?.classList.remove('open');
+        const langCode = btn.getAttribute('data-lang') as LangCode;
+        const pathSeg = localePathMap[langCode];
+        const targetUrl = pathSeg ? `/${pathSeg}/` : '/';
+        window.location.href = targetUrl;
       });
     });
 
@@ -152,7 +158,6 @@ export default function HomePage() {
         if (data.error) return;
         const fmt = (n: number) => 'NT$' + n.toLocaleString('en-US');
 
-        // Airport pricing
         const airports = ['tpe', 'tsa', 'rmq', 'khh'] as const;
         const vehicleTypes = ['S', 'M', 'L'] as const;
         for (const ap of airports) {
@@ -164,16 +169,13 @@ export default function HomePage() {
           }
         }
 
-        // Charter pricing
         const charterTypes = ['S', 'M', 'L', 'XL'] as const;
         for (const vt of charterTypes) {
           const ct = data.charter?.[vt];
           if (!ct) continue;
-
           const el6 = document.querySelector(`[data-price="charter-${vt}-6h"]`);
           const el8 = document.querySelector(`[data-price="charter-${vt}-8h"]`);
           const elOt = document.querySelector(`[data-price="charter-${vt}-ot"]`);
-
           if (el6) {
             if (ct.h6) {
               el6.textContent = fmt(ct.h6);
@@ -187,7 +189,7 @@ export default function HomePage() {
           if (elOt) elOt.textContent = fmt(ct.overtime);
         }
       })
-      .catch(() => {}); // Keep hardcoded fallback on error
+      .catch(() => {});
 
     return () => {
       langBtn?.removeEventListener('click', handleLangBtn);
@@ -196,7 +198,7 @@ export default function HomePage() {
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
     };
-  }, [applyLang]);
+  }, [applyLang, locale]);
 
-  return <div dangerouslySetInnerHTML={{ __html: bodyHTML }} />;
+  return <div dangerouslySetInnerHTML={{ __html: getBodyHTML(langPrefix) }} />;
 }

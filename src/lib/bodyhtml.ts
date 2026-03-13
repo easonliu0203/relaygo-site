@@ -1,14 +1,15 @@
-export const bodyHTML = `<!-- Navigation -->
+export function getBodyHTML(langPrefix: string = ''): string {
+  return `<!-- Navigation -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
-      <a href="#" class="nav-logo">Relay<span class="go">Go</span></a>
+      <a href="${langPrefix || '/'}" class="nav-logo">Relay<span class="go">Go</span></a>
       <div class="nav-right">
         <ul class="nav-links">
           <li><a href="#services" data-i18n="nav_services">服務項目</a></li>
           <li><a href="#fleet" data-i18n="nav_fleet">車型介紹</a></li>
           <li><a href="#pricing" data-i18n="nav_pricing">價格方案</a></li>
-          <li><a href="/guides" data-i18n="nav_guides">行程攻略</a></li>
-          <li><a href="/faq" data-i18n="nav_faq">常見問題</a></li>
+          <li><a href="${langPrefix}/guides" data-i18n="nav_guides">行程攻略</a></li>
+          <li><a href="${langPrefix}/faq" data-i18n="nav_faq">常見問題</a></li>
           <li><a href="#download" class="nav-cta" data-i18n="nav_download">下載 App</a></li>
         </ul>
         <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -18,8 +19,8 @@ export const bodyHTML = `<!-- Navigation -->
           <a href="#services" data-i18n="nav_services" class="mobile-menu-link">服務項目</a>
           <a href="#fleet" data-i18n="nav_fleet" class="mobile-menu-link">車型介紹</a>
           <a href="#pricing" data-i18n="nav_pricing" class="mobile-menu-link">價格方案</a>
-          <a href="/guides" data-i18n="nav_guides" class="mobile-menu-link">行程攻略</a>
-          <a href="/faq" data-i18n="nav_faq" class="mobile-menu-link">常見問題</a>
+          <a href="${langPrefix}/guides" data-i18n="nav_guides" class="mobile-menu-link">行程攻略</a>
+          <a href="${langPrefix}/faq" data-i18n="nav_faq" class="mobile-menu-link">常見問題</a>
           <a href="#download" data-i18n="nav_download" class="mobile-menu-cta">下載 App</a>
         </div>
         <div class="lang-switcher">
@@ -508,3 +509,7 @@ export const bodyHTML = `<!-- Navigation -->
       </div>
     </div>
   </footer>`;
+}
+
+// Keep backward-compatible export
+export const bodyHTML = getBodyHTML('');

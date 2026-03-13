@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import type { TourGuide } from '@/lib/supabase';
+import { localePathMap, type Locale } from '@/lib/i18n-config';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms';
 
@@ -36,51 +36,31 @@ const ROUTE_ICONS: Record<string, string> = {
   'alishan-forest': '🌲',
 };
 
-function detectLang(): LangCode {
-  if (typeof window === 'undefined') return 'zh-TW';
-  const manual = localStorage.getItem('relaygo_lang_manual');
-  if (manual && ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms'].includes(manual)) return manual as LangCode;
-  const bl = navigator.language || '';
-  if (bl.startsWith('zh-CN') || bl === 'zh-Hans' || bl === 'zh') return 'zh-CN';
-  if (bl.startsWith('zh')) return 'zh-TW';
-  if (bl.startsWith('ja')) return 'ja';
-  if (bl.startsWith('ko')) return 'ko';
-  if (bl.startsWith('th')) return 'th';
-  if (bl.startsWith('vi')) return 'vi';
-  if (bl.startsWith('ms') || bl.startsWith('my')) return 'ms';
-  return 'en';
-}
-
 function t(obj: Record<string, string>, lang: LangCode): string {
   return obj[lang] || obj['zh-TW'] || obj['en'] || '';
 }
 
-export default function GuidesListContent({ guides }: { guides: TourGuide[] }) {
-  const [lang, setLang] = useState<LangCode>('zh-TW');
-
-  useEffect(() => {
-    setLang(detectLang());
-  }, []);
+export default function GuidesListContent({ guides, initialLang }: { guides: TourGuide[]; initialLang: Locale }) {
+  const lang = initialLang as LangCode;
+  const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
 
   return (
     <div className="guides-page">
-      {/* Header */}
       <div className="guides-header">
         <div className="guides-header-inner">
-          <a href="/" className="guide-back-link">← {UI.home[lang]}</a>
+          <a href={langPrefix || '/'} className="guide-back-link">← {UI.home[lang]}</a>
           <h1 className="guides-page-title">{UI.pageTitle[lang]}</h1>
           <p className="guides-page-subtitle">{UI.pageSubtitle[lang]}</p>
         </div>
       </div>
 
-      {/* Grid */}
       <div className="guides-grid-wrap">
         {guides.length === 0 ? (
           <p className="guides-empty">{UI.noGuides[lang]}</p>
         ) : (
           <div className="guides-grid">
             {guides.map((guide) => (
-              <a key={guide.id} href={`/guide/${guide.slug}`} className="guide-card">
+              <a key={guide.id} href={`${langPrefix}/guide/${guide.slug}`} className="guide-card">
                 <div
                   className="guide-card-img"
                   style={guide.cover_image ? { backgroundImage: `url(${guide.cover_image})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}

@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import type { TourGuide } from '@/lib/supabase';
+import { localePathMap, type Locale } from '@/lib/i18n-config';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms';
 
@@ -21,22 +22,6 @@ const CITY_ICONS: Record<string, string> = {
   '台北': '🏙️', '台中': '🌄', '花蓮': '🏔️', '高雄': '🌊', '嘉義': '🌲',
   '南投': '🏞️', '屏東': '🏖️', '台南': '🏯', '宜蘭': '♨️',
 };
-
-function detectLang(): LangCode {
-  if (typeof window === 'undefined') return 'zh-TW';
-  const manual = localStorage.getItem('relaygo_lang_manual');
-  if (manual && ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms'].includes(manual)) return manual as LangCode;
-  const bl = navigator.language || '';
-  if (bl.startsWith('zh-CN') || bl === 'zh-Hans' || bl === 'zh') return 'zh-CN';
-  if (bl.startsWith('zh')) return 'zh-TW';
-  if (bl.startsWith('ja')) return 'ja';
-  if (bl.startsWith('ko')) return 'ko';
-  if (bl.startsWith('th')) return 'th';
-  if (bl.startsWith('vi')) return 'vi';
-  if (bl.startsWith('ms') || bl.startsWith('my')) return 'ms';
-  if (bl.startsWith('en')) return 'en';
-  return 'en';
-}
 
 function t(obj: Record<string, string>, lang: LangCode): string {
   return obj[lang] || obj['zh-TW'] || obj['en'] || '';
@@ -68,13 +53,10 @@ function renderMarkdown(md: string): string {
     .replace(/<p><\/p>/g, '');
 }
 
-export default function GuideContent({ guide }: { guide: TourGuide }) {
-  const [lang, setLang] = useState<LangCode>('zh-TW');
+export default function GuideContent({ guide, initialLang }: { guide: TourGuide; initialLang: Locale }) {
+  const lang = initialLang as LangCode;
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    setLang(detectLang());
-  }, []);
+  const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
 
   const title = t(guide.title, lang);
   const description = t(guide.description, lang);
@@ -96,7 +78,7 @@ export default function GuideContent({ guide }: { guide: TourGuide }) {
       >
         <div className="guide-hero-overlay" />
         <div className="guide-hero-content">
-          <a href="/guides" className="guide-back-link">
+          <a href={`${langPrefix}/guides`} className="guide-back-link">
             ← {UI.back[lang]}
           </a>
           <h1 className="guide-title">{title}</h1>
