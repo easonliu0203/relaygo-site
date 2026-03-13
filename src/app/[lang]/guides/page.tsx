@@ -48,6 +48,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 export default async function GuidesPage({ params }: { params: { lang: string } }) {
   const locale = resolveLocale(params.lang);
   const guides = await getPublishedGuides();
+  const langPrefix = localePathMap[locale] ? `/${localePathMap[locale]}` : '';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -62,11 +63,24 @@ export default async function GuidesPage({ params }: { params: { lang: string } 
     },
   };
 
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'RelayGo', item: `https://relaygo.pro${langPrefix || '/'}` },
+      { '@type': 'ListItem', position: 2, name: GUIDES_TITLES[locale].split(' | ')[0], item: `https://relaygo.pro${langPrefix}/guides` },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <GuidesListContent guides={guides} initialLang={locale} />
     </>

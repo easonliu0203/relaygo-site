@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import FAQContent from './FAQContent';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
+import { FAQS, type LangCode } from '@/lib/faq-data';
 
 const FAQ_TITLES: Record<Locale, string> = {
   'zh-TW': '常見問題 FAQ | RelayGo 包車服務',
@@ -11,6 +12,16 @@ const FAQ_TITLES: Record<Locale, string> = {
   th: 'คำถามที่พบบ่อย | RelayGo บริการรถเหมา',
   vi: 'Câu hỏi thường gặp | RelayGo Dịch vụ xe riêng',
   ms: 'Soalan Lazim | RelayGo Perkhidmatan Sewa Kenderaan',
+};
+
+const BREADCRUMB_HOME: Record<Locale, string> = {
+  'zh-TW': 'RelayGo', 'zh-CN': 'RelayGo', en: 'RelayGo', ja: 'RelayGo',
+  ko: 'RelayGo', th: 'RelayGo', vi: 'RelayGo', ms: 'RelayGo',
+};
+
+const BREADCRUMB_FAQ: Record<Locale, string> = {
+  'zh-TW': '常見問題', 'zh-CN': '常见问题', en: 'FAQ', ja: 'よくある質問',
+  ko: '자주 묻는 질문', th: 'คำถามที่พบบ่อย', vi: 'Câu hỏi thường gặp', ms: 'Soalan Lazim',
 };
 
 function buildFaqAlternates() {
@@ -43,7 +54,47 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   };
 }
 
+function faqPageJsonLd(locale: Locale) {
+  const lang = locale as LangCode;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question[lang] || faq.question['zh-TW'],
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer[lang] || faq.answer['zh-TW'],
+      },
+    })),
+  };
+}
+
+function breadcrumbJsonLd(locale: Locale) {
+  const langPrefix = localePathMap[locale] ? `/${localePathMap[locale]}` : '';
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: BREADCRUMB_HOME[locale], item: `https://relaygo.pro${langPrefix || '/'}` },
+      { '@type': 'ListItem', position: 2, name: BREADCRUMB_FAQ[locale], item: `https://relaygo.pro${langPrefix}/faq` },
+    ],
+  };
+}
+
 export default function FAQPage({ params }: { params: { lang: string } }) {
   const locale = resolveLocale(params.lang);
-  return <FAQContent initialLang={locale} />;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(locale)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(locale)) }}
+      />
+      <FAQContent initialLang={locale} />
+    </>
+  );
 }
