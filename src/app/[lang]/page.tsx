@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { I18N, LANG_LABELS, LANG_TITLES, type LangCode } from '@/lib/i18n';
 import { getBodyHTML } from '@/lib/bodyhtml';
 import { localePathMap, resolveLocale } from '@/lib/i18n-config';
@@ -10,6 +10,7 @@ export default function HomePage() {
   const params = useParams();
   const locale = resolveLocale(params.lang as string) as LangCode;
   const langPrefix = localePathMap[locale] ? `/${localePathMap[locale]}` : '';
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const applyLang = useCallback((lang: LangCode) => {
     const dict = I18N[lang];
@@ -46,49 +47,72 @@ export default function HomePage() {
 
   }, []);
 
+  // Event delegation: handle all clicks on innerHTML elements via the wrapper div
+  const handleContainerClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+
+    // Language button toggle
+    if (target.closest('#langBtn')) {
+      e.stopPropagation();
+      const dropdown = containerRef.current?.querySelector('#langDropdown');
+      dropdown?.classList.toggle('open');
+      return;
+    }
+
+    // Language option click → navigate
+    const langOption = target.closest('.lang-option');
+    if (langOption) {
+      e.stopPropagation();
+      const langCode = langOption.getAttribute('data-lang') as LangCode;
+      const pathSeg = localePathMap[langCode];
+      window.location.href = pathSeg ? `/${pathSeg}/` : '/';
+      return;
+    }
+
+    // Hamburger menu toggle
+    if (target.closest('#hamburger')) {
+      const hamburger = containerRef.current?.querySelector('#hamburger');
+      const mobileMenu = containerRef.current?.querySelector('#mobileMenu');
+      hamburger?.classList.toggle('open');
+      mobileMenu?.classList.toggle('open');
+      return;
+    }
+
+    // Mobile menu link click → close menu
+    if (target.closest('.mobile-menu-link') || target.closest('.mobile-menu-cta')) {
+      const hamburger = containerRef.current?.querySelector('#hamburger');
+      const mobileMenu = containerRef.current?.querySelector('#mobileMenu');
+      hamburger?.classList.remove('open');
+      mobileMenu?.classList.remove('open');
+      return;
+    }
+
+    // Pricing tab click
+    const pricingTab = target.closest('.pricing-tab');
+    if (pricingTab) {
+      containerRef.current?.querySelectorAll('.pricing-tab').forEach((t) => t.classList.remove('active'));
+      pricingTab.classList.add('active');
+      const panelId = pricingTab.getAttribute('data-panel');
+      containerRef.current?.querySelectorAll('.pricing-panel').forEach((p) => p.classList.remove('active'));
+      const panel = document.getElementById('panel-' + panelId);
+      panel?.classList.add('active');
+      return;
+    }
+
+    // Click anywhere else → close lang dropdown
+    containerRef.current?.querySelector('#langDropdown')?.classList.remove('open');
+  }, []);
+
   useEffect(() => {
     applyLang(locale);
 
-    const langBtn = document.getElementById('langBtn');
-    const langDropdown = document.getElementById('langDropdown');
-
-    const handleLangBtn = (e: Event) => {
-      e.stopPropagation();
-      langDropdown?.classList.toggle('open');
-    };
-    langBtn?.addEventListener('click', handleLangBtn);
-
+    // Close lang dropdown on outside click
     const handleDocClick = () => {
-      langDropdown?.classList.remove('open');
+      containerRef.current?.querySelector('#langDropdown')?.classList.remove('open');
     };
     document.addEventListener('click', handleDocClick);
 
-    // Language switcher: navigate to locale sub-path
-    document.querySelectorAll('.lang-option').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const langCode = btn.getAttribute('data-lang') as LangCode;
-        const pathSeg = localePathMap[langCode];
-        const targetUrl = pathSeg ? `/${pathSeg}/` : '/';
-        window.location.href = targetUrl;
-      });
-    });
-
-    // Hamburger mobile menu
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const handleHamburger = () => {
-      hamburger?.classList.toggle('open');
-      mobileMenu?.classList.toggle('open');
-    };
-    hamburger?.addEventListener('click', handleHamburger);
-    document.querySelectorAll('.mobile-menu-link, .mobile-menu-cta').forEach((link) => {
-      link.addEventListener('click', () => {
-        hamburger?.classList.remove('open');
-        mobileMenu?.classList.remove('open');
-      });
-    });
-
+    // Scroll handler for navbar
     const navbar = document.getElementById('navbar');
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -99,6 +123,7 @@ export default function HomePage() {
     };
     window.addEventListener('scroll', handleScroll);
 
+    // Fade-up animations
     const fadeEls = document.querySelectorAll('.fade-up');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -136,20 +161,6 @@ export default function HomePage() {
       });
     }, { threshold: 0.5 });
     statNumbers.forEach((el) => statsObserver.observe(el));
-
-    const pricingTabs = document.querySelectorAll('.pricing-tab');
-    pricingTabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        pricingTabs.forEach((t) => t.classList.remove('active'));
-        tab.classList.add('active');
-        const panelId = tab.getAttribute('data-panel');
-        document.querySelectorAll('.pricing-panel').forEach((p) => {
-          p.classList.remove('active');
-        });
-        const panel = document.getElementById('panel-' + panelId);
-        panel?.classList.add('active');
-      });
-    });
 
     // Fetch dynamic pricing from Supabase
     fetch('/api/pricing')
@@ -192,13 +203,18 @@ export default function HomePage() {
       .catch(() => {});
 
     return () => {
-      langBtn?.removeEventListener('click', handleLangBtn);
-      hamburger?.removeEventListener('click', handleHamburger);
       document.removeEventListener('click', handleDocClick);
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
+      statsObserver.disconnect();
     };
   }, [applyLang, locale]);
 
-  return <div dangerouslySetInnerHTML={{ __html: getBodyHTML(langPrefix, locale) }} />;
+  return (
+    <div
+      ref={containerRef}
+      onClick={handleContainerClick}
+      dangerouslySetInnerHTML={{ __html: getBodyHTML(langPrefix, locale) }}
+    />
+  );
 }
