@@ -16,6 +16,16 @@ const UI: Record<string, Record<LangCode, string>> = {
   share: { 'zh-TW': '分享', 'zh-CN': '分享', en: 'Share', ja: 'シェア', ko: '공유', th: 'แชร์', vi: 'Chia sẻ', ms: 'Kongsi' },
   copy: { 'zh-TW': '複製連結', 'zh-CN': '复制链接', en: 'Copy Link', ja: 'リンクコピー', ko: '링크 복사', th: 'คัดลอกลิงก์', vi: 'Sao chép liên kết', ms: 'Salin pautan' },
   copied: { 'zh-TW': '已複製！', 'zh-CN': '已复制！', en: 'Copied!', ja: 'コピー済み！', ko: '복사됨!', th: 'คัดลอกแล้ว!', vi: 'Đã sao chép!', ms: 'Disalin!' },
+  itineraryNote: {
+    'zh-TW': '行程完全由您自訂，可以自由新增與刪除。網站上的景點路線僅供參考，司機會按照您的路線行駛，路線不順時也會提供專業建議以節省交通時間。',
+    'zh-CN': '行程完全由您自定，可以自由新增与删除。网站上的景点路线仅供参考，司机会按照您的路线行驶，路线不顺时也会提供专业建议以节省交通时间。',
+    en: 'Your itinerary is fully customizable — feel free to add or remove any stops. The routes on this website are for reference only. Your driver will follow your preferred route and offer professional suggestions to save travel time if the route is not optimal.',
+    ja: '行程はすべてお客様のご希望通りにカスタマイズ可能です。立ち寄り先の追加・削除も自由に行えます。本サイトの観光ルートはあくまで参考です。ドライバーはお客様のルートに沿って走行し、効率が悪い場合は交通時間を節約するためのプロのアドバイスもご提供いたします。',
+    ko: '일정은 완전히 자유롭게 맞춤 설정할 수 있으며, 원하는 대로 추가하거나 삭제할 수 있습니다. 웹사이트의 관광 노선은 참고용이며, 기사님이 고객님의 노선대로 운행하고, 비효율적인 경우 교통 시간을 절약할 수 있는 전문적인 조언도 제공합니다.',
+    th: 'กำหนดการเดินทางปรับแต่งได้ตามใจ สามารถเพิ่มหรือลดจุดแวะได้อย่างอิสระ เส้นทางบนเว็บไซต์เป็นเพียงข้อมูลอ้างอิง คนขับจะขับตามเส้นทางของคุณ และแนะนำเส้นทางที่ดีกว่าเพื่อประหยัดเวลาเดินทาง',
+    vi: 'Lộ trình hoàn toàn do bạn tùy chỉnh, có thể tự do thêm hoặc bớt điểm dừng. Các tuyến đường trên trang web chỉ mang tính tham khảo. Tài xế sẽ đi theo lộ trình của bạn và đưa ra gợi ý chuyên nghiệp để tiết kiệm thời gian di chuyển khi cần.',
+    ms: 'Jadual perjalanan boleh disesuaikan sepenuhnya — anda bebas menambah atau membuang mana-mana perhentian. Laluan di laman web ini adalah untuk rujukan sahaja. Pemandu akan mengikut laluan pilihan anda dan memberi cadangan profesional untuk menjimatkan masa perjalanan jika perlu.',
+  },
 };
 
 const CITY_ICONS: Record<string, string> = {
@@ -111,6 +121,10 @@ export default function GuideContent({ guide, initialLang }: { guide: TourGuide;
             className="guide-article"
             dangerouslySetInnerHTML={{ __html: contentHtml }}
           />
+          <div className="guide-itinerary-note">
+            <span className="guide-itinerary-note-icon">💡</span>
+            <p>{UI.itineraryNote[lang]}</p>
+          </div>
         </div>
 
         {/* Sidebar */}

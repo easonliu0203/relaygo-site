@@ -73,6 +73,8 @@ Each guide follows this markdown structure. Read `references/content-template.md
 - **Wear**: [Shoes/clothing + reason]
 ```
 
+> **Note:** A "customize your itinerary" callout is automatically rendered below every guide article by `GuideContent.tsx`. It tells users the itinerary is fully customizable and the driver will follow their preferred route. This is i18n'd for all 8 languages. You do NOT need to add this text to the markdown content — it is injected by the component.
+
 ## Photo Workflow
 
 Unsplash search often returns irrelevant results for Taiwan-specific attractions. Follow this process carefully to avoid embedding photos that don't match the content:
