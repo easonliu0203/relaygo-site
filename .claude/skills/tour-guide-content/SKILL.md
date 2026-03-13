@@ -178,3 +178,4 @@ Run through before finalizing any guide:
 | kenting-south | 墾丁南台灣一日遊 | 8 | 高雄 |
 | alishan-forest | 阿里山森林一日遊 | 8 | 嘉義 |
 | yangmingshan | 陽明山一日遊 | 8 | 台北 |
+| north-coast | 北海岸一日遊 | 8 | 台北 |
