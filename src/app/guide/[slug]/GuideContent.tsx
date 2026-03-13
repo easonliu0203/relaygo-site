@@ -3,18 +3,18 @@
 import { useEffect, useState, useMemo } from 'react';
 import type { TourGuide } from '@/lib/supabase';
 
-type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko';
+type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms';
 
 const UI: Record<string, Record<LangCode, string>> = {
-  back: { 'zh-TW': '返回攻略列表', 'zh-CN': '返回攻略列表', en: 'Back to Guides', ja: 'ガイド一覧へ', ko: '가이드 목록' },
-  hours: { 'zh-TW': '小時行程', 'zh-CN': '小时行程', en: 'hour trip', ja: '時間の旅', ko: '시간 여행' },
-  bookNow: { 'zh-TW': '立即預約包車', 'zh-CN': '立即预约包车', en: 'Book Charter Now', ja: '今すぐ予約する', ko: '지금 예약하기' },
-  duration: { 'zh-TW': '建議時數', 'zh-CN': '建议时长', en: 'Duration', ja: '所要時間', ko: '소요 시간' },
-  departure: { 'zh-TW': '出發地', 'zh-CN': '出发地', en: 'Departure', ja: '出発地', ko: '출발지' },
-  tripInfo: { 'zh-TW': '行程資訊', 'zh-CN': '行程信息', en: 'Trip Info', ja: 'ツアー情報', ko: '여행 정보' },
-  share: { 'zh-TW': '分享', 'zh-CN': '分享', en: 'Share', ja: 'シェア', ko: '공유' },
-  copy: { 'zh-TW': '複製連結', 'zh-CN': '复制链接', en: 'Copy Link', ja: 'リンクコピー', ko: '링크 복사' },
-  copied: { 'zh-TW': '已複製！', 'zh-CN': '已复制！', en: 'Copied!', ja: 'コピー済み！', ko: '복사됨!' },
+  back: { 'zh-TW': '返回攻略列表', 'zh-CN': '返回攻略列表', en: 'Back to Guides', ja: 'ガイド一覧へ', ko: '가이드 목록', th: 'กลับไปรายการไกด์', vi: 'Quay lại danh sách', ms: 'Kembali ke senarai panduan' },
+  hours: { 'zh-TW': '小時行程', 'zh-CN': '小时行程', en: 'hour trip', ja: '時間の旅', ko: '시간 여행', th: 'ชั่วโมง', vi: 'giờ', ms: 'jam' },
+  bookNow: { 'zh-TW': '立即預約包車', 'zh-CN': '立即预约包车', en: 'Book Charter Now', ja: '今すぐ予約する', ko: '지금 예약하기', th: 'จองรถเหมาเลย', vi: 'Đặt xe ngay', ms: 'Tempah sekarang' },
+  duration: { 'zh-TW': '建議時數', 'zh-CN': '建议时长', en: 'Duration', ja: '所要時間', ko: '소요 시간', th: 'ระยะเวลา', vi: 'Thời lượng', ms: 'Tempoh' },
+  departure: { 'zh-TW': '出發地', 'zh-CN': '出发地', en: 'Departure', ja: '出発地', ko: '출발지', th: 'จุดออกเดินทาง', vi: 'Điểm khởi hành', ms: 'Lokasi berlepas' },
+  tripInfo: { 'zh-TW': '行程資訊', 'zh-CN': '行程信息', en: 'Trip Info', ja: 'ツアー情報', ko: '여행 정보', th: 'ข้อมูลทริป', vi: 'Thông tin chuyến đi', ms: 'Maklumat perjalanan' },
+  share: { 'zh-TW': '分享', 'zh-CN': '分享', en: 'Share', ja: 'シェア', ko: '공유', th: 'แชร์', vi: 'Chia sẻ', ms: 'Kongsi' },
+  copy: { 'zh-TW': '複製連結', 'zh-CN': '复制链接', en: 'Copy Link', ja: 'リンクコピー', ko: '링크 복사', th: 'คัดลอกลิงก์', vi: 'Sao chép liên kết', ms: 'Salin pautan' },
+  copied: { 'zh-TW': '已複製！', 'zh-CN': '已复制！', en: 'Copied!', ja: 'コピー済み！', ko: '복사됨!', th: 'คัดลอกแล้ว!', vi: 'Đã sao chép!', ms: 'Disalin!' },
 };
 
 const CITY_ICONS: Record<string, string> = {
@@ -25,12 +25,15 @@ const CITY_ICONS: Record<string, string> = {
 function detectLang(): LangCode {
   if (typeof window === 'undefined') return 'zh-TW';
   const manual = localStorage.getItem('relaygo_lang_manual');
-  if (manual && ['zh-TW', 'zh-CN', 'en', 'ja', 'ko'].includes(manual)) return manual as LangCode;
+  if (manual && ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms'].includes(manual)) return manual as LangCode;
   const bl = navigator.language || '';
   if (bl.startsWith('zh-CN') || bl === 'zh-Hans' || bl === 'zh') return 'zh-CN';
   if (bl.startsWith('zh')) return 'zh-TW';
   if (bl.startsWith('ja')) return 'ja';
   if (bl.startsWith('ko')) return 'ko';
+  if (bl.startsWith('th')) return 'th';
+  if (bl.startsWith('vi')) return 'vi';
+  if (bl.startsWith('ms') || bl.startsWith('my')) return 'ms';
   if (bl.startsWith('en')) return 'en';
   return 'en';
 }

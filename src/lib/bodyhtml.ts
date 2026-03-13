@@ -33,6 +33,9 @@ export const bodyHTML = `<!-- Navigation -->
             <button class="lang-option" data-lang="en">English</button>
             <button class="lang-option" data-lang="ja">日本語</button>
             <button class="lang-option" data-lang="ko">한국어</button>
+            <button class="lang-option" data-lang="th">ไทย</button>
+            <button class="lang-option" data-lang="vi">Tiếng Việt</button>
+            <button class="lang-option" data-lang="ms">Bahasa Melayu</button>
           </div>
         </div>
       </div>

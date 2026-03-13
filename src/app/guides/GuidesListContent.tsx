@@ -3,21 +3,24 @@
 import { useEffect, useState } from 'react';
 import type { TourGuide } from '@/lib/supabase';
 
-type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko';
+type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms';
 
 const UI: Record<string, Record<LangCode, string>> = {
-  pageTitle: { 'zh-TW': '包車攻略', 'zh-CN': '包车攻略', en: 'Travel Guides', ja: 'チャーターガイド', ko: '차터 가이드' },
+  pageTitle: { 'zh-TW': '包車攻略', 'zh-CN': '包车攻略', en: 'Travel Guides', ja: 'チャーターガイド', ko: '차터 가이드', th: 'คู่มือเที่ยวรถเหมา', vi: 'Cẩm nang du lịch', ms: 'Panduan perjalanan' },
   pageSubtitle: {
     'zh-TW': '精選台灣包車旅遊路線，專業司機帶路，行程規劃一次搞定',
     'zh-CN': '精选台湾包车旅游路线，专业司机带路，行程规划一次搞定',
     en: 'Curated charter tour routes in Taiwan with professional drivers',
     ja: '厳選した台湾チャーターツアールート、プロドライバーがご案内',
     ko: '전문 기사와 함께하는 엄선된 대만 차터 투어 루트',
+    th: 'เส้นทางท่องเที่ยวรถเหมาคัดสรรในไต้หวัน พร้อมคนขับมืออาชีพ',
+    vi: 'Tuyến du lịch xe riêng tuyển chọn tại Đài Loan cùng tài xế chuyên nghiệp',
+    ms: 'Laluan pelancongan sewa kenderaan terpilih di Taiwan bersama pemandu profesional',
   },
-  hours: { 'zh-TW': '小時', 'zh-CN': '小时', en: 'hrs', ja: '時間', ko: '시간' },
-  readMore: { 'zh-TW': '查看攻略', 'zh-CN': '查看攻略', en: 'Read More', ja: '詳細を見る', ko: '자세히 보기' },
-  home: { 'zh-TW': '返回首頁', 'zh-CN': '返回首页', en: 'Home', ja: 'トップへ', ko: '홈으로' },
-  noGuides: { 'zh-TW': '攻略即將上線，敬請期待！', 'zh-CN': '攻略即将上线，敬请期待！', en: 'Guides coming soon!', ja: 'ガイド準備中！', ko: '가이드 준비 중!' },
+  hours: { 'zh-TW': '小時', 'zh-CN': '小时', en: 'hrs', ja: '時間', ko: '시간', th: 'ชม.', vi: 'giờ', ms: 'jam' },
+  readMore: { 'zh-TW': '查看攻略', 'zh-CN': '查看攻略', en: 'Read More', ja: '詳細を見る', ko: '자세히 보기', th: 'อ่านเพิ่มเติม', vi: 'Xem thêm', ms: 'Baca lagi' },
+  home: { 'zh-TW': '返回首頁', 'zh-CN': '返回首页', en: 'Home', ja: 'トップへ', ko: '홈으로', th: 'หน้าหลัก', vi: 'Trang chủ', ms: 'Laman utama' },
+  noGuides: { 'zh-TW': '攻略即將上線，敬請期待！', 'zh-CN': '攻略即将上线，敬请期待！', en: 'Guides coming soon!', ja: 'ガイド準備中！', ko: '가이드 준비 중!', th: 'คู่มือกำลังจะมาเร็ว ๆ นี้!', vi: 'Cẩm nang sắp ra mắt!', ms: 'Panduan akan datang tidak lama lagi!' },
 };
 
 const CITY_ICONS: Record<string, string> = {
@@ -36,12 +39,15 @@ const ROUTE_ICONS: Record<string, string> = {
 function detectLang(): LangCode {
   if (typeof window === 'undefined') return 'zh-TW';
   const manual = localStorage.getItem('relaygo_lang_manual');
-  if (manual && ['zh-TW', 'zh-CN', 'en', 'ja', 'ko'].includes(manual)) return manual as LangCode;
+  if (manual && ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms'].includes(manual)) return manual as LangCode;
   const bl = navigator.language || '';
   if (bl.startsWith('zh-CN') || bl === 'zh-Hans' || bl === 'zh') return 'zh-CN';
   if (bl.startsWith('zh')) return 'zh-TW';
   if (bl.startsWith('ja')) return 'ja';
   if (bl.startsWith('ko')) return 'ko';
+  if (bl.startsWith('th')) return 'th';
+  if (bl.startsWith('vi')) return 'vi';
+  if (bl.startsWith('ms') || bl.startsWith('my')) return 'ms';
   return 'en';
 }
 

@@ -166,6 +166,30 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'Question',
+                  name: 'RelayGo รับ-ส่งถึงที่พักได้ไหม?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'ได้เลย บริการรถเหมาจะไปรับคุณถึงโรงแรม ที่พัก หรือจุดที่กำหนด โดยไม่ต้องเช่ารถหรือใช้ขนส่งสาธารณะ',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'RelayGo có đón tận nơi không?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Có. Dịch vụ xe riêng sẽ đón bạn tại khách sạn, Airbnb hoặc bất kỳ địa điểm nào bạn chỉ định — không cần thuê xe hay tìm phương tiện công cộng.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Adakah RelayGo menyediakan perkhidmatan jemput dari pintu ke pintu?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Ya. Perkhidmatan sewa kenderaan kami akan menjemput anda di hotel, Airbnb, atau mana-mana lokasi yang ditetapkan — tanpa perlu menyewa kereta atau menggunakan pengangkutan awam.',
+                  },
+                },
+                {
+                  '@type': 'Question',
                   name: '司機素質如何？',
                   acceptedAnswer: {
                     '@type': 'Answer',
@@ -194,6 +218,30 @@ export default function RootLayout({
                   acceptedAnswer: {
                     '@type': 'Answer',
                     text: '모든 기사님은 풍부한 차량 대절 경험을 갖추고 있으며 부정적 리뷰가 없는 분만 배정합니다.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'คนขับมีคุณภาพอย่างไร?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'คนขับทุกคนเป็นมืออาชีพที่มีประสบการณ์และไม่มีรีวิวเชิงลบ หากได้รับการร้องเรียนจะถูกถอดออกจากทีมทันที',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Chất lượng tài xế được đảm bảo như thế nào?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Tất cả tài xế đều là người có kinh nghiệm lâu năm và không có đánh giá tiêu cực. Tài xế nào nhận được khiếu nại sẽ bị loại khỏi đội ngũ ngay lập tức.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Bagaimana kualiti pemandu dijamin?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Semua pemandu adalah profesional berpengalaman dengan sifar ulasan negatif. Mana-mana pemandu yang menerima aduan akan dikeluarkan daripada senarai serta-merta.',
                   },
                 },
                 {
@@ -230,6 +278,30 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'Question',
+                  name: 'รถที่ใช้ถูกกฎหมายหรือไม่?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'รถทุกคันเป็นรถเช่าที่จดทะเบียนถูกต้องหรือรถร่วมบริการที่มีประกันครบถ้วน ไม่ใช่รถผิดกฎหมาย',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Xe có đăng ký hợp pháp không?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Tất cả xe đều là xe cho thuê có giấy phép hoặc xe hợp đồng đã đăng ký, có bảo hiểm đầy đủ — tuyệt đối không sử dụng xe trái phép.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Adakah kenderaan berdaftar secara sah?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Sudah tentu. Setiap kenderaan adalah kereta sewa berlesen atau kenderaan e-hailing berdaftar dengan perlindungan insurans penuh — bukan kenderaan tanpa lesen.',
+                  },
+                },
+                {
+                  '@type': 'Question',
                   name: '費用是否包含停車費、過路費等額外費用？',
                   acceptedAnswer: {
                     '@type': 'Answer',
@@ -258,6 +330,30 @@ export default function RootLayout({
                   acceptedAnswer: {
                     '@type': 'Answer',
                     text: '기사 식비, 숙박비, 주차비, 유류비, 통행료 등 모든 비용을 사전에 명확히 안내드리며 추가 요금은 없습니다.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'ค่าทางด่วน ค่าจอดรถ และค่าน้ำมันรวมอยู่ในราคาแล้วหรือไม่?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'ค่าใช้จ่ายทั้งหมด ได้แก่ ค่าอาหารคนขับ ที่พัก ค่าจอดรถ ค่าน้ำมัน และค่าทางด่วน จะแจ้งให้ทราบล่วงหน้าอย่างชัดเจน ไม่มีค่าใช้จ่ายเพิ่มเติมระหว่างทาง',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Phí cầu đường, đỗ xe và nhiên liệu có bao gồm trong giá không?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Tất cả chi phí — bữa ăn tài xế, chỗ ở, đỗ xe, nhiên liệu và phí cầu đường — đều được liệt kê rõ ràng từ đầu. Không có phụ phí phát sinh trong suốt chuyến đi.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Adakah tol, parkir, dan bahan api termasuk dalam harga?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Semua kos — makan pemandu, penginapan, parkir, bahan api, dan tol — disenaraikan dengan jelas terlebih dahulu. Tiada caj tambahan tersembunyi sepanjang perjalanan anda.',
                   },
                 },
                 {
@@ -294,6 +390,30 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'Question',
+                  name: 'ต้องให้ทิปคนขับไหม?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'ทิปไม่ได้บังคับ ขึ้นอยู่กับความพึงพอใจของคุณ หากคุณรู้สึกว่าคนขับให้บริการดีเยี่ยม การให้ทิปจะเป็นกำลังใจที่ดี',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Có cần tip cho tài xế không?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Tip không bắt buộc. Hoàn toàn tùy thuộc vào bạn — nếu bạn hài lòng với dịch vụ của tài xế, một khoản tip nhỏ luôn được trân trọng.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Perlukah memberi tip kepada pemandu?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Memberi tip tidak diwajibkan. Ia bergantung sepenuhnya kepada anda — jika anda berpuas hati dengan perkhidmatan pemandu, tip sentiasa dihargai.',
+                  },
+                },
+                {
+                  '@type': 'Question',
                   name: '包車行程可以自訂嗎？',
                   acceptedAnswer: {
                     '@type': 'Answer',
@@ -322,6 +442,30 @@ export default function RootLayout({
                   acceptedAnswer: {
                     '@type': 'Answer',
                     text: '네, 일정은 자유롭게 구성 가능합니다. 사이트의 코스는 참고용이며, 비효율적인 동선은 기사님이 전문적으로 조언해 드립니다.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'กำหนดเส้นทางเองได้ไหม?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'ได้เลย คุณวางแผนเส้นทางเอง แล้วคนขับจะขับตามเส้นทางของคุณ เส้นทางบนเว็บไซต์เป็นเพียงคำแนะนำ หากเส้นทางไม่เหมาะสม คนขับจะแนะนำเพื่อประหยัดเวลาเดินทาง',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Tôi có thể tùy chỉnh lịch trình không?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Hoàn toàn được. Bạn lên lịch trình và tài xế sẽ đi theo. Các tuyến đường trên website chỉ mang tính tham khảo. Nếu tuyến đường chưa tối ưu, tài xế sẽ tư vấn chuyên môn để tiết kiệm thời gian di chuyển.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Bolehkah saya menyesuaikan jadual perjalanan?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Sudah tentu. Anda merancang laluan dan pemandu akan mengikutinya. Laluan di laman web kami hanyalah cadangan. Jika laluan tidak optimum, pemandu akan memberikan nasihat profesional untuk menjimatkan masa perjalanan.',
                   },
                 },
                 {
@@ -358,6 +502,30 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'Question',
+                  name: 'จองรถเหมาอย่างไร?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'จองผ่านแอป RelayGo หลังจองแล้วสามารถติดต่อฝ่ายบริการลูกค้าผ่านแชทในแอปได้ แนะนำให้จองล่วงหน้าอย่างน้อย 1 เดือนในช่วงไฮซีซั่น',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Làm thế nào để đặt xe riêng?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Đặt xe qua ứng dụng RelayGo. Sau khi đặt, bạn có thể liên hệ bộ phận chăm sóc khách hàng qua tính năng chat trong ứng dụng. Chúng tôi khuyên nên đặt trước ít nhất 1 tháng vào mùa cao điểm.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Bagaimana cara membuat tempahan sewa kenderaan?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Tempah melalui aplikasi RelayGo. Selepas tempahan, anda boleh menghubungi khidmat pelanggan melalui ruangan sembang dalam aplikasi. Kami syorkan membuat tempahan sekurang-kurangnya sebulan lebih awal semasa musim puncak.',
+                  },
+                },
+                {
+                  '@type': 'Question',
                   name: '付款方式有哪些？',
                   acceptedAnswer: {
                     '@type': 'Answer',
@@ -390,6 +558,30 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'Question',
+                  name: 'รองรับช่องทางชำระเงินอะไรบ้าง?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'ชำระเงินผ่านบัตรเครดิตออนไลน์ในแอป โดยต้องชำระเงินมัดจำเพื่อยืนยันการจอง',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Chấp nhận những phương thức thanh toán nào?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Thanh toán bằng thẻ tín dụng trực tuyến qua ứng dụng. Cần đặt cọc để xác nhận đơn đặt xe.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Apakah kaedah pembayaran yang diterima?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Pembayaran kad kredit dalam talian melalui aplikasi. Deposit diperlukan untuk mengesahkan tempahan anda.',
+                  },
+                },
+                {
+                  '@type': 'Question',
                   name: '出發前如何聯繫司機？',
                   acceptedAnswer: {
                     '@type': 'Answer',
@@ -418,6 +610,30 @@ export default function RootLayout({
                   acceptedAnswer: {
                     '@type': 'Answer',
                     text: '출발 전날부터 앱 내 채팅으로 기사님과 직접 연락하여 픽업 세부사항을 확인할 수 있습니다.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'ติดต่อคนขับก่อนออกเดินทางได้อย่างไร?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'คุณสามารถส่งข้อความถึงคนขับโดยตรงผ่านแชทในแอป ล่วงหน้าหนึ่งวันก่อนออกเดินทาง เพื่อยืนยันรายละเอียดการรับ-ส่ง',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Làm thế nào để liên hệ tài xế trước chuyến đi?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Bạn có thể nhắn tin trực tiếp cho tài xế qua tính năng chat trong ứng dụng vào ngày trước khi khởi hành để xác nhận chi tiết đón.',
+                  },
+                },
+                {
+                  '@type': 'Question',
+                  name: 'Bagaimana untuk menghubungi pemandu sebelum perjalanan?',
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: 'Anda boleh menghantar mesej terus kepada pemandu melalui ruangan sembang dalam aplikasi sehari sebelum berlepas untuk mengesahkan butiran jemput.',
                   },
                 },
               ],
