@@ -131,7 +131,7 @@ export default function GuideContent({ guide, initialLang }: { guide: TourGuide;
               </span>
               <span className="guide-info-value">{guide.city}</span>
             </div>
-            <a href="https://relaygo.pro/#download" className="guide-cta-btn">
+            <a href={`${langPrefix}/#download`} className="guide-cta-btn">
               📱 {UI.bookNow[lang]}
             </a>
             <div className="guide-share-row">

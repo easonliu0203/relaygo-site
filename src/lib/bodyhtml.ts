@@ -1,5 +1,11 @@
-export function getBodyHTML(langPrefix: string = ''): string {
-  return `<!-- Navigation -->
+import { I18N } from './i18n';
+
+export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): string {
+  const dict = I18N[lang] || I18N['zh-TW'];
+  // Helper: translate by key, fallback to zh-TW, then to raw fallback
+  const t = (key: string, fallback: string) => dict[key] ?? I18N['zh-TW']?.[key] ?? fallback;
+
+  let html = `<!-- Navigation -->
   <nav class="navbar" id="navbar">
     <div class="nav-inner">
       <a href="${langPrefix || '/'}" class="nav-logo">Relay<span class="go">Go</span></a>
@@ -509,6 +515,19 @@ export function getBodyHTML(langPrefix: string = ''): string {
       </div>
     </div>
   </footer>`;
+
+  // Server-side translate: replace data-i18n="key">text< with translated text
+  html = html.replace(/data-i18n="([^"]+)">([^<]*)<\//g, (_match, key, fallback) => {
+    return `data-i18n="${key}">${t(key, fallback)}</`;
+  });
+
+  // Server-side translate: replace data-i18n-html="key">html content
+  // Only 2 elements use this (hero_title in <h1>, cta_title in <h2>), match up to closing parent tag
+  html = html.replace(/data-i18n-html="([^"]+)">([\s\S]*?)<\/(h1|h2)>/g, (_match, key, fallback, tag) => {
+    return `data-i18n-html="${key}">${t(key, fallback)}</${tag}>`;
+  });
+
+  return html;
 }
 
 // Keep backward-compatible export

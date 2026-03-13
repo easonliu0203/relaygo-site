@@ -200,5 +200,5 @@ export default function HomePage() {
     };
   }, [applyLang, locale]);
 
-  return <div dangerouslySetInnerHTML={{ __html: getBodyHTML(langPrefix) }} />;
+  return <div dangerouslySetInnerHTML={{ __html: getBodyHTML(langPrefix, locale) }} />;
 }
