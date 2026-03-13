@@ -165,7 +165,7 @@ Run through before finalizing any guide:
 4. Photo tips mention specific times, angles, or conditions
 5. Itinerary drive times are realistic (check Google Maps if unsure)
 6. Practical tips cover: season, crowds, clothing, weather
-7. All 5 languages present with consistent structure (zh-TW, zh-CN, en, ja, ko)
+7. All 8 languages present with consistent structure (zh-TW, zh-CN, en, ja, ko, th, vi, ms)
 8. Markdown renders correctly (test with the site's renderMarkdown function)
 
 ## Existing Routes
@@ -177,3 +177,4 @@ Run through before finalizing any guide:
 | taroko-gorge | 太魯閣峽谷一日遊 | 8 | 花蓮 |
 | kenting-south | 墾丁南台灣一日遊 | 8 | 高雄 |
 | alishan-forest | 阿里山森林一日遊 | 8 | 嘉義 |
+| yangmingshan | 陽明山一日遊 | 8 | 台北 |
