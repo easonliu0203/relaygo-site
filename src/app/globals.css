@@ -1047,10 +1047,12 @@
       transform: translateY(-8px);
       transition: opacity 0.3s, transform 0.3s;
       z-index: 1000;
+      pointer-events: none;
     }
     .mobile-menu.open {
       opacity: 1;
       transform: translateY(0);
+      pointer-events: auto;
     }
     .mobile-menu-link {
       display: block;
