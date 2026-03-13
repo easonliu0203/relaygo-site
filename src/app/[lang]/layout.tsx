@@ -229,6 +229,7 @@ export default function LangLayout({ children, params }: Props) {
               sameAs: [
                 'https://apps.apple.com/app/relaygo/id6670425865',
                 'https://play.google.com/store/apps/details?id=com.relaygo.customer',
+                'https://www.instagram.com/relaygo.official',
               ],
             }),
           }}

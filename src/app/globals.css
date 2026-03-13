@@ -85,6 +85,13 @@
     }
     .navbar.scrolled .nav-links a { color: var(--gray-700); }
     .nav-links a:hover { color: var(--accent); }
+    .nav-ig {
+      display: flex;
+      align-items: center;
+      opacity: 0.85;
+      transition: opacity 0.3s, color 0.3s;
+    }
+    .nav-ig:hover { opacity: 1; color: var(--accent) !important; }
     .nav-cta {
       background: var(--accent) !important;
       color: var(--white) !important;
