@@ -16,6 +16,7 @@ const UI: Record<string, Record<LangCode, string>> = {
   share: { 'zh-TW': '分享', 'zh-CN': '分享', en: 'Share', ja: 'シェア', ko: '공유', th: 'แชร์', vi: 'Chia sẻ', ms: 'Kongsi' },
   copy: { 'zh-TW': '複製連結', 'zh-CN': '复制链接', en: 'Copy Link', ja: 'リンクコピー', ko: '링크 복사', th: 'คัดลอกลิงก์', vi: 'Sao chép liên kết', ms: 'Salin pautan' },
   copied: { 'zh-TW': '已複製！', 'zh-CN': '已复制！', en: 'Copied!', ja: 'コピー済み！', ko: '복사됨!', th: 'คัดลอกแล้ว!', vi: 'Đã sao chép!', ms: 'Disalin!' },
+  relatedGuides: { 'zh-TW': '其他攻略推薦', 'zh-CN': '其他攻略推荐', en: 'More Guides', ja: '他のガイド', ko: '다른 가이드', th: 'ไกด์อื่นๆ', vi: 'Hướng dẫn khác', ms: 'Panduan lain' },
   itineraryNote: {
     'zh-TW': '行程完全由您自訂，可以自由新增與刪除。網站上的景點路線僅供參考，司機會按照您的路線行駛，路線不順時也會提供專業建議以節省交通時間。',
     'zh-CN': '行程完全由您自定，可以自由新增与删除。网站上的景点路线仅供参考，司机会按照您的路线行驶，路线不顺时也会提供专业建议以节省交通时间。',
@@ -63,7 +64,7 @@ function renderMarkdown(md: string): string {
     .replace(/<p><\/p>/g, '');
 }
 
-export default function GuideContent({ guide, initialLang }: { guide: TourGuide; initialLang: Locale }) {
+export default function GuideContent({ guide, initialLang, relatedGuides = [] }: { guide: TourGuide; initialLang: Locale; relatedGuides?: TourGuide[] }) {
   const lang = initialLang as LangCode;
   const [copied, setCopied] = useState(false);
   const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
@@ -154,6 +155,24 @@ export default function GuideContent({ guide, initialLang }: { guide: TourGuide;
               </button>
             </div>
           </div>
+          {relatedGuides.length > 0 && (
+            <div className="guide-related">
+              <div className="guide-related-title">{UI.relatedGuides[lang]}</div>
+              {relatedGuides.map((rg) => {
+                const rgTitle = t(rg.title, lang);
+                const rgIcon = CITY_ICONS[rg.city] || '📍';
+                return (
+                  <a key={rg.slug} href={`${langPrefix}/guide/${rg.slug}`} className="guide-related-link">
+                    <span className="guide-related-icon">{rgIcon}</span>
+                    <div>
+                      <div className="guide-related-name">{rgTitle}</div>
+                      <div className="guide-related-meta">{rg.city} · {rg.duration_hours}h</div>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          )}
         </aside>
       </div>
 

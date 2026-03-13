@@ -140,12 +140,16 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         <div class="stat-label" data-i18n="stat_drivers">專業司機</div>
       </div>
       <div class="stat-item fade-up">
-        <div class="stat-number">✅</div>
-        <div class="stat-label" data-i18n="stat_legal">合法司機</div>
+        <div class="stat-number">100%</div>
+        <div class="stat-label" data-i18n="stat_legal">合法營業登記</div>
       </div>
       <div class="stat-item fade-up">
-        <div class="stat-number">🏅</div>
-        <div class="stat-label" data-i18n="stat_licensed">專業證照</div>
+        <div class="stat-number">7</div>
+        <div class="stat-label" data-i18n="stat_languages">支援語言</div>
+      </div>
+      <div class="stat-item fade-up">
+        <div class="stat-number">4</div>
+        <div class="stat-label" data-i18n="stat_airports">服務機場</div>
       </div>
     </div>
   </div>

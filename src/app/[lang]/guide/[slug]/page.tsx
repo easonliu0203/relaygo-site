@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getGuideBySlug, getAllGuideSlugs } from '@/lib/supabase';
+import { getGuideBySlug, getAllGuideSlugs, getPublishedGuides } from '@/lib/supabase';
 import GuideContent from './GuideContent';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
 
@@ -91,9 +91,13 @@ function breadcrumbJsonLd(title: string, slug: string, langPrefix: string) {
 
 export default async function GuidePage({ params }: Props) {
   const locale = resolveLocale(params.lang);
-  const guide = await getGuideBySlug(params.slug);
+  const [guide, allGuides] = await Promise.all([
+    getGuideBySlug(params.slug),
+    getPublishedGuides(),
+  ]);
   if (!guide) notFound();
 
+  const relatedGuides = allGuides.filter((g) => g.slug !== params.slug).slice(0, 3);
   const title = guide.title[locale] || guide.title['zh-TW'] || guide.title['en'] || '';
   const langPrefix = localePathMap[locale] ? `/${localePathMap[locale]}` : '';
 
@@ -107,7 +111,7 @@ export default async function GuidePage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(title, params.slug, langPrefix)) }}
       />
-      <GuideContent guide={guide} initialLang={locale} />
+      <GuideContent guide={guide} initialLang={locale} relatedGuides={relatedGuides} />
     </>
   );
 }
