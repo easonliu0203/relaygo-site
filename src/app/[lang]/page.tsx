@@ -106,12 +106,6 @@ export default function HomePage() {
   useEffect(() => {
     applyLang(locale);
 
-    // Close lang dropdown on outside click
-    const handleDocClick = () => {
-      containerRef.current?.querySelector('#langDropdown')?.classList.remove('open');
-    };
-    document.addEventListener('click', handleDocClick);
-
     // Scroll handler for navbar
     const navbar = document.getElementById('navbar');
     const handleScroll = () => {
@@ -203,7 +197,6 @@ export default function HomePage() {
       .catch(() => {});
 
     return () => {
-      document.removeEventListener('click', handleDocClick);
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
       statsObserver.disconnect();
