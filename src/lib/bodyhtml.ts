@@ -143,7 +143,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
       </div>
       <div class="stat-item fade-up">
         <div class="stat-number">100%</div>
-        <div class="stat-label" data-i18n="stat_legal">合法營業登記</div>
+        <div class="stat-label" data-i18n="stat_legal">合法職業駕照司機</div>
       </div>
       <div class="stat-item fade-up">
         <div class="stat-number">7</div>
