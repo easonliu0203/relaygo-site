@@ -611,6 +611,44 @@
   font-weight: 500;
 }
 
+/* Region section */
+.guides-region-section {
+  margin-bottom: 60px;
+}
+
+.guides-region-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(108, 99, 255, 0.12);
+}
+
+.guides-region-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.guides-region-title {
+  font-family: var(--heading-font);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--dark);
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.guides-region-count {
+  margin-left: auto;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: rgba(108, 99, 255, 0.08);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
 .guides-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
