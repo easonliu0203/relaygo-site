@@ -12,6 +12,8 @@ const GUIDES_TITLES: Record<Locale, string> = {
   th: 'คู่มือเที่ยวรถเหมา | RelayGo - เส้นทางท่องเที่ยวไต้หวัน',
   vi: 'Cẩm nang du lịch | RelayGo - Tuyến du lịch xe riêng Đài Loan',
   ms: 'Panduan Perjalanan | RelayGo - Laluan Pelancongan Sewa Kenderaan Taiwan',
+  id: 'Panduan Wisata | RelayGo - Rute Wisata Charter Taiwan',
+  fil: 'Mga Gabay sa Paglalakbay | RelayGo - Mga Ruta ng Charter Tour sa Taiwan',
 };
 
 function buildGuidesAlternates() {

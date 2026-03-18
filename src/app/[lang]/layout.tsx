@@ -26,6 +26,8 @@ const LOCALE_DESCRIPTIONS: Record<Locale, string> = {
   th: 'RelayGo ให้บริการรถเหมามืออาชีพในไต้หวัน คนขับปลอดภัย ติดตามแบบเรียลไทม์ หลายช่องทางชำระเงิน ดาวน์โหลดแอปเพื่อจองเลย!',
   vi: 'RelayGo cung cấp dịch vụ thuê xe riêng chuyên nghiệp tại Đài Loan. Tài xế an toàn, theo dõi thời gian thực, nhiều phương thức thanh toán. Tải ứng dụng để đặt xe ngay!',
   ms: 'RelayGo menawarkan perkhidmatan sewa kenderaan profesional di Taiwan. Pemandu selamat, penjejakan masa nyata, pelbagai kaedah pembayaran. Muat turun aplikasi untuk menempah sekarang!',
+  id: 'RelayGo menyediakan layanan sewa mobil profesional di Taiwan. Pengemudi aman, pelacakan real-time, berbagai metode pembayaran. Unduh aplikasi untuk memesan sekarang!',
+  fil: 'Nag-aalok ang RelayGo ng propesyonal na serbisyo ng charter car sa Taiwan. Ligtas na driver, real-time na pagsubaybay, iba\'t ibang paraan ng pagbabayad. I-download ang app para mag-book ngayon!',
 };
 
 const OG_DESCRIPTIONS: Record<Locale, string> = {
@@ -37,6 +39,8 @@ const OG_DESCRIPTIONS: Record<Locale, string> = {
   th: 'บริการรถเหมาปลอดภัยและเชื่อถือได้ ติดตามแบบเรียลไทม์ หลายช่องทางชำระเงิน และ AI วางแผนเที่ยว',
   vi: 'Dịch vụ xe riêng an toàn và đáng tin cậy, theo dõi thời gian thực, nhiều phương thức thanh toán & AI lên kế hoạch du lịch',
   ms: 'Perkhidmatan sewa kenderaan selamat & boleh dipercayai dengan penjejakan masa nyata, pelbagai kaedah pembayaran & perancangan perjalanan AI',
+  id: 'Layanan sewa mobil aman & terpercaya dengan pelacakan real-time, berbagai metode pembayaran & perencanaan wisata AI',
+  fil: 'Ligtas at mapagkakatiwalaang serbisyo ng charter car na may real-time na pagsubaybay, iba\'t ibang paraan ng pagbabayad at AI travel planning',
 };
 
 function buildAlternates(path: string = '') {
@@ -135,7 +139,7 @@ export default function LangLayout({ children, params }: Props) {
                 '@type': 'Country',
                 name: 'Taiwan',
               },
-              knowsLanguage: ['zh-TW', 'en', 'ja', 'ko', 'th', 'vi', 'ms'],
+              knowsLanguage: ['zh-TW', 'en', 'ja', 'ko', 'th', 'vi', 'ms', 'id', 'fil'],
               serviceType: [
                 '機場接送', '包車旅遊', '商務用車',
                 'Airport Transfer', 'Charter Tour', 'Business Transportation',

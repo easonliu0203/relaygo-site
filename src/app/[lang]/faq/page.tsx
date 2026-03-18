@@ -12,16 +12,19 @@ const FAQ_TITLES: Record<Locale, string> = {
   th: 'คำถามที่พบบ่อย | RelayGo บริการรถเหมา',
   vi: 'Câu hỏi thường gặp | RelayGo Dịch vụ xe riêng',
   ms: 'Soalan Lazim | RelayGo Perkhidmatan Sewa Kenderaan',
+  id: 'FAQ | RelayGo Layanan Sewa Mobil',
+  fil: 'FAQ | RelayGo Serbisyo ng Charter Car',
 };
 
 const BREADCRUMB_HOME: Record<Locale, string> = {
   'zh-TW': 'RelayGo', 'zh-CN': 'RelayGo', en: 'RelayGo', ja: 'RelayGo',
-  ko: 'RelayGo', th: 'RelayGo', vi: 'RelayGo', ms: 'RelayGo',
+  ko: 'RelayGo', th: 'RelayGo', vi: 'RelayGo', ms: 'RelayGo', id: 'RelayGo', fil: 'RelayGo',
 };
 
 const BREADCRUMB_FAQ: Record<Locale, string> = {
   'zh-TW': '常見問題', 'zh-CN': '常见问题', en: 'FAQ', ja: 'よくある質問',
   ko: '자주 묻는 질문', th: 'คำถามที่พบบ่อย', vi: 'Câu hỏi thường gặp', ms: 'Soalan Lazim',
+  id: 'Pertanyaan Umum', fil: 'Mga Madalas na Tanong',
 };
 
 function buildFaqAlternates() {

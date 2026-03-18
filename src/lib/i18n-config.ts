@@ -1,6 +1,6 @@
 export const defaultLocale = 'zh-TW';
 
-export const locales = ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms'] as const;
+export const locales = ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms', 'id', 'fil'] as const;
 export type Locale = (typeof locales)[number];
 
 // URL path segment for each locale (empty string = default, no prefix)
@@ -13,6 +13,8 @@ export const localePathMap: Record<Locale, string> = {
   th: 'th',
   vi: 'vi',
   ms: 'ms',
+  id: 'id',
+  fil: 'fil',
 };
 
 // Reverse: path segment → locale
@@ -25,6 +27,8 @@ export const pathToLocale: Record<string, Locale> = {
   th: 'th',
   vi: 'vi',
   ms: 'ms',
+  id: 'id',
+  fil: 'fil',
 };
 
 // All non-default path segments

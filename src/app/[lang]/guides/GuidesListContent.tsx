@@ -3,10 +3,10 @@
 import type { TourGuide } from '@/lib/supabase';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 
-type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms';
+type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
 
 const UI: Record<string, Record<LangCode, string>> = {
-  pageTitle: { 'zh-TW': '包車攻略', 'zh-CN': '包车攻略', en: 'Travel Guides', ja: 'チャーターガイド', ko: '차터 가이드', th: 'คู่มือเที่ยวรถเหมา', vi: 'Cẩm nang du lịch', ms: 'Panduan perjalanan' },
+  pageTitle: { 'zh-TW': '包車攻略', 'zh-CN': '包车攻略', en: 'Travel Guides', ja: 'チャーターガイド', ko: '차터 가이드', th: 'คู่มือเที่ยวรถเหมา', vi: 'Cẩm nang du lịch', ms: 'Panduan perjalanan', id: 'Panduan Wisata', fil: 'Mga Gabay sa Paglalakbay' },
   pageSubtitle: {
     'zh-TW': '精選台灣包車旅遊路線，專業司機帶路，行程規劃一次搞定',
     'zh-CN': '精选台湾包车旅游路线，专业司机带路，行程规划一次搞定',
@@ -16,15 +16,17 @@ const UI: Record<string, Record<LangCode, string>> = {
     th: 'เส้นทางท่องเที่ยวรถเหมาคัดสรรในไต้หวัน พร้อมคนขับมืออาชีพ',
     vi: 'Tuyến du lịch xe riêng tuyển chọn tại Đài Loan cùng tài xế chuyên nghiệp',
     ms: 'Laluan pelancongan sewa kenderaan terpilih di Taiwan bersama pemandu profesional',
+    id: 'Rute wisata charter terpilih di Taiwan dengan pengemudi profesional',
+    fil: 'Mga piling charter tour route sa Taiwan kasama ang mga propesyonal na driver',
   },
-  hours: { 'zh-TW': '小時', 'zh-CN': '小时', en: 'hrs', ja: '時間', ko: '시간', th: 'ชม.', vi: 'giờ', ms: 'jam' },
-  readMore: { 'zh-TW': '查看攻略', 'zh-CN': '查看攻略', en: 'Read More', ja: '詳細を見る', ko: '자세히 보기', th: 'อ่านเพิ่มเติม', vi: 'Xem thêm', ms: 'Baca lagi' },
-  home: { 'zh-TW': '返回首頁', 'zh-CN': '返回首页', en: 'Home', ja: 'トップへ', ko: '홈으로', th: 'หน้าหลัก', vi: 'Trang chủ', ms: 'Laman utama' },
-  noGuides: { 'zh-TW': '攻略即將上線，敬請期待！', 'zh-CN': '攻略即将上线，敬请期待！', en: 'Guides coming soon!', ja: 'ガイド準備中！', ko: '가이드 준비 중!', th: 'คู่มือกำลังจะมาเร็ว ๆ นี้!', vi: 'Cẩm nang sắp ra mắt!', ms: 'Panduan akan datang tidak lama lagi!' },
-  north: { 'zh-TW': '北部', 'zh-CN': '北部', en: 'Northern Taiwan', ja: '北部', ko: '북부', th: 'ภาคเหนือ', vi: 'Miền Bắc', ms: 'Utara' },
-  central: { 'zh-TW': '中部', 'zh-CN': '中部', en: 'Central Taiwan', ja: '中部', ko: '중부', th: 'ภาคกลาง', vi: 'Miền Trung', ms: 'Tengah' },
-  south: { 'zh-TW': '南部', 'zh-CN': '南部', en: 'Southern Taiwan', ja: '南部', ko: '남부', th: 'ภาคใต้', vi: 'Miền Nam', ms: 'Selatan' },
-  east: { 'zh-TW': '東部', 'zh-CN': '东部', en: 'Eastern Taiwan', ja: '東部', ko: '동부', th: 'ภาคตะวันออก', vi: 'Miền Đông', ms: 'Timur' },
+  hours: { 'zh-TW': '小時', 'zh-CN': '小时', en: 'hrs', ja: '時間', ko: '시간', th: 'ชม.', vi: 'giờ', ms: 'jam', id: 'jam', fil: 'oras' },
+  readMore: { 'zh-TW': '查看攻略', 'zh-CN': '查看攻略', en: 'Read More', ja: '詳細を見る', ko: '자세히 보기', th: 'อ่านเพิ่มเติม', vi: 'Xem thêm', ms: 'Baca lagi', id: 'Baca Selengkapnya', fil: 'Basahin Pa' },
+  home: { 'zh-TW': '返回首頁', 'zh-CN': '返回首页', en: 'Home', ja: 'トップへ', ko: '홈으로', th: 'หน้าหลัก', vi: 'Trang chủ', ms: 'Laman utama', id: 'Beranda', fil: 'Home' },
+  noGuides: { 'zh-TW': '攻略即將上線，敬請期待！', 'zh-CN': '攻略即将上线，敬请期待！', en: 'Guides coming soon!', ja: 'ガイド準備中！', ko: '가이드 준비 중!', th: 'คู่มือกำลังจะมาเร็ว ๆ นี้!', vi: 'Cẩm nang sắp ra mắt!', ms: 'Panduan akan datang tidak lama lagi!', id: 'Panduan segera hadir!', fil: 'Mga gabay ay paparating na!' },
+  north: { 'zh-TW': '北部', 'zh-CN': '北部', en: 'Northern Taiwan', ja: '北部', ko: '북부', th: 'ภาคเหนือ', vi: 'Miền Bắc', ms: 'Utara', id: 'Taiwan Utara', fil: 'Hilagang Taiwan' },
+  central: { 'zh-TW': '中部', 'zh-CN': '中部', en: 'Central Taiwan', ja: '中部', ko: '중부', th: 'ภาคกลาง', vi: 'Miền Trung', ms: 'Tengah', id: 'Taiwan Tengah', fil: 'Gitnang Taiwan' },
+  south: { 'zh-TW': '南部', 'zh-CN': '南部', en: 'Southern Taiwan', ja: '南部', ko: '남부', th: 'ภาคใต้', vi: 'Miền Nam', ms: 'Selatan', id: 'Taiwan Selatan', fil: 'Timog Taiwan' },
+  east: { 'zh-TW': '東部', 'zh-CN': '东部', en: 'Eastern Taiwan', ja: '東部', ko: '동부', th: 'ภาคตะวันออก', vi: 'Miền Đông', ms: 'Timur', id: 'Taiwan Timur', fil: 'Silangang Taiwan' },
 };
 
 const CITY_ICONS: Record<string, string> = {
