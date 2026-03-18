@@ -45,6 +45,8 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
             <button class="lang-option" data-lang="th">ไทย</button>
             <button class="lang-option" data-lang="vi">Tiếng Việt</button>
             <button class="lang-option" data-lang="ms">Bahasa Melayu</button>
+            <button class="lang-option" data-lang="id">Bahasa Indonesia</button>
+            <button class="lang-option" data-lang="fil">Filipino</button>
           </div>
         </div>
       </div>
