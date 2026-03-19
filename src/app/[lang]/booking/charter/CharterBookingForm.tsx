@@ -125,6 +125,42 @@ const UI: Record<string, Record<string, string>> = {
   plans: {
     'zh-TW': '個方案', 'zh-CN': '个方案', en: 'plans', ja: 'プラン', ko: '플랜', th: 'แผน', vi: 'gói', ms: 'pelan', id: 'paket', fil: 'plano',
   },
+  airportPickup: {
+    'zh-TW': '加購接機', 'zh-CN': '加购接机', en: 'Add Airport Pickup', ja: '空港送迎を追加',
+    ko: '공항 픽업 추가', th: 'เพิ่มรับสนามบิน', vi: 'Thêm đón sân bay', ms: 'Tambah jemput lapangan terbang',
+    id: 'Tambah jemput bandara', fil: 'Dagdag na airport pickup',
+  },
+  airportDropoff: {
+    'zh-TW': '加購送機', 'zh-CN': '加购送机', en: 'Add Airport Dropoff', ja: '空港送りを追加',
+    ko: '공항 드롭오프 추가', th: 'เพิ่มส่งสนามบิน', vi: 'Thêm đưa sân bay', ms: 'Tambah hantar lapangan terbang',
+    id: 'Tambah antar bandara', fil: 'Dagdag na airport dropoff',
+  },
+  selectAirport: {
+    'zh-TW': '選擇機場', 'zh-CN': '选择机场', en: 'Select Airport', ja: '空港を選択',
+    ko: '공항 선택', th: 'เลือกสนามบิน', vi: 'Chọn sân bay', ms: 'Pilih lapangan terbang',
+    id: 'Pilih bandara', fil: 'Pumili ng paliparan',
+  },
+  flightNumber: {
+    'zh-TW': '航班號碼', 'zh-CN': '航班号码', en: 'Flight Number', ja: 'フライト番号',
+    ko: '항공편 번호', th: 'หมายเลขเที่ยวบิน', vi: 'Số chuyến bay', ms: 'Nombor penerbangan',
+    id: 'Nomor penerbangan', fil: 'Flight number',
+  },
+  flightPlaceholder: {
+    'zh-TW': '例：CI123', 'zh-CN': '例：CI123', en: 'e.g. CI123', ja: '例：CI123',
+    ko: '예: CI123', th: 'เช่น CI123', vi: 'VD: CI123', ms: 'cth: CI123',
+    id: 'cth: CI123', fil: 'hal: CI123',
+  },
+  airportFeeNote: {
+    'zh-TW': '加購接機/送機會另外收費，費用將於選擇車型後顯示', 'zh-CN': '加购接机/送机会另外收费，费用将于选择车型后显示',
+    en: 'Airport pickup/dropoff involves additional fees, shown after vehicle selection',
+    ja: '空港送迎は別途料金がかかります。車種選択後に表示されます',
+    ko: '공항 픽업/드롭오프에는 추가 요금이 부과됩니다',
+    th: 'บริการรับ-ส่งสนามบินมีค่าใช้จ่ายเพิ่มเติม',
+    vi: 'Dịch vụ đón/đưa sân bay có phí phụ thu',
+    ms: 'Perkhidmatan lapangan terbang dikenakan caj tambahan',
+    id: 'Layanan bandara dikenakan biaya tambahan',
+    fil: 'May dagdag na bayad ang airport service',
+  },
 };
 
 // City → region mapping (mirrors backend TW_CITY_CENTERS)
@@ -140,6 +176,13 @@ const REGION_CITIES: { region: string; label: Record<string, string>; cities: st
   { region: 'central', label: { 'zh-TW': '中部', 'zh-CN': '中部', en: 'Central', ja: '中部', ko: '중부', th: 'ภาคกลาง', vi: 'Miền Trung', ms: 'Tengah', id: 'Tengah', fil: 'Gitna' }, cities: ['台中', '苗栗', '彰化', '南投', '雲林'] },
   { region: 'south', label: { 'zh-TW': '南部', 'zh-CN': '南部', en: 'South', ja: '南部', ko: '남부', th: 'ภาคใต้', vi: 'Miền Nam', ms: 'Selatan', id: 'Selatan', fil: 'Timog' }, cities: ['高雄', '台南', '嘉義', '屏東'] },
   { region: 'east', label: { 'zh-TW': '東部', 'zh-CN': '东部', en: 'East', ja: '東部', ko: '동부', th: 'ภาคตะวันออก', vi: 'Miền Đông', ms: 'Timur', id: 'Timur', fil: 'Silangan' }, cities: ['花蓮', '台東'] },
+];
+
+const AIRPORTS = [
+  { code: 'TPE', name: '桃園國際機場 (TPE)' },
+  { code: 'TSA', name: '台北松山機場 (TSA)' },
+  { code: 'RMQ', name: '台中清泉崗機場 (RMQ)' },
+  { code: 'KHH', name: '高雄小港機場 (KHH)' },
 ];
 
 const VEHICLE_ICONS: Record<string, string> = { S: '🚗', M: '🚙', L: '🚐', XL: '✨' };
@@ -186,6 +229,34 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
   const [pickup, setPickup] = useState('');
   const [dropoff, setDropoff] = useState('');
   const [notes, setNotes] = useState('');
+
+  // Airport add-ons (mutually exclusive)
+  const [addAirportPickup, setAddAirportPickup] = useState(false);
+  const [pickupAirport, setPickupAirport] = useState('');
+  const [pickupFlight, setPickupFlight] = useState('');
+  const [addAirportDropoff, setAddAirportDropoff] = useState(false);
+  const [dropoffAirport, setDropoffAirport] = useState('');
+  const [dropoffFlight, setDropoffFlight] = useState('');
+
+  const handleToggleAirportPickup = (on: boolean) => {
+    setAddAirportPickup(on);
+    if (on) {
+      setAddAirportDropoff(false);
+      setDropoffAirport('');
+      setDropoffFlight('');
+    }
+    if (!on) { setPickupAirport(''); setPickupFlight(''); setPickup(''); }
+  };
+
+  const handleToggleAirportDropoff = (on: boolean) => {
+    setAddAirportDropoff(on);
+    if (on) {
+      setAddAirportPickup(false);
+      setPickupAirport('');
+      setPickupFlight('');
+    }
+    if (!on) { setDropoffAirport(''); setDropoffFlight(''); setDropoff(''); }
+  };
 
   // Fetch packages from backend (re-fetch when city/region changes)
   useEffect(() => {
@@ -254,6 +325,12 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
       notes,
       city,
       region,
+      addAirportPickup,
+      pickupAirport: addAirportPickup ? pickupAirport : undefined,
+      pickupFlight: addAirportPickup ? pickupFlight : undefined,
+      addAirportDropoff,
+      dropoffAirport: addAirportDropoff ? dropoffAirport : undefined,
+      dropoffFlight: addAirportDropoff ? dropoffFlight : undefined,
       guideSlug,
       lang: initialLang,
     };
@@ -319,28 +396,99 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
 
         {/* Pickup */}
         <div className="charter-section">
-          <label className="charter-label">{t(UI.pickup, lang)}</label>
-          <input
-            type="text"
-            className="charter-input"
-            placeholder={t(UI.pickupPlaceholder, lang)}
-            value={pickup}
-            onChange={(e) => setPickup(e.target.value)}
-            required
-          />
+          <div className="charter-label-row">
+            <label className="charter-label">{t(UI.pickup, lang)}</label>
+            <label className="charter-toggle">
+              <input
+                type="checkbox"
+                checked={addAirportPickup}
+                onChange={(e) => handleToggleAirportPickup(e.target.checked)}
+              />
+              <span className="charter-toggle-label">✈️ {t(UI.airportPickup, lang)}</span>
+            </label>
+          </div>
+          {addAirportPickup ? (
+            <div className="charter-airport-fields">
+              <select
+                className="charter-input charter-select"
+                value={pickupAirport}
+                onChange={(e) => setPickupAirport(e.target.value)}
+                required
+              >
+                <option value="">{t(UI.selectAirport, lang)}</option>
+                {AIRPORTS.map((a) => (
+                  <option key={a.code} value={a.code}>{a.name}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                className="charter-input"
+                placeholder={t(UI.flightPlaceholder, lang)}
+                value={pickupFlight}
+                onChange={(e) => setPickupFlight(e.target.value.toUpperCase().replace(/[^A-Z0-9\- ]/g, '').slice(0, 12))}
+                maxLength={12}
+              />
+            </div>
+          ) : (
+            <input
+              type="text"
+              className="charter-input"
+              placeholder={t(UI.pickupPlaceholder, lang)}
+              value={pickup}
+              onChange={(e) => setPickup(e.target.value)}
+              required
+            />
+          )}
         </div>
 
         {/* Dropoff */}
         <div className="charter-section">
-          <label className="charter-label">{t(UI.dropoff, lang)}</label>
-          <input
-            type="text"
-            className="charter-input"
-            placeholder={t(UI.dropoffPlaceholder, lang)}
-            value={dropoff}
-            onChange={(e) => setDropoff(e.target.value)}
-            required
-          />
+          <div className="charter-label-row">
+            <label className="charter-label">{t(UI.dropoff, lang)}</label>
+            <label className="charter-toggle">
+              <input
+                type="checkbox"
+                checked={addAirportDropoff}
+                onChange={(e) => handleToggleAirportDropoff(e.target.checked)}
+              />
+              <span className="charter-toggle-label">✈️ {t(UI.airportDropoff, lang)}</span>
+            </label>
+          </div>
+          {addAirportDropoff ? (
+            <div className="charter-airport-fields">
+              <select
+                className="charter-input charter-select"
+                value={dropoffAirport}
+                onChange={(e) => setDropoffAirport(e.target.value)}
+                required
+              >
+                <option value="">{t(UI.selectAirport, lang)}</option>
+                {AIRPORTS.map((a) => (
+                  <option key={a.code} value={a.code}>{a.name}</option>
+                ))}
+              </select>
+              <input
+                type="text"
+                className="charter-input"
+                placeholder={t(UI.flightPlaceholder, lang)}
+                value={dropoffFlight}
+                onChange={(e) => setDropoffFlight(e.target.value.toUpperCase().replace(/[^A-Z0-9\- ]/g, '').slice(0, 12))}
+                maxLength={12}
+              />
+            </div>
+          ) : (
+            <input
+              type="text"
+              className="charter-input"
+              placeholder={t(UI.dropoffPlaceholder, lang)}
+              value={dropoff}
+              onChange={(e) => setDropoff(e.target.value)}
+              required
+            />
+          )}
+          {(addAirportPickup || addAirportDropoff) && (
+            <p className="charter-airport-note">ℹ️ {t(UI.airportFeeNote, lang)}</p>
+          )}
         </div>
 
         {/* Passengers */}

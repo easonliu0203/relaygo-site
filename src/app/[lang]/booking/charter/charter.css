@@ -132,6 +132,58 @@
   cursor: pointer;
 }
 
+/* Label row with toggle */
+.charter-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.charter-label-row .charter-label {
+  margin-bottom: 0;
+}
+
+.charter-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.charter-toggle input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+.charter-toggle-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* Airport fields */
+.charter-airport-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.charter-airport-note {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  line-height: 1.5;
+  padding: 10px 14px;
+  background: rgba(108, 99, 255, 0.04);
+  border-radius: 10px;
+  border-left: 3px solid var(--primary);
+}
+
 .charter-textarea {
   resize: vertical;
   min-height: 80px;
