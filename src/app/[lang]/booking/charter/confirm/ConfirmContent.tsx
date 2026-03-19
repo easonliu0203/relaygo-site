@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import { auth, googleProvider, appleProvider } from '@/lib/firebase';
-import { onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, type User } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, type User } from 'firebase/auth';
 import '../charter.css';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
@@ -86,13 +86,24 @@ const UI: Record<string, Record<string, string>> = {
   loginTitle: { 'zh-TW': '登入後即可支付', en: 'Sign in to pay' },
   email: { 'zh-TW': '電子郵件', en: 'Email' },
   password: { 'zh-TW': '密碼', en: 'Password' },
-  loginEmail: { 'zh-TW': '以電子郵件登入', en: 'Sign in with Email' },
+  loginEmail: { 'zh-TW': '電子郵件登入', en: 'Sign in with Email' },
+  registerEmail: { 'zh-TW': '電子郵件註冊', en: 'Register with Email' },
+  loginBtn: { 'zh-TW': '登入', en: 'Sign In' },
+  registerBtn: { 'zh-TW': '註冊', en: 'Register' },
   loginGoogle: { 'zh-TW': '以 Google 登入', en: 'Sign in with Google' },
   loginApple: { 'zh-TW': '以 Apple 登入', en: 'Sign in with Apple' },
   loginAgree: { 'zh-TW': '點擊登入即同意', en: 'By signing in, you agree to our' },
   privacyPolicy: { 'zh-TW': '隱私權政策', en: 'Privacy Policy' },
   loggedInAs: { 'zh-TW': '已登入', en: 'Signed in as' },
   logout: { 'zh-TW': '登出', en: 'Sign out' },
+  // Profile
+  profileTitle: { 'zh-TW': '填寫基本資料', en: 'Complete Your Profile' },
+  profileSubtitle: { 'zh-TW': '以下資料為必填，用於預約確認', en: 'Required for booking confirmation' },
+  lastName: { 'zh-TW': '姓氏', en: 'Last Name' },
+  firstName: { 'zh-TW': '名字', en: 'First Name' },
+  phone: { 'zh-TW': '電話號碼', en: 'Phone Number' },
+  confirmPw: { 'zh-TW': '確認密碼', en: 'Confirm Password' },
+  saveProfile: { 'zh-TW': '儲存並繼續', en: 'Save & Continue' },
 };
 
 function t(obj: Record<string, string>, lang: string): string {
@@ -122,10 +133,19 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [showLogin, setShowLogin] = useState(false);
+  const [authStep, setAuthStep] = useState<'choose' | 'email-login' | 'email-register' | 'profile'>('choose');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
+  // Profile fields
+  const [profileFirstName, setProfileFirstName] = useState('');
+  const [profileLastName, setProfileLastName] = useState('');
+  const [profileNationality, setProfileNationality] = useState('TW');
+  const [profilePhoneCode, setProfilePhoneCode] = useState('+886');
+  const [profilePhone, setProfilePhone] = useState('');
+  const [profileSaving, setProfileSaving] = useState(false);
 
   // Promo code
   const [promoCode, setPromoCode] = useState('');
@@ -225,14 +245,67 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
     setPromoError('');
   };
 
+  // --- Auth helpers ---
+  const syncUserToBackend = async (firebaseUid: string, email: string) => {
+    try {
+      await fetch(`${API_BASE}/api/auth/register-or-login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firebaseUid, email, role: 'customer' }),
+      });
+    } catch { /* non-blocking */ }
+  };
+
+  const checkProfileComplete = async (uid: string): Promise<boolean> => {
+    try {
+      const r = await fetch(`${API_BASE}/api/profile/upsert?firebaseUid=${uid}`);
+      const res = await r.json();
+      if (!res.success || !res.data) return false;
+      const p = res.data;
+      return !!(p.firstName?.trim() && p.lastName?.trim() && p.phone?.trim() && p.nationalityCode?.trim() && p.phoneCountryCode?.trim());
+    } catch { return false; }
+  };
+
+  const saveProfile = async (uid: string) => {
+    setProfileSaving(true);
+    try {
+      const phone = profilePhone ? `${profilePhoneCode}${profilePhone}` : null;
+      await fetch(`${API_BASE}/api/profile/upsert`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firebaseUid: uid,
+          firstName: profileFirstName.trim(),
+          lastName: profileLastName.trim(),
+          phone,
+          phoneCountryCode: profilePhoneCode,
+          nationalityCode: profileNationality,
+        }),
+      });
+      setShowLogin(false);
+    } catch {
+      setLoginError(lang === 'zh-TW' ? '儲存失敗，請重試' : 'Save failed, please retry');
+    } finally { setProfileSaving(false); }
+  };
+
+  const onAuthSuccess = async (fbUser: User) => {
+    await syncUserToBackend(fbUser.uid, fbUser.email || '');
+    const complete = await checkProfileComplete(fbUser.uid);
+    if (complete) {
+      setShowLogin(false);
+    } else {
+      setAuthStep('profile');
+    }
+  };
+
   // --- Login handlers ---
   const handleEmailLogin = async () => {
     if (!loginEmail || !loginPassword) return;
     setLoginLoading(true);
     setLoginError('');
     try {
-      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-      setShowLogin(false);
+      const cred = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      await onAuthSuccess(cred.user);
     } catch (e: unknown) {
       const msg = (e as { code?: string }).code || '';
       if (msg.includes('user-not-found') || msg.includes('wrong-password') || msg.includes('invalid-credential')) {
@@ -243,27 +316,70 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
     } finally { setLoginLoading(false); }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleEmailRegister = async () => {
+    if (!loginEmail || !loginPassword || !profileFirstName || !profileLastName || !profilePhone) {
+      setLoginError(lang === 'zh-TW' ? '請填寫所有必填欄位' : 'Please fill in all required fields');
+      return;
+    }
+    if (loginPassword !== confirmPassword) {
+      setLoginError(lang === 'zh-TW' ? '密碼不一致' : 'Passwords do not match');
+      return;
+    }
+    if (loginPassword.length < 6) {
+      setLoginError(lang === 'zh-TW' ? '密碼至少 6 個字元' : 'Password must be at least 6 characters');
+      return;
+    }
+    setLoginLoading(true);
+    setLoginError('');
     try {
-      await signInWithPopup(auth, googleProvider);
-      setShowLogin(false);
+      const cred = await createUserWithEmailAndPassword(auth, loginEmail, loginPassword);
+      await syncUserToBackend(cred.user.uid, cred.user.email || '');
+      await saveProfile(cred.user.uid);
+    } catch (e: unknown) {
+      const msg = (e as { code?: string }).code || '';
+      if (msg.includes('email-already-in-use')) {
+        setLoginError(lang === 'zh-TW' ? '此信箱已註冊，請改用登入' : 'Email already registered, please sign in');
+      } else {
+        setLoginError(msg);
+      }
+    } finally { setLoginLoading(false); }
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoginLoading(true);
+    try {
+      const cred = await signInWithPopup(auth, googleProvider);
+      await onAuthSuccess(cred.user);
     } catch { /* user cancelled */ }
+    finally { setLoginLoading(false); }
   };
 
   const handleAppleLogin = async () => {
+    setLoginLoading(true);
     try {
-      await signInWithPopup(auth, appleProvider);
-      setShowLogin(false);
+      const cred = await signInWithPopup(auth, appleProvider);
+      await onAuthSuccess(cred.user);
     } catch { /* user cancelled */ }
+    finally { setLoginLoading(false); }
   };
 
   // --- Pay handler ---
-  const handlePay = () => {
+  const handlePay = async () => {
     if (!policyAgreed) {
       alert(t(UI.agreePolicyRequired, lang));
       return;
     }
     if (!user) {
+      setAuthStep('choose');
+      setLoginError('');
+      setShowLogin(true);
+      return;
+    }
+    // Check profile completeness
+    const complete = await checkProfileComplete(user.uid);
+    if (!complete) {
+      setAuthStep('profile');
+      setLoginError('');
       setShowLogin(true);
       return;
     }
@@ -470,58 +586,160 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
         </button>
       </div>
 
-      {/* Login Modal */}
+      {/* Login / Register / Profile Modal */}
       {showLogin && (
         <div className="confirm-login-overlay" onClick={() => setShowLogin(false)}>
           <div className="confirm-login-modal" onClick={(e) => e.stopPropagation()}>
-            <h2 className="confirm-login-title">{t(UI.loginTitle, lang)}</h2>
 
-            {/* Email/Password */}
-            <div className="confirm-login-field">
-              <input
-                type="email"
-                className="charter-input"
-                placeholder={t(UI.email, lang)}
-                value={loginEmail}
-                onChange={(e) => setLoginEmail(e.target.value)}
-              />
-            </div>
-            <div className="confirm-login-field">
-              <input
-                type="password"
-                className="charter-input"
-                placeholder={t(UI.password, lang)}
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleEmailLogin()}
-              />
-            </div>
-            {loginError && <p className="confirm-login-error">{loginError}</p>}
-            <button
-              type="button"
-              className="confirm-login-btn email"
-              onClick={handleEmailLogin}
-              disabled={loginLoading}
-            >
-              📧 {t(UI.loginEmail, lang)}
-            </button>
+            {/* Step: Choose method */}
+            {authStep === 'choose' && (<>
+              <h2 className="confirm-login-title">{t(UI.loginTitle, lang)}</h2>
+              <button type="button" className="confirm-login-btn google" onClick={handleGoogleLogin} disabled={loginLoading}>
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                {t(UI.loginGoogle, lang)}
+              </button>
+              <button type="button" className="confirm-login-btn apple" onClick={handleAppleLogin} disabled={loginLoading}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.32 2.32-1.62 4.22-3.74 4.25z"/></svg>
+                {t(UI.loginApple, lang)}
+              </button>
+              <div className="confirm-login-divider"><span>or</span></div>
+              <button type="button" className="confirm-login-btn email" onClick={() => { setAuthStep('email-login'); setLoginError(''); }}>
+                📧 {t(UI.loginEmail, lang)}
+              </button>
+              <button type="button" className="confirm-login-btn-link" onClick={() => { setAuthStep('email-register'); setLoginError(''); }}>
+                {t(UI.registerEmail, lang)}
+              </button>
+              <p className="confirm-login-agree">
+                {t(UI.loginAgree, lang)}{' '}
+                <a href={`${langPrefix}/privacy-policy`} target="_blank" rel="noopener">{t(UI.privacyPolicy, lang)}</a>
+              </p>
+            </>)}
 
-            <div className="confirm-login-divider"><span>or</span></div>
+            {/* Step: Email Login */}
+            {authStep === 'email-login' && (<>
+              <button type="button" className="confirm-login-back" onClick={() => setAuthStep('choose')}>← {t(UI.back, lang)}</button>
+              <h2 className="confirm-login-title">{t(UI.loginEmail, lang)}</h2>
+              <div className="confirm-login-field">
+                <input type="email" className="charter-input" placeholder={t(UI.email, lang)} value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
+              </div>
+              <div className="confirm-login-field">
+                <input type="password" className="charter-input" placeholder={t(UI.password, lang)} value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleEmailLogin()} />
+              </div>
+              {loginError && <p className="confirm-login-error">{loginError}</p>}
+              <button type="button" className="confirm-login-btn email" onClick={handleEmailLogin} disabled={loginLoading}>
+                {loginLoading ? '...' : t(UI.loginBtn, lang)}
+              </button>
+            </>)}
 
-            {/* Social login */}
-            <button type="button" className="confirm-login-btn google" onClick={handleGoogleLogin}>
-              <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-              {t(UI.loginGoogle, lang)}
-            </button>
-            <button type="button" className="confirm-login-btn apple" onClick={handleAppleLogin}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.32 2.32-1.62 4.22-3.74 4.25z"/></svg>
-              {t(UI.loginApple, lang)}
-            </button>
+            {/* Step: Email Register */}
+            {authStep === 'email-register' && (<>
+              <button type="button" className="confirm-login-back" onClick={() => setAuthStep('choose')}>← {t(UI.back, lang)}</button>
+              <h2 className="confirm-login-title">{t(UI.registerEmail, lang)}</h2>
+              <div className="confirm-login-field">
+                <input type="email" className="charter-input" placeholder={t(UI.email, lang)} value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} />
+              </div>
+              <div className="confirm-login-row">
+                <input type="text" className="charter-input" placeholder={t(UI.lastName, lang)} value={profileLastName} onChange={(e) => setProfileLastName(e.target.value)} />
+                <input type="text" className="charter-input" placeholder={t(UI.firstName, lang)} value={profileFirstName} onChange={(e) => setProfileFirstName(e.target.value)} />
+              </div>
+              <div className="confirm-login-field">
+                <select className="charter-input charter-select" value={profileNationality} onChange={(e) => setProfileNationality(e.target.value)}>
+                  <option value="TW">🇹🇼 Taiwan</option>
+                  <option value="JP">🇯🇵 Japan</option>
+                  <option value="KR">🇰🇷 Korea</option>
+                  <option value="US">🇺🇸 United States</option>
+                  <option value="HK">🇭🇰 Hong Kong</option>
+                  <option value="SG">🇸🇬 Singapore</option>
+                  <option value="MY">🇲🇾 Malaysia</option>
+                  <option value="TH">🇹🇭 Thailand</option>
+                  <option value="VN">🇻🇳 Vietnam</option>
+                  <option value="ID">🇮🇩 Indonesia</option>
+                  <option value="PH">🇵🇭 Philippines</option>
+                  <option value="CN">🇨🇳 China</option>
+                  <option value="GB">🇬🇧 United Kingdom</option>
+                  <option value="AU">🇦🇺 Australia</option>
+                  <option value="CA">🇨🇦 Canada</option>
+                  <option value="DE">🇩🇪 Germany</option>
+                  <option value="FR">🇫🇷 France</option>
+                </select>
+              </div>
+              <div className="confirm-login-row">
+                <select className="charter-input charter-select" value={profilePhoneCode} onChange={(e) => setProfilePhoneCode(e.target.value)} style={{ flex: '0 0 110px' }}>
+                  <option value="+886">🇹🇼 +886</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+82">🇰🇷 +82</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+852">🇭🇰 +852</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+60">🇲🇾 +60</option>
+                  <option value="+66">🇹🇭 +66</option>
+                  <option value="+84">🇻🇳 +84</option>
+                  <option value="+62">🇮🇩 +62</option>
+                  <option value="+63">🇵🇭 +63</option>
+                  <option value="+86">🇨🇳 +86</option>
+                  <option value="+44">🇬🇧 +44</option>
+                  <option value="+61">🇦🇺 +61</option>
+                </select>
+                <input type="tel" className="charter-input" placeholder={t(UI.phone, lang)} value={profilePhone} onChange={(e) => setProfilePhone(e.target.value.replace(/[^0-9]/g, ''))} />
+              </div>
+              <div className="confirm-login-field">
+                <input type="password" className="charter-input" placeholder={t(UI.password, lang)} value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} />
+              </div>
+              <div className="confirm-login-field">
+                <input type="password" className="charter-input" placeholder={t(UI.confirmPw, lang)} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+              </div>
+              {loginError && <p className="confirm-login-error">{loginError}</p>}
+              <button type="button" className="confirm-login-btn email" onClick={handleEmailRegister} disabled={loginLoading}>
+                {loginLoading ? '...' : t(UI.registerBtn, lang)}
+              </button>
+            </>)}
 
-            <p className="confirm-login-agree">
-              {t(UI.loginAgree, lang)}{' '}
-              <a href={`${langPrefix}/privacy-policy`} target="_blank" rel="noopener">{t(UI.privacyPolicy, lang)}</a>
-            </p>
+            {/* Step: Profile completion (after social login) */}
+            {authStep === 'profile' && (<>
+              <h2 className="confirm-login-title">{t(UI.profileTitle, lang)}</h2>
+              <p className="confirm-login-subtitle">{t(UI.profileSubtitle, lang)}</p>
+              <div className="confirm-login-row">
+                <input type="text" className="charter-input" placeholder={t(UI.lastName, lang)} value={profileLastName} onChange={(e) => setProfileLastName(e.target.value)} />
+                <input type="text" className="charter-input" placeholder={t(UI.firstName, lang)} value={profileFirstName} onChange={(e) => setProfileFirstName(e.target.value)} />
+              </div>
+              <div className="confirm-login-field">
+                <select className="charter-input charter-select" value={profileNationality} onChange={(e) => setProfileNationality(e.target.value)}>
+                  <option value="TW">🇹🇼 Taiwan</option>
+                  <option value="JP">🇯🇵 Japan</option>
+                  <option value="KR">🇰🇷 Korea</option>
+                  <option value="US">🇺🇸 United States</option>
+                  <option value="HK">🇭🇰 Hong Kong</option>
+                  <option value="SG">🇸🇬 Singapore</option>
+                  <option value="MY">🇲🇾 Malaysia</option>
+                  <option value="TH">🇹🇭 Thailand</option>
+                  <option value="VN">🇻🇳 Vietnam</option>
+                  <option value="ID">🇮🇩 Indonesia</option>
+                  <option value="PH">🇵🇭 Philippines</option>
+                  <option value="CN">🇨🇳 China</option>
+                </select>
+              </div>
+              <div className="confirm-login-row">
+                <select className="charter-input charter-select" value={profilePhoneCode} onChange={(e) => setProfilePhoneCode(e.target.value)} style={{ flex: '0 0 110px' }}>
+                  <option value="+886">🇹🇼 +886</option>
+                  <option value="+81">🇯🇵 +81</option>
+                  <option value="+82">🇰🇷 +82</option>
+                  <option value="+1">🇺🇸 +1</option>
+                  <option value="+852">🇭🇰 +852</option>
+                  <option value="+65">🇸🇬 +65</option>
+                  <option value="+60">🇲🇾 +60</option>
+                  <option value="+66">🇹🇭 +66</option>
+                  <option value="+84">🇻🇳 +84</option>
+                  <option value="+62">🇮🇩 +62</option>
+                  <option value="+63">🇵🇭 +63</option>
+                  <option value="+86">🇨🇳 +86</option>
+                </select>
+                <input type="tel" className="charter-input" placeholder={t(UI.phone, lang)} value={profilePhone} onChange={(e) => setProfilePhone(e.target.value.replace(/[^0-9]/g, ''))} />
+              </div>
+              {loginError && <p className="confirm-login-error">{loginError}</p>}
+              <button type="button" className="confirm-login-btn email" onClick={() => user && saveProfile(user.uid)} disabled={profileSaving || !profileFirstName || !profileLastName || !profilePhone}>
+                {profileSaving ? '...' : t(UI.saveProfile, lang)}
+              </button>
+            </>)}
           </div>
         </div>
       )}
