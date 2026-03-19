@@ -1,0 +1,312 @@
+/* ===== Charter Booking Page ===== */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.charter-page {
+  min-height: 100vh;
+  background: #F8F9FC;
+}
+
+/* Header */
+.charter-header {
+  background: linear-gradient(160deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+  padding: 100px 32px 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.charter-header::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 214, 143, 0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.charter-header-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  animation: fadeSlideUp 0.7s ease-out;
+}
+
+.charter-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s;
+}
+
+.charter-back-link:hover {
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.charter-title {
+  font-family: var(--heading-font);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.charter-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+/* Form */
+.charter-form {
+  max-width: 640px;
+  margin: -24px auto 0;
+  padding: 32px 24px 80px;
+  position: relative;
+  z-index: 3;
+  animation: fadeSlideUp 0.7s ease-out 0.1s both;
+}
+
+.charter-section {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.charter-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 10px;
+  letter-spacing: -0.1px;
+}
+
+.charter-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  font-size: 1rem;
+  color: var(--dark);
+  background: #F8F9FC;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  font-family: inherit;
+}
+
+.charter-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+}
+
+.charter-input::placeholder {
+  color: #A0AEC0;
+}
+
+.charter-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Duration selector */
+.charter-duration-row {
+  display: flex;
+  gap: 10px;
+}
+
+.charter-duration-btn {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  background: #F8F9FC;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.charter-duration-btn.active {
+  border-color: var(--primary);
+  background: rgba(108, 99, 255, 0.08);
+  color: var(--primary);
+}
+
+.charter-duration-btn:hover:not(.active) {
+  border-color: rgba(108, 99, 255, 0.3);
+}
+
+/* Stepper */
+.charter-stepper {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.charter-stepper-btn {
+  width: 44px;
+  height: 44px;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background: #F8F9FC;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.charter-stepper-btn:hover {
+  border-color: var(--primary);
+  background: rgba(108, 99, 255, 0.08);
+  color: var(--primary);
+}
+
+.charter-stepper-btn:active {
+  transform: scale(0.95);
+}
+
+.charter-stepper-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--dark);
+  min-width: 60px;
+  text-align: center;
+}
+
+/* Vehicle Cards */
+.charter-vehicles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.charter-vehicle-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 18px 12px;
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  background: #F8F9FC;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+}
+
+.charter-vehicle-card.active {
+  border-color: var(--primary);
+  background: rgba(108, 99, 255, 0.08);
+  box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.08);
+}
+
+.charter-vehicle-card:hover:not(.active) {
+  border-color: rgba(108, 99, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.charter-vehicle-icon {
+  font-size: 2rem;
+}
+
+.charter-vehicle-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.charter-vehicle-card.active .charter-vehicle-name {
+  color: var(--primary);
+}
+
+.charter-vehicle-pax {
+  font-size: 0.75rem;
+  color: var(--gray-500);
+}
+
+/* Submit */
+.charter-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 24px;
+  padding: 18px;
+  background: linear-gradient(135deg, var(--accent) 0%, #00b87a 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+  box-shadow: 0 4px 16px rgba(0, 214, 143, 0.3);
+  letter-spacing: 0.3px;
+}
+
+.charter-submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0, 214, 143, 0.4);
+}
+
+.charter-submit-btn:active {
+  transform: translateY(-1px);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .charter-header {
+    padding: 72px 20px 36px;
+  }
+
+  .charter-form {
+    padding: 24px 16px 60px;
+  }
+
+  .charter-section {
+    padding: 16px 18px;
+  }
+
+  .charter-vehicles {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .charter-duration-row {
+    flex-wrap: wrap;
+  }
+
+  .charter-duration-btn {
+    min-width: calc(50% - 5px);
+  }
+}
+
+@media (max-width: 380px) {
+  .charter-vehicles {
+    grid-template-columns: 1fr;
+  }
+}

@@ -10,6 +10,7 @@ const UI: Record<string, Record<LangCode, string>> = {
   back: { 'zh-TW': '返回攻略列表', 'zh-CN': '返回攻略列表', en: 'Back to Guides', ja: 'ガイド一覧へ', ko: '가이드 목록', th: 'กลับไปรายการไกด์', vi: 'Quay lại danh sách', ms: 'Kembali ke senarai panduan' },
   hours: { 'zh-TW': '小時行程', 'zh-CN': '小时行程', en: 'hour trip', ja: '時間の旅', ko: '시간 여행', th: 'ชั่วโมง', vi: 'giờ', ms: 'jam' },
   bookNow: { 'zh-TW': '立即預約包車', 'zh-CN': '立即预约包车', en: 'Book Charter Now', ja: '今すぐ予約する', ko: '지금 예약하기', th: 'จองรถเหมาเลย', vi: 'Đặt xe ngay', ms: 'Tempah sekarang' },
+  downloadApp: { 'zh-TW': '下載APP預約包車', 'zh-CN': '下载APP预约包车', en: 'Download App to Book', ja: 'アプリで予約', ko: '앱 다운로드하여 예약', th: 'ดาวน์โหลดแอปจอง', vi: 'Tải App để đặt', ms: 'Muat turun App untuk tempah' },
   duration: { 'zh-TW': '建議時數', 'zh-CN': '建议时长', en: 'Duration', ja: '所要時間', ko: '소요 시간', th: 'ระยะเวลา', vi: 'Thời lượng', ms: 'Tempoh' },
   departure: { 'zh-TW': '出發地', 'zh-CN': '出发地', en: 'Departure', ja: '出発地', ko: '출발지', th: 'จุดออกเดินทาง', vi: 'Điểm khởi hành', ms: 'Lokasi berlepas' },
   tripInfo: { 'zh-TW': '行程資訊', 'zh-CN': '行程信息', en: 'Trip Info', ja: 'ツアー情報', ko: '여행 정보', th: 'ข้อมูลทริป', vi: 'Thông tin chuyến đi', ms: 'Maklumat perjalanan' },
@@ -146,8 +147,11 @@ export default function GuideContent({ guide, initialLang, relatedGuides = [] }:
               </span>
               <span className="guide-info-value">{guide.city}</span>
             </div>
-            <a href={`${langPrefix}/#download`} className="guide-cta-btn">
-              📱 {UI.bookNow[lang]}
+            <a href={`${langPrefix}/booking/charter?guide=${guide.slug}&city=${encodeURIComponent(guide.city)}&hours=${guide.duration_hours}`} className="guide-cta-btn">
+              🚐 {UI.bookNow[lang]}
+            </a>
+            <a href={`${langPrefix}/#download`} className="guide-cta-btn guide-cta-btn-secondary">
+              📱 {UI.downloadApp[lang]}
             </a>
             <div className="guide-share-row">
               <button className="guide-share-btn" onClick={handleCopy}>
