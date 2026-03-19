@@ -1,11 +1,22 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import './charter.css';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
+
+interface FlightResult {
+  airportCode: string;
+  airportName: string;
+  flightNo: string;
+  scheduledTime: string | null;
+  estimatedTime: string | null;
+  terminal: string | null;
+  status: string | null;
+  route: string | null;
+}
 
 interface VehiclePackage {
   id: string;
@@ -258,6 +269,54 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
     if (!on) { setDropoffAirport(''); setDropoffFlight(''); setDropoff(''); }
   };
 
+  // Flight search
+  const [pickupFlightResults, setPickupFlightResults] = useState<FlightResult[]>([]);
+  const [dropoffFlightResults, setDropoffFlightResults] = useState<FlightResult[]>([]);
+  const [pickupSelectedFlight, setPickupSelectedFlight] = useState<FlightResult | null>(null);
+  const [dropoffSelectedFlight, setDropoffSelectedFlight] = useState<FlightResult | null>(null);
+  const pickupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dropoffTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const searchFlights = useCallback((query: string, direction: 'arrival' | 'departure', airport: string, setter: (r: FlightResult[]) => void) => {
+    if (query.length < 2) { setter([]); return; }
+    const params = new URLSearchParams({ q: query, direction });
+    if (airport) params.set('airport', airport);
+    fetch(`${API_BASE}/api/flights/search?${params}`)
+      .then(r => r.json())
+      .then(res => { if (res.success) setter(res.data); })
+      .catch(() => setter([]));
+  }, []);
+
+  const handlePickupFlightChange = (val: string) => {
+    const clean = val.toUpperCase().replace(/[^A-Z0-9\- ]/g, '').slice(0, 12);
+    setPickupFlight(clean);
+    setPickupSelectedFlight(null);
+    if (pickupTimerRef.current) clearTimeout(pickupTimerRef.current);
+    pickupTimerRef.current = setTimeout(() => searchFlights(clean, 'arrival', pickupAirport, setPickupFlightResults), 300);
+  };
+
+  const handleDropoffFlightChange = (val: string) => {
+    const clean = val.toUpperCase().replace(/[^A-Z0-9\- ]/g, '').slice(0, 12);
+    setDropoffFlight(clean);
+    setDropoffSelectedFlight(null);
+    if (dropoffTimerRef.current) clearTimeout(dropoffTimerRef.current);
+    dropoffTimerRef.current = setTimeout(() => searchFlights(clean, 'departure', dropoffAirport, setDropoffFlightResults), 300);
+  };
+
+  const selectPickupFlight = (f: FlightResult) => {
+    setPickupSelectedFlight(f);
+    setPickupFlight(f.flightNo);
+    setPickupAirport(f.airportCode);
+    setPickupFlightResults([]);
+  };
+
+  const selectDropoffFlight = (f: FlightResult) => {
+    setDropoffSelectedFlight(f);
+    setDropoffFlight(f.flightNo);
+    setDropoffAirport(f.airportCode);
+    setDropoffFlightResults([]);
+  };
+
   // Fetch packages from backend (re-fetch when city/region changes)
   useEffect(() => {
     setLoadingPkgs(true);
@@ -413,21 +472,44 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                 className="charter-input charter-select"
                 value={pickupAirport}
                 onChange={(e) => setPickupAirport(e.target.value)}
-                required
               >
                 <option value="">{t(UI.selectAirport, lang)}</option>
                 {AIRPORTS.map((a) => (
                   <option key={a.code} value={a.code}>{a.name}</option>
                 ))}
               </select>
-              <input
-                type="text"
-                className="charter-input"
-                placeholder={t(UI.flightPlaceholder, lang)}
-                value={pickupFlight}
-                onChange={(e) => setPickupFlight(e.target.value.toUpperCase().replace(/[^A-Z0-9\- ]/g, '').slice(0, 12))}
-                maxLength={12}
-              />
+              <div className="charter-flight-search">
+                <input
+                  type="text"
+                  className="charter-input"
+                  placeholder={t(UI.flightPlaceholder, lang)}
+                  value={pickupFlight}
+                  onChange={(e) => handlePickupFlightChange(e.target.value)}
+                  maxLength={12}
+                  autoComplete="off"
+                />
+                {pickupFlightResults.length > 0 && (
+                  <div className="charter-flight-dropdown">
+                    {pickupFlightResults.map((f, i) => (
+                      <button key={i} type="button" className="charter-flight-item" onClick={() => selectPickupFlight(f)}>
+                        <span className="charter-flight-no">{f.flightNo}</span>
+                        <span className="charter-flight-time">{f.scheduledTime || '--:--'}</span>
+                        <span className="charter-flight-airport">{f.airportName}({f.airportCode}){f.terminal ? ` ${f.terminal}` : ''}</span>
+                        {f.route && <span className="charter-flight-route">{f.route}</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {pickupSelectedFlight && (
+                <div className="charter-flight-selected">
+                  ✈️ {pickupSelectedFlight.airportName}({pickupSelectedFlight.airportCode})
+                  {pickupSelectedFlight.terminal ? ` ${pickupSelectedFlight.terminal}` : ''}
+                  {' '}{pickupSelectedFlight.flightNo}
+                  {' '}{pickupSelectedFlight.scheduledTime || ''}
+                  {pickupSelectedFlight.route ? ` — ${pickupSelectedFlight.route}` : ''}
+                </div>
+              )}
             </div>
           ) : (
             <input
@@ -460,21 +542,44 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                 className="charter-input charter-select"
                 value={dropoffAirport}
                 onChange={(e) => setDropoffAirport(e.target.value)}
-                required
               >
                 <option value="">{t(UI.selectAirport, lang)}</option>
                 {AIRPORTS.map((a) => (
                   <option key={a.code} value={a.code}>{a.name}</option>
                 ))}
               </select>
-              <input
-                type="text"
-                className="charter-input"
-                placeholder={t(UI.flightPlaceholder, lang)}
-                value={dropoffFlight}
-                onChange={(e) => setDropoffFlight(e.target.value.toUpperCase().replace(/[^A-Z0-9\- ]/g, '').slice(0, 12))}
-                maxLength={12}
-              />
+              <div className="charter-flight-search">
+                <input
+                  type="text"
+                  className="charter-input"
+                  placeholder={t(UI.flightPlaceholder, lang)}
+                  value={dropoffFlight}
+                  onChange={(e) => handleDropoffFlightChange(e.target.value)}
+                  maxLength={12}
+                  autoComplete="off"
+                />
+                {dropoffFlightResults.length > 0 && (
+                  <div className="charter-flight-dropdown">
+                    {dropoffFlightResults.map((f, i) => (
+                      <button key={i} type="button" className="charter-flight-item" onClick={() => selectDropoffFlight(f)}>
+                        <span className="charter-flight-no">{f.flightNo}</span>
+                        <span className="charter-flight-time">{f.scheduledTime || '--:--'}</span>
+                        <span className="charter-flight-airport">{f.airportName}({f.airportCode}){f.terminal ? ` ${f.terminal}` : ''}</span>
+                        {f.route && <span className="charter-flight-route">{f.route}</span>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {dropoffSelectedFlight && (
+                <div className="charter-flight-selected">
+                  ✈️ {dropoffSelectedFlight.airportName}({dropoffSelectedFlight.airportCode})
+                  {dropoffSelectedFlight.terminal ? ` ${dropoffSelectedFlight.terminal}` : ''}
+                  {' '}{dropoffSelectedFlight.flightNo}
+                  {' '}{dropoffSelectedFlight.scheduledTime || ''}
+                  {dropoffSelectedFlight.route ? ` — ${dropoffSelectedFlight.route}` : ''}
+                </div>
+              )}
             </div>
           ) : (
             <input
