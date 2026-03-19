@@ -426,8 +426,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
   const currentMaxPax = selectedPkg ? (VEHICLE_MAX_PAX[selectedPkg.vehicleType] || 4) : 8;
   const currentMaxLug = selectedPkg ? (VEHICLE_MAX_LUG[selectedPkg.vehicleType] || 4) : 8;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     // Manual validation
     if (!city) { alert(lang === 'zh-TW' ? '請選擇目的城市' : 'Please select a destination city'); return; }
     if (!dateTime) { alert(lang === 'zh-TW' ? '請選擇預約時間' : 'Please select a date and time'); return; }
@@ -498,7 +497,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
         </div>
       </div>
 
-      <form className="charter-form" onSubmit={handleSubmit}>
+      <div className="charter-form">
         {/* Destination City */}
         <div className="charter-section">
           <label className="charter-label">{t(UI.destCity, lang)}</label>
@@ -810,12 +809,13 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
         )}
 
         <button
-          type="submit"
+          type="button"
           className="charter-submit-btn"
+          onClick={handleSubmit}
         >
           {t(UI.submit, lang)}
         </button>
-      </form>
+      </div>
     </div>
   );
 }
