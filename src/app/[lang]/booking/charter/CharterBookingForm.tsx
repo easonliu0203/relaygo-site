@@ -7,6 +7,11 @@ import './charter.css';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
 
+interface PlaceSuggestion {
+  placeId: string;
+  text: string;
+}
+
 interface FlightResult {
   airportCode: string;
   airportName: string;
@@ -317,6 +322,61 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
     setDropoffFlightResults([]);
   };
 
+  // Place autocomplete
+  const [pickupSuggestions, setPickupSuggestions] = useState<PlaceSuggestion[]>([]);
+  const [dropoffSuggestions, setDropoffSuggestions] = useState<PlaceSuggestion[]>([]);
+  const pickupPlaceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dropoffPlaceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const searchPlaces = useCallback((input: string, setter: (s: PlaceSuggestion[]) => void) => {
+    if (input.length < 2) { setter([]); return; }
+    fetch(`${API_BASE}/api/places/autocomplete`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input,
+        languageCode: lang === 'zh-CN' ? 'zh-CN' : lang === 'en' ? 'en' : lang === 'ja' ? 'ja' : 'zh-TW',
+        regionCode: 'TW',
+        includedPrimaryTypes: ['establishment', 'geocode'],
+      }),
+    })
+      .then(r => r.json())
+      .then(res => {
+        const suggestions: PlaceSuggestion[] = (res.suggestions || [])
+          .filter((s: { placePrediction?: unknown }) => s.placePrediction)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          .map((s: any) => ({
+            placeId: s.placePrediction?.placeId || '',
+            text: s.placePrediction?.text?.text || s.placePrediction?.structuredFormat?.mainText?.text || '',
+          }))
+          .slice(0, 5);
+        setter(suggestions);
+      })
+      .catch(() => setter([]));
+  }, [lang]);
+
+  const handlePickupInput = (val: string) => {
+    setPickup(val);
+    if (pickupPlaceTimer.current) clearTimeout(pickupPlaceTimer.current);
+    pickupPlaceTimer.current = setTimeout(() => searchPlaces(val, setPickupSuggestions), 300);
+  };
+
+  const handleDropoffInput = (val: string) => {
+    setDropoff(val);
+    if (dropoffPlaceTimer.current) clearTimeout(dropoffPlaceTimer.current);
+    dropoffPlaceTimer.current = setTimeout(() => searchPlaces(val, setDropoffSuggestions), 300);
+  };
+
+  const selectPickupPlace = (s: PlaceSuggestion) => {
+    setPickup(s.text);
+    setPickupSuggestions([]);
+  };
+
+  const selectDropoffPlace = (s: PlaceSuggestion) => {
+    setDropoff(s.text);
+    setDropoffSuggestions([]);
+  };
+
   // Fetch packages from backend (re-fetch when city/region changes)
   useEffect(() => {
     setLoadingPkgs(true);
@@ -512,14 +572,27 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
               )}
             </div>
           ) : (
-            <input
-              type="text"
-              className="charter-input"
-              placeholder={t(UI.pickupPlaceholder, lang)}
-              value={pickup}
-              onChange={(e) => setPickup(e.target.value)}
-              required
-            />
+            <div className="charter-place-search">
+              <input
+                type="text"
+                className="charter-input"
+                placeholder={t(UI.pickupPlaceholder, lang)}
+                value={pickup}
+                onChange={(e) => handlePickupInput(e.target.value)}
+                onBlur={() => setTimeout(() => setPickupSuggestions([]), 200)}
+                required
+                autoComplete="off"
+              />
+              {pickupSuggestions.length > 0 && (
+                <div className="charter-place-dropdown">
+                  {pickupSuggestions.map((s) => (
+                    <button key={s.placeId} type="button" className="charter-place-item" onMouseDown={() => selectPickupPlace(s)}>
+                      📍 {s.text}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
         </div>
 
@@ -582,14 +655,27 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
               )}
             </div>
           ) : (
-            <input
-              type="text"
-              className="charter-input"
-              placeholder={t(UI.dropoffPlaceholder, lang)}
-              value={dropoff}
-              onChange={(e) => setDropoff(e.target.value)}
-              required
-            />
+            <div className="charter-place-search">
+              <input
+                type="text"
+                className="charter-input"
+                placeholder={t(UI.dropoffPlaceholder, lang)}
+                value={dropoff}
+                onChange={(e) => handleDropoffInput(e.target.value)}
+                onBlur={() => setTimeout(() => setDropoffSuggestions([]), 200)}
+                required
+                autoComplete="off"
+              />
+              {dropoffSuggestions.length > 0 && (
+                <div className="charter-place-dropdown">
+                  {dropoffSuggestions.map((s) => (
+                    <button key={s.placeId} type="button" className="charter-place-item" onMouseDown={() => selectDropoffPlace(s)}>
+                      📍 {s.text}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           )}
           {(addAirportPickup || addAirportDropoff) && (
             <p className="charter-airport-note">ℹ️ {t(UI.airportFeeNote, lang)}</p>
