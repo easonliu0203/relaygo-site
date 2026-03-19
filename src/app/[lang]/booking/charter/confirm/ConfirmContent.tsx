@@ -60,6 +60,8 @@ const UI: Record<string, Record<string, string>> = {
   notesLabel: { 'zh-TW': '備註', en: 'Notes' },
   charterFee: { 'zh-TW': '包車費用', en: 'Charter Fee' },
   discount: { 'zh-TW': '優惠折扣', en: 'Discount' },
+  crossRegion: { 'zh-TW': '跨區費', en: 'Cross-Region Fee' },
+  calcSurcharge: { 'zh-TW': '計算跨區費中...', en: 'Calculating surcharge...' },
   deposit: { 'zh-TW': '訂金（30%）', en: 'Deposit (30%)' },
   payDeposit: { 'zh-TW': '支付訂金', en: 'Pay Deposit' },
   hours: { 'zh-TW': '小時', en: 'hrs' },
@@ -74,9 +76,9 @@ const UI: Record<string, Record<string, string>> = {
   promoApplied: { 'zh-TW': '優惠碼已套用', en: 'Promo code applied' },
   // Cancel policy
   cancelPolicy: { 'zh-TW': '取消政策', en: 'Cancellation Policy' },
-  cancelPolicyText: {
-    'zh-TW': '• 出發前 3 天以上取消：全額退還訂金\n• 出發前 1-3 天取消：退還 50% 訂金\n• 出發前 24 小時內取消：不退還訂金\n• 出發當天未到或臨時取消：不退還訂金',
-    en: '• Cancel 3+ days before: Full deposit refund\n• Cancel 1-3 days before: 50% deposit refund\n• Cancel within 24 hours: No refund\n• No-show on departure day: No refund',
+  cancelPolicyFallback: {
+    'zh-TW': '<p>載入中...</p>',
+    en: '<p>Loading...</p>',
   },
   agreePolicy: { 'zh-TW': '我已閱讀並同意取消政策', en: 'I have read and agree to the cancellation policy' },
   agreePolicyRequired: { 'zh-TW': '請先同意取消政策', en: 'Please agree to the cancellation policy first' },
@@ -133,6 +135,12 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
 
   // Policy
   const [policyAgreed, setPolicyAgreed] = useState(false);
+  const [policyHtml, setPolicyHtml] = useState('');
+
+  // Cross-region surcharge
+  const [surcharge, setSurcharge] = useState(0);
+  const [surchargeLoading, setSurchargeLoading] = useState(false);
+  const [surchargeInfo, setSurchargeInfo] = useState('');
 
   useEffect(() => {
     const raw = sessionStorage.getItem('relaygo_booking');
@@ -143,6 +151,45 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
     const unsub = onAuthStateChanged(auth, (u) => { setUser(u); setAuthLoading(false); });
     return unsub;
   }, []);
+
+  // Fetch cancellation policy from Supabase
+  useEffect(() => {
+    const apiLang = lang === 'zh-CN' ? 'zh-CN' : lang === 'en' ? 'en' : lang === 'ja' ? 'ja' : 'zh-TW';
+    fetch(`${API_BASE}/api/legal/documents/by-id/d3c9461a-b790-4e5b-a898-7d95d54d824b?lang=${apiLang}`)
+      .then(r => r.json())
+      .then(res => { if (res.success && res.data?.content) setPolicyHtml(res.data.content); })
+      .catch(() => {});
+  }, [lang]);
+
+  // Calculate cross-region surcharge
+  useEffect(() => {
+    if (!booking?.city || !booking?.vehicleType) return;
+    setSurchargeLoading(true);
+    const params = new URLSearchParams({
+      city: booking.city,
+      vehicle_type: booking.vehicleType,
+      pickup_lat: '0', pickup_lng: '0',
+      dropoff_lat: '0', dropoff_lng: '0',
+    });
+    if (booking.addAirportPickup && booking.pickupAirport) {
+      params.set('pickup_airport_code', booking.pickupAirport);
+    }
+    if (booking.addAirportDropoff && booking.dropoffAirport) {
+      params.set('dropoff_airport_code', booking.dropoffAirport);
+    }
+    fetch(`${API_BASE}/api/pricing/charter-surcharge?${params}`)
+      .then(r => r.json())
+      .then(res => {
+        if (res.success && res.data) {
+          setSurcharge(res.data.surcharge || 0);
+          if (res.data.surcharge > 0) {
+            setSurchargeInfo(`${res.data.total_distance_km}km × ${formatPrice(res.data.rate_per_km)}/km`);
+          }
+        }
+      })
+      .catch(() => {})
+      .finally(() => setSurchargeLoading(false));
+  }, [booking?.city, booking?.vehicleType, booking?.pickupAirport, booking?.dropoffAirport, booking?.addAirportPickup, booking?.addAirportDropoff]);
 
   // --- Promo code handlers ---
   const handleApplyPromo = async () => {
@@ -242,7 +289,8 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
   }
 
   const charterFee = booking.price;
-  const totalAfterDiscount = Math.max(0, charterFee - promoDiscount);
+  const totalBeforeDiscount = charterFee + surcharge;
+  const totalAfterDiscount = Math.max(0, totalBeforeDiscount - promoDiscount);
   const depositRate = 0.3;
   const depositAmount = Math.ceil(totalAfterDiscount * depositRate);
   const vehicleName = VEHICLE_NAMES[booking.vehicleType]?.[lang] || VEHICLE_NAMES[booking.vehicleType]?.['zh-TW'] || booking.vehicleType;
@@ -355,6 +403,24 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
             <span>{t(UI.overtime, lang)}: {formatPrice(booking.overtimeRate)}{t(UI.perHour, lang)}</span>
             <span></span>
           </div>
+          {surcharge > 0 && (
+            <div className="confirm-price-row">
+              <span>{t(UI.crossRegion, lang)}</span>
+              <span>{formatPrice(surcharge)}</span>
+            </div>
+          )}
+          {surcharge > 0 && surchargeInfo && (
+            <div className="confirm-price-row sub">
+              <span>{surchargeInfo}</span>
+              <span></span>
+            </div>
+          )}
+          {surchargeLoading && (
+            <div className="confirm-price-row sub">
+              <span>{t(UI.calcSurcharge, lang)}</span>
+              <span></span>
+            </div>
+          )}
           {promoApplied && promoDiscount > 0 && (
             <div className="confirm-price-row" style={{ color: 'var(--accent)' }}>
               <span>{t(UI.discount, lang)}</span>
@@ -371,11 +437,10 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
         {/* Cancellation Policy */}
         <div className="charter-section">
           <label className="charter-label">{t(UI.cancelPolicy, lang)}</label>
-          <div className="confirm-policy-text">
-            {t(UI.cancelPolicyText, lang).split('\n').map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </div>
+          <div
+            className="confirm-policy-text"
+            dangerouslySetInnerHTML={{ __html: policyHtml || t(UI.cancelPolicyFallback, lang) }}
+          />
           <label className="confirm-policy-agree" onClick={() => setPolicyAgreed(!policyAgreed)}>
             <span className={`confirm-checkbox ${policyAgreed ? 'checked' : ''}`}>
               {policyAgreed && '✓'}
