@@ -249,78 +249,6 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
       </div>
 
       <form className="charter-form" onSubmit={handleSubmit}>
-        {/* Vehicle & Plan Selection — top priority like mobile */}
-        <div className="charter-section">
-          <label className="charter-label">{t(UI.vehicleType, lang)}</label>
-          {loadingPkgs ? (
-            <div className="charter-loading">{t(UI.loading, lang)}</div>
-          ) : (
-            <div className="charter-vehicle-groups">
-              {grouped.map((group) => {
-                const isExpanded = expandedType === group.type;
-                const icon = VEHICLE_ICONS[group.type] || '🚗';
-                const firstName = group.plans[0]?.description || group.type;
-                const planCount = group.plans.length;
-
-                return (
-                  <div key={group.type} className={`charter-vg ${isExpanded ? 'expanded' : ''}`}>
-                    {/* Vehicle type header — tap to expand */}
-                    <button
-                      type="button"
-                      className="charter-vg-header"
-                      onClick={() => handleToggle(group.type)}
-                    >
-                      <span className="charter-vg-icon">{icon}</span>
-                      <div className="charter-vg-info">
-                        <span className="charter-vg-name">{firstName}</span>
-                        <span className="charter-vg-meta">
-                          {group.plans[0]?.capacityInfo} · {planCount} {t(UI.plans, lang)}
-                        </span>
-                      </div>
-                      <span className={`charter-vg-arrow ${isExpanded ? 'open' : ''}`}>▼</span>
-                    </button>
-
-                    {/* Expanded plan list */}
-                    {isExpanded && (
-                      <div className="charter-vg-plans">
-                        {group.plans.map((pkg) => {
-                          const isSelected = selectedPkg?.id === pkg.id;
-                          const hasDiscount = pkg.discountPrice < pkg.originalPrice;
-
-                          return (
-                            <button
-                              key={pkg.id}
-                              type="button"
-                              className={`charter-plan-card ${isSelected ? 'selected' : ''}`}
-                              onClick={() => handleSelectPlan(pkg)}
-                            >
-                              <div className="charter-plan-top">
-                                <span className="charter-plan-duration">
-                                  {pkg.duration} {t(UI.hours, lang)}
-                                </span>
-                                {isSelected && <span className="charter-plan-check">✓</span>}
-                              </div>
-                              <div className="charter-plan-prices">
-                                {hasDiscount && (
-                                  <span className="charter-plan-original">{formatPrice(pkg.originalPrice)}</span>
-                                )}
-                                <span className="charter-plan-price">{formatPrice(pkg.discountPrice)}</span>
-                              </div>
-                              <div className="charter-plan-overtime">
-                                {t(UI.overtimeRate, lang)}: {formatPrice(pkg.overtimeRate)}{t(UI.perHour, lang)}
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-
         {/* Date & Time */}
         <div className="charter-section">
           <label className="charter-label">{t(UI.dateTime, lang)}</label>
@@ -390,6 +318,76 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
             onChange={(e) => setNotes(e.target.value)}
             rows={3}
           />
+        </div>
+
+        {/* Vehicle & Plan Selection */}
+        <div className="charter-section">
+          <label className="charter-label">{t(UI.vehicleType, lang)}</label>
+          {loadingPkgs ? (
+            <div className="charter-loading">{t(UI.loading, lang)}</div>
+          ) : (
+            <div className="charter-vehicle-groups">
+              {grouped.map((group) => {
+                const isExpanded = expandedType === group.type;
+                const icon = VEHICLE_ICONS[group.type] || '🚗';
+                const firstName = group.plans[0]?.description || group.type;
+                const planCount = group.plans.length;
+
+                return (
+                  <div key={group.type} className={`charter-vg ${isExpanded ? 'expanded' : ''}`}>
+                    <button
+                      type="button"
+                      className="charter-vg-header"
+                      onClick={() => handleToggle(group.type)}
+                    >
+                      <span className="charter-vg-icon">{icon}</span>
+                      <div className="charter-vg-info">
+                        <span className="charter-vg-name">{firstName}</span>
+                        <span className="charter-vg-meta">
+                          {group.plans[0]?.capacityInfo} · {planCount} {t(UI.plans, lang)}
+                        </span>
+                      </div>
+                      <span className={`charter-vg-arrow ${isExpanded ? 'open' : ''}`}>▼</span>
+                    </button>
+
+                    {isExpanded && (
+                      <div className="charter-vg-plans">
+                        {group.plans.map((pkg) => {
+                          const isSelected = selectedPkg?.id === pkg.id;
+                          const hasDiscount = pkg.discountPrice < pkg.originalPrice;
+
+                          return (
+                            <button
+                              key={pkg.id}
+                              type="button"
+                              className={`charter-plan-card ${isSelected ? 'selected' : ''}`}
+                              onClick={() => handleSelectPlan(pkg)}
+                            >
+                              <div className="charter-plan-top">
+                                <span className="charter-plan-duration">
+                                  {pkg.duration} {t(UI.hours, lang)}
+                                </span>
+                                {isSelected && <span className="charter-plan-check">✓</span>}
+                              </div>
+                              <div className="charter-plan-prices">
+                                {hasDiscount && (
+                                  <span className="charter-plan-original">{formatPrice(pkg.originalPrice)}</span>
+                                )}
+                                <span className="charter-plan-price">{formatPrice(pkg.discountPrice)}</span>
+                              </div>
+                              <div className="charter-plan-overtime">
+                                {t(UI.overtimeRate, lang)}: {formatPrice(pkg.overtimeRate)}{t(UI.perHour, lang)}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         {/* Selected summary + Submit */}
