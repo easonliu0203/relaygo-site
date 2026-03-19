@@ -32,6 +32,16 @@ const UI: Record<string, Record<string, string>> = {
     ko: '← 가이드로 돌아가기', th: '← กลับไปไกด์', vi: '← Quay lại hướng dẫn', ms: '← Kembali ke panduan',
     id: '← Kembali ke panduan', fil: '← Bumalik sa gabay',
   },
+  destCity: {
+    'zh-TW': '目的城市', 'zh-CN': '目的城市', en: 'Destination City', ja: '目的地',
+    ko: '목적지', th: 'เมืองปลายทาง', vi: 'Thành phố đến', ms: 'Bandar destinasi',
+    id: 'Kota tujuan', fil: 'Lungsod na pupuntahan',
+  },
+  destCityPlaceholder: {
+    'zh-TW': '請選擇目的城市', 'zh-CN': '请选择目的城市', en: 'Select destination city', ja: '目的地を選択',
+    ko: '목적지 선택', th: 'เลือกเมืองปลายทาง', vi: 'Chọn thành phố', ms: 'Pilih bandar',
+    id: 'Pilih kota tujuan', fil: 'Pumili ng lungsod',
+  },
   dateTime: {
     'zh-TW': '預約時間', 'zh-CN': '预约时间', en: 'Pickup Date & Time', ja: '予約日時',
     ko: '예약 일시', th: 'วันเวลาที่จอง', vi: 'Ngày giờ đón', ms: 'Tarikh & Masa',
@@ -117,6 +127,21 @@ const UI: Record<string, Record<string, string>> = {
   },
 };
 
+// City → region mapping (mirrors backend TW_CITY_CENTERS)
+const CITY_REGION: Record<string, string> = {
+  '台北': 'north', '新北': 'north', '基隆': 'north', '桃園': 'north', '新竹': 'north', '宜蘭': 'north',
+  '台中': 'central', '苗栗': 'central', '彰化': 'central', '南投': 'central', '雲林': 'central',
+  '高雄': 'south', '台南': 'south', '嘉義': 'south', '屏東': 'south',
+  '花蓮': 'east', '台東': 'east',
+};
+
+const REGION_CITIES: { region: string; label: Record<string, string>; cities: string[] }[] = [
+  { region: 'north', label: { 'zh-TW': '北部', 'zh-CN': '北部', en: 'North', ja: '北部', ko: '북부', th: 'ภาคเหนือ', vi: 'Miền Bắc', ms: 'Utara', id: 'Utara', fil: 'Hilaga' }, cities: ['台北', '新北', '基隆', '桃園', '新竹', '宜蘭'] },
+  { region: 'central', label: { 'zh-TW': '中部', 'zh-CN': '中部', en: 'Central', ja: '中部', ko: '중부', th: 'ภาคกลาง', vi: 'Miền Trung', ms: 'Tengah', id: 'Tengah', fil: 'Gitna' }, cities: ['台中', '苗栗', '彰化', '南投', '雲林'] },
+  { region: 'south', label: { 'zh-TW': '南部', 'zh-CN': '南部', en: 'South', ja: '南部', ko: '남부', th: 'ภาคใต้', vi: 'Miền Nam', ms: 'Selatan', id: 'Selatan', fil: 'Timog' }, cities: ['高雄', '台南', '嘉義', '屏東'] },
+  { region: 'east', label: { 'zh-TW': '東部', 'zh-CN': '东部', en: 'East', ja: '東部', ko: '동부', th: 'ภาคตะวันออก', vi: 'Miền Đông', ms: 'Timur', id: 'Timur', fil: 'Silangan' }, cities: ['花蓮', '台東'] },
+];
+
 const VEHICLE_ICONS: Record<string, string> = { S: '🚗', M: '🚙', L: '🚐', XL: '✨' };
 const VEHICLE_MAX_PAX: Record<string, number> = { S: 4, M: 4, L: 8, XL: 6 };
 const VEHICLE_MAX_LUG: Record<string, number> = { S: 3, M: 4, L: 8, XL: 4 };
@@ -144,6 +169,10 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
   const guideCity = searchParams.get('city') || '';
   const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
 
+  // City / region
+  const [city, setCity] = useState(guideCity || '');
+  const region = city ? (CITY_REGION[city] || 'default') : 'default';
+
   // Packages from API
   const [packages, setPackages] = useState<VehiclePackage[]>([]);
   const [loadingPkgs, setLoadingPkgs] = useState(true);
@@ -158,14 +187,15 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
   const [dropoff, setDropoff] = useState('');
   const [notes, setNotes] = useState('');
 
-  // Fetch packages from backend
+  // Fetch packages from backend (re-fetch when city/region changes)
   useEffect(() => {
-    const langMap: Record<string, string> = {
-      'zh-TW': 'zh-TW', 'zh-CN': 'zh-CN', en: 'en', ja: 'ja', ko: 'ko',
-      th: 'th', vi: 'vi', ms: 'ms', id: 'id', fil: 'fil',
-    };
-    const apiLang = langMap[lang] || 'zh-TW';
-    const url = `${API_BASE}/api/pricing/packages?lang=${apiLang}`;
+    setLoadingPkgs(true);
+    setSelectedPkg(null);
+    setExpandedType(null);
+
+    const apiLang = lang || 'zh-TW';
+    const params = new URLSearchParams({ lang: apiLang, country: 'TW', region });
+    const url = `${API_BASE}/api/pricing/packages?${params}`;
 
     fetch(url)
       .then((r) => r.json())
@@ -176,7 +206,11 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
       })
       .catch(() => {})
       .finally(() => setLoadingPkgs(false));
-  }, [lang]);
+  }, [lang, region]);
+
+  const handleCityChange = (newCity: string) => {
+    setCity(newCity);
+  };
 
   // Group packages by vehicle type
   const typeOrder = ['S', 'M', 'L', 'XL'];
@@ -218,8 +252,9 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
       pickup,
       dropoff,
       notes,
+      city,
+      region,
       guideSlug,
-      guideCity,
       lang: initialLang,
     };
     console.log('Booking data:', bookingData);
@@ -249,6 +284,26 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
       </div>
 
       <form className="charter-form" onSubmit={handleSubmit}>
+        {/* Destination City */}
+        <div className="charter-section">
+          <label className="charter-label">{t(UI.destCity, lang)}</label>
+          <select
+            className="charter-input charter-select"
+            value={city}
+            onChange={(e) => handleCityChange(e.target.value)}
+            required
+          >
+            <option value="">{t(UI.destCityPlaceholder, lang)}</option>
+            {REGION_CITIES.map((rg) => (
+              <optgroup key={rg.region} label={t(rg.label, lang)}>
+                {rg.cities.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
+        </div>
+
         {/* Date & Time */}
         <div className="charter-section">
           <label className="charter-label">{t(UI.dateTime, lang)}</label>
