@@ -111,6 +111,7 @@
   transition: border-color 0.2s, box-shadow 0.2s;
   outline: none;
   font-family: inherit;
+  box-sizing: border-box;
 }
 
 .charter-input:focus {
@@ -127,33 +128,178 @@
   min-height: 80px;
 }
 
-/* Duration selector */
-.charter-duration-row {
-  display: flex;
-  gap: 10px;
+/* Loading */
+.charter-loading {
+  text-align: center;
+  padding: 24px;
+  color: var(--gray-500);
+  font-size: 0.95rem;
 }
 
-.charter-duration-btn {
+/* ===== Vehicle Groups (like mobile ExpansionTile) ===== */
+.charter-vehicle-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.charter-vg {
+  border: 2px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.charter-vg.expanded {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.08);
+}
+
+.charter-vg-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 18px;
+  background: #F8F9FC;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+  font-family: inherit;
+}
+
+.charter-vg-header:hover {
+  background: rgba(108, 99, 255, 0.04);
+}
+
+.charter-vg.expanded .charter-vg-header {
+  background: rgba(108, 99, 255, 0.06);
+}
+
+.charter-vg-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+.charter-vg-info {
   flex: 1;
-  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.charter-vg-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.charter-vg-meta {
+  font-size: 0.78rem;
+  color: var(--gray-500);
+}
+
+.charter-vg-arrow {
+  font-size: 0.7rem;
+  color: var(--gray-500);
+  transition: transform 0.3s;
+  flex-shrink: 0;
+}
+
+.charter-vg-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Plan cards inside expanded group */
+.charter-vg-plans {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px 14px;
+  background: var(--white);
+}
+
+.charter-plan-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
   border: 2px solid rgba(0, 0, 0, 0.06);
   border-radius: 12px;
-  background: #F8F9FC;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--gray-700);
+  background: #FAFBFE;
   cursor: pointer;
   transition: all 0.2s;
+  text-align: left;
+  font-family: inherit;
+  width: 100%;
 }
 
-.charter-duration-btn.active {
+.charter-plan-card:hover {
+  border-color: rgba(108, 99, 255, 0.3);
+  background: rgba(108, 99, 255, 0.03);
+}
+
+.charter-plan-card.selected {
   border-color: var(--primary);
+  background: rgba(108, 99, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.08);
+}
+
+.charter-plan-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.charter-plan-duration {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dark);
   background: rgba(108, 99, 255, 0.08);
+  padding: 4px 12px;
+  border-radius: 8px;
+}
+
+.charter-plan-check {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.charter-plan-prices {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.charter-plan-original {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  text-decoration: line-through;
+}
+
+.charter-plan-price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.charter-plan-card.selected .charter-plan-price {
   color: var(--primary);
 }
 
-.charter-duration-btn:hover:not(.active) {
-  border-color: rgba(108, 99, 255, 0.3);
+.charter-plan-overtime {
+  font-size: 0.78rem;
+  color: var(--gray-500);
 }
 
 /* Stepper */
@@ -178,6 +324,7 @@
   justify-content: center;
   transition: all 0.2s;
   line-height: 1;
+  font-family: inherit;
 }
 
 .charter-stepper-btn:hover {
@@ -198,55 +345,29 @@
   text-align: center;
 }
 
-/* Vehicle Cards */
-.charter-vehicles {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+/* Summary bar */
+.charter-summary {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 2px solid rgba(108, 99, 255, 0.15);
 }
 
-.charter-vehicle-card {
+.charter-summary-row {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
-  padding: 18px 12px;
-  border: 2px solid rgba(0, 0, 0, 0.06);
-  border-radius: 14px;
-  background: #F8F9FC;
-  cursor: pointer;
-  transition: all 0.25s;
-  text-align: center;
-}
-
-.charter-vehicle-card.active {
-  border-color: var(--primary);
-  background: rgba(108, 99, 255, 0.08);
-  box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.08);
-}
-
-.charter-vehicle-card:hover:not(.active) {
-  border-color: rgba(108, 99, 255, 0.3);
-  transform: translateY(-2px);
-}
-
-.charter-vehicle-icon {
-  font-size: 2rem;
-}
-
-.charter-vehicle-name {
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: var(--dark);
 }
 
-.charter-vehicle-card.active .charter-vehicle-name {
+.charter-summary-price {
+  font-size: 1.15rem;
+  font-weight: 800;
   color: var(--primary);
-}
-
-.charter-vehicle-pax {
-  font-size: 0.75rem;
-  color: var(--gray-500);
 }
 
 /* Submit */
@@ -255,7 +376,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-top: 24px;
+  margin-top: 16px;
   padding: 18px;
   background: linear-gradient(135deg, var(--accent) 0%, #00b87a 100%);
   color: var(--white);
@@ -267,15 +388,22 @@
   transition: transform 0.25s, box-shadow 0.25s;
   box-shadow: 0 4px 16px rgba(0, 214, 143, 0.3);
   letter-spacing: 0.3px;
+  font-family: inherit;
 }
 
-.charter-submit-btn:hover {
+.charter-submit-btn:hover:not(.disabled) {
   transform: translateY(-3px);
   box-shadow: 0 8px 28px rgba(0, 214, 143, 0.4);
 }
 
-.charter-submit-btn:active {
+.charter-submit-btn:active:not(.disabled) {
   transform: translateY(-1px);
+}
+
+.charter-submit-btn.disabled {
+  background: #CBD5E0;
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
 /* ===== Responsive ===== */
@@ -290,23 +418,5 @@
 
   .charter-section {
     padding: 16px 18px;
-  }
-
-  .charter-vehicles {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .charter-duration-row {
-    flex-wrap: wrap;
-  }
-
-  .charter-duration-btn {
-    min-width: calc(50% - 5px);
-  }
-}
-
-@media (max-width: 380px) {
-  .charter-vehicles {
-    grid-template-columns: 1fr;
   }
 }
