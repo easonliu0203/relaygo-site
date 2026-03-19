@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
+import { auth, googleProvider, appleProvider } from '@/lib/firebase';
+import { onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, type User } from 'firebase/auth';
 import '../charter.css';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
@@ -35,6 +37,7 @@ interface BookingData {
   lang: string;
 }
 
+const API_BASE = 'https://api.relaygo.pro';
 const VEHICLE_ICONS: Record<string, string> = { S: '🚗', M: '🚙', L: '🚐', XL: '✨' };
 const VEHICLE_NAMES: Record<string, Record<string, string>> = {
   S: { 'zh-TW': '五人座轎車', en: 'Sedan' },
@@ -44,97 +47,50 @@ const VEHICLE_NAMES: Record<string, Record<string, string>> = {
 };
 
 const UI: Record<string, Record<string, string>> = {
-  title: {
-    'zh-TW': '確認訂單', 'zh-CN': '确认订单', en: 'Confirm Order', ja: '注文確認',
-    ko: '주문 확인', th: 'ยืนยันคำสั่ง', vi: 'Xác nhận đơn', ms: 'Sahkan tempahan',
-    id: 'Konfirmasi pesanan', fil: 'Kumpirmahin',
+  title: { 'zh-TW': '確認訂單', en: 'Confirm Order' },
+  back: { 'zh-TW': '← 返回修改', en: '← Back to Edit' },
+  tourPlan: { 'zh-TW': '旅遊方案', en: 'Tour Plan' },
+  vehicle: { 'zh-TW': '車型方案', en: 'Vehicle Plan' },
+  bookingTime: { 'zh-TW': '預約時間', en: 'Booking Time' },
+  pickupLabel: { 'zh-TW': '上車地點', en: 'Pickup' },
+  dropoffLabel: { 'zh-TW': '下車地點', en: 'Dropoff' },
+  pax: { 'zh-TW': '乘客 / 行李', en: 'Passengers / Luggage' },
+  airportPickup: { 'zh-TW': '加購接機', en: 'Airport Pickup' },
+  airportDropoff: { 'zh-TW': '加購送機', en: 'Airport Dropoff' },
+  notesLabel: { 'zh-TW': '備註', en: 'Notes' },
+  charterFee: { 'zh-TW': '包車費用', en: 'Charter Fee' },
+  discount: { 'zh-TW': '優惠折扣', en: 'Discount' },
+  deposit: { 'zh-TW': '訂金（30%）', en: 'Deposit (30%)' },
+  payDeposit: { 'zh-TW': '支付訂金', en: 'Pay Deposit' },
+  hours: { 'zh-TW': '小時', en: 'hrs' },
+  overtime: { 'zh-TW': '超時費率', en: 'Overtime rate' },
+  perHour: { 'zh-TW': '/小時', en: '/hr' },
+  noData: { 'zh-TW': '無訂單資料，請重新填寫', en: 'No booking data, please go back' },
+  // Promo code
+  promoCode: { 'zh-TW': '優惠碼', en: 'Promo Code' },
+  promoPlaceholder: { 'zh-TW': '輸入優惠碼', en: 'Enter promo code' },
+  apply: { 'zh-TW': '套用', en: 'Apply' },
+  clear: { 'zh-TW': '清除', en: 'Clear' },
+  promoApplied: { 'zh-TW': '優惠碼已套用', en: 'Promo code applied' },
+  // Cancel policy
+  cancelPolicy: { 'zh-TW': '取消政策', en: 'Cancellation Policy' },
+  cancelPolicyText: {
+    'zh-TW': '• 出發前 3 天以上取消：全額退還訂金\n• 出發前 1-3 天取消：退還 50% 訂金\n• 出發前 24 小時內取消：不退還訂金\n• 出發當天未到或臨時取消：不退還訂金',
+    en: '• Cancel 3+ days before: Full deposit refund\n• Cancel 1-3 days before: 50% deposit refund\n• Cancel within 24 hours: No refund\n• No-show on departure day: No refund',
   },
-  back: {
-    'zh-TW': '← 返回修改', 'zh-CN': '← 返回修改', en: '← Back to Edit', ja: '← 修正に戻る',
-    ko: '← 수정으로 돌아가기', th: '← กลับแก้ไข', vi: '← Quay lại sửa', ms: '← Kembali edit',
-    id: '← Kembali edit', fil: '← Bumalik sa pag-edit',
-  },
-  tourPlan: {
-    'zh-TW': '旅遊方案', 'zh-CN': '旅游方案', en: 'Tour Plan', ja: 'ツアープラン',
-    ko: '투어 플랜', th: 'แผนทัวร์', vi: 'Gói tour', ms: 'Pelan lawatan',
-    id: 'Paket wisata', fil: 'Tour plan',
-  },
-  vehicle: {
-    'zh-TW': '車型方案', 'zh-CN': '车型方案', en: 'Vehicle Plan', ja: '車種プラン',
-    ko: '차종 플랜', th: 'แผนรถ', vi: 'Gói xe', ms: 'Pelan kenderaan',
-    id: 'Paket kendaraan', fil: 'Plano ng sasakyan',
-  },
-  bookingTime: {
-    'zh-TW': '預約時間', 'zh-CN': '预约时间', en: 'Booking Time', ja: '予約日時',
-    ko: '예약 일시', th: 'วันเวลาจอง', vi: 'Thời gian', ms: 'Masa tempahan',
-    id: 'Waktu pemesanan', fil: 'Oras ng booking',
-  },
-  pickupLabel: {
-    'zh-TW': '上車地點', 'zh-CN': '上车地点', en: 'Pickup', ja: '乗車場所',
-    ko: '탑승 장소', th: 'จุดรับ', vi: 'Điểm đón', ms: 'Lokasi naik',
-    id: 'Jemput', fil: 'Pickup',
-  },
-  dropoffLabel: {
-    'zh-TW': '下車地點', 'zh-CN': '下车地点', en: 'Dropoff', ja: '降車場所',
-    ko: '하차 장소', th: 'จุดส่ง', vi: 'Điểm trả', ms: 'Lokasi turun',
-    id: 'Turun', fil: 'Dropoff',
-  },
-  pax: {
-    'zh-TW': '乘客 / 行李', 'zh-CN': '乘客 / 行李', en: 'Passengers / Luggage', ja: '乗客 / 荷物',
-    ko: '탑승 / 수하물', th: 'ผู้โดยสาร / กระเป๋า', vi: 'Hành khách / Hành lý', ms: 'Penumpang / Bagasi',
-    id: 'Penumpang / Bagasi', fil: 'Pasahero / Bagahe',
-  },
-  airportPickup: {
-    'zh-TW': '加購接機', 'zh-CN': '加购接机', en: 'Airport Pickup', ja: '空港送迎',
-    ko: '공항 픽업', th: 'รับสนามบิน', vi: 'Đón sân bay', ms: 'Jemput lapangan terbang',
-    id: 'Jemput bandara', fil: 'Airport pickup',
-  },
-  airportDropoff: {
-    'zh-TW': '加購送機', 'zh-CN': '加购送机', en: 'Airport Dropoff', ja: '空港送り',
-    ko: '공항 드롭오프', th: 'ส่งสนามบิน', vi: 'Đưa sân bay', ms: 'Hantar lapangan terbang',
-    id: 'Antar bandara', fil: 'Airport dropoff',
-  },
-  notesLabel: {
-    'zh-TW': '備註', 'zh-CN': '备注', en: 'Notes', ja: '備考',
-    ko: '메모', th: 'หมายเหตุ', vi: 'Ghi chú', ms: 'Nota',
-    id: 'Catatan', fil: 'Tala',
-  },
-  charterFee: {
-    'zh-TW': '包車費用', 'zh-CN': '包车费用', en: 'Charter Fee', ja: 'チャーター料金',
-    ko: '전세 요금', th: 'ค่ารถเหมา', vi: 'Phí thuê xe', ms: 'Caj charter',
-    id: 'Biaya charter', fil: 'Charter fee',
-  },
-  deposit: {
-    'zh-TW': '訂金（30%）', 'zh-CN': '订金（30%）', en: 'Deposit (30%)', ja: 'デポジット（30%）',
-    ko: '보증금 (30%)', th: 'มัดจำ (30%)', vi: 'Đặt cọc (30%)', ms: 'Deposit (30%)',
-    id: 'Deposit (30%)', fil: 'Deposito (30%)',
-  },
-  payDeposit: {
-    'zh-TW': '支付訂金', 'zh-CN': '支付订金', en: 'Pay Deposit', ja: 'デポジットを支払う',
-    ko: '보증금 결제', th: 'ชำระมัดจำ', vi: 'Thanh toán đặt cọc', ms: 'Bayar deposit',
-    id: 'Bayar deposit', fil: 'Magbayad ng deposito',
-  },
-  hours: {
-    'zh-TW': '小時', 'zh-CN': '小时', en: 'hrs', ja: '時間', ko: '시간', th: 'ชม.', vi: 'giờ', ms: 'jam', id: 'jam', fil: 'oras',
-  },
-  overtime: {
-    'zh-TW': '超時費率', 'zh-CN': '超时费率', en: 'Overtime rate', ja: '超過料金', ko: '초과 요금',
-    th: 'ค่าล่วงเวลา', vi: 'Phí ngoài giờ', ms: 'Kadar lebih masa', id: 'Tarif lembur', fil: 'Overtime',
-  },
-  perHour: {
-    'zh-TW': '/小時', 'zh-CN': '/小时', en: '/hr', ja: '/時間', ko: '/시간', th: '/ชม.', vi: '/giờ', ms: '/jam', id: '/jam', fil: '/oras',
-  },
-  noData: {
-    'zh-TW': '無訂單資料，請重新填寫', 'zh-CN': '无订单数据，请重新填写', en: 'No booking data, please go back',
-    ja: '予約データがありません', ko: '예약 데이터 없음', th: 'ไม่มีข้อมูล', vi: 'Không có dữ liệu',
-    ms: 'Tiada data', id: 'Tidak ada data', fil: 'Walang data',
-  },
-  loginRequired: {
-    'zh-TW': '支付功能即將上線，敬請期待！', 'zh-CN': '支付功能即将上线，敬请期待！',
-    en: 'Payment feature coming soon!', ja: '支払い機能は近日公開予定です',
-    ko: '결제 기능 곧 출시 예정', th: 'ฟังก์ชันชำระเงินเร็วๆ นี้', vi: 'Tính năng thanh toán sắp ra mắt',
-    ms: 'Ciri pembayaran akan datang', id: 'Fitur pembayaran segera hadir', fil: 'Payment feature coming soon',
-  },
+  agreePolicy: { 'zh-TW': '我已閱讀並同意取消政策', en: 'I have read and agree to the cancellation policy' },
+  agreePolicyRequired: { 'zh-TW': '請先同意取消政策', en: 'Please agree to the cancellation policy first' },
+  // Login
+  loginTitle: { 'zh-TW': '登入後即可支付', en: 'Sign in to pay' },
+  email: { 'zh-TW': '電子郵件', en: 'Email' },
+  password: { 'zh-TW': '密碼', en: 'Password' },
+  loginEmail: { 'zh-TW': '以電子郵件登入', en: 'Sign in with Email' },
+  loginGoogle: { 'zh-TW': '以 Google 登入', en: 'Sign in with Google' },
+  loginApple: { 'zh-TW': '以 Apple 登入', en: 'Sign in with Apple' },
+  loginAgree: { 'zh-TW': '點擊登入即同意', en: 'By signing in, you agree to our' },
+  privacyPolicy: { 'zh-TW': '隱私權政策', en: 'Privacy Policy' },
+  loggedInAs: { 'zh-TW': '已登入', en: 'Signed in as' },
+  logout: { 'zh-TW': '登出', en: 'Sign out' },
 };
 
 function t(obj: Record<string, string>, lang: string): string {
@@ -160,21 +116,119 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
   const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
   const [booking, setBooking] = useState<BookingData | null>(null);
 
+  // Auth
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
+
+  // Promo code
+  const [promoCode, setPromoCode] = useState('');
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [promoDiscount, setPromoDiscount] = useState(0);
+  const [promoError, setPromoError] = useState('');
+
+  // Policy
+  const [policyAgreed, setPolicyAgreed] = useState(false);
+
   useEffect(() => {
     const raw = sessionStorage.getItem('relaygo_booking');
-    if (raw) {
-      try { setBooking(JSON.parse(raw)); } catch { /* skip */ }
-    }
+    if (raw) { try { setBooking(JSON.parse(raw)); } catch { /* skip */ } }
   }, []);
 
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => { setUser(u); setAuthLoading(false); });
+    return unsub;
+  }, []);
+
+  // --- Promo code handlers ---
+  const handleApplyPromo = async () => {
+    if (!promoCode.trim() || !booking) return;
+    setPromoError('');
+    try {
+      const r = await fetch(`${API_BASE}/api/promo-codes/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          promo_code: promoCode.trim(),
+          original_price: booking.price,
+          user_id: user?.uid || '',
+          service_type: 'charter',
+        }),
+      });
+      const res = await r.json();
+      if (res.success && res.valid) {
+        setPromoApplied(true);
+        setPromoDiscount(res.total_discount || res.discount_amount || 0);
+      } else {
+        setPromoError(res.message || res.error || 'Invalid promo code');
+      }
+    } catch {
+      setPromoError('Network error');
+    }
+  };
+
+  const handleClearPromo = () => {
+    setPromoCode('');
+    setPromoApplied(false);
+    setPromoDiscount(0);
+    setPromoError('');
+  };
+
+  // --- Login handlers ---
+  const handleEmailLogin = async () => {
+    if (!loginEmail || !loginPassword) return;
+    setLoginLoading(true);
+    setLoginError('');
+    try {
+      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      setShowLogin(false);
+    } catch (e: unknown) {
+      const msg = (e as { code?: string }).code || '';
+      if (msg.includes('user-not-found') || msg.includes('wrong-password') || msg.includes('invalid-credential')) {
+        setLoginError(lang === 'zh-TW' ? '帳號或密碼錯誤' : 'Invalid email or password');
+      } else {
+        setLoginError(msg);
+      }
+    } finally { setLoginLoading(false); }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      setShowLogin(false);
+    } catch { /* user cancelled */ }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      await signInWithPopup(auth, appleProvider);
+      setShowLogin(false);
+    } catch { /* user cancelled */ }
+  };
+
+  // --- Pay handler ---
+  const handlePay = () => {
+    if (!policyAgreed) {
+      alert(t(UI.agreePolicyRequired, lang));
+      return;
+    }
+    if (!user) {
+      setShowLogin(true);
+      return;
+    }
+    // TODO: create booking → pay deposit → redirect to GomyPay
+    alert(lang === 'zh-TW' ? '支付功能即將上線，敬請期待！' : 'Payment coming soon!');
+  };
+
+  // --- No data ---
   if (!booking) {
     return (
       <div className="charter-page">
-        <div className="charter-header">
-          <div className="charter-header-inner">
-            <h1 className="charter-title">{t(UI.title, lang)}</h1>
-          </div>
-        </div>
+        <div className="charter-header"><div className="charter-header-inner"><h1 className="charter-title">{t(UI.title, lang)}</h1></div></div>
         <div className="charter-form">
           <div className="charter-section" style={{ textAlign: 'center', padding: '48px 24px' }}>
             <p>{t(UI.noData, lang)}</p>
@@ -187,25 +241,18 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
     );
   }
 
-  const depositRate = 0.3;
   const charterFee = booking.price;
-  const totalPrice = charterFee; // TODO: + airport fee + surcharge
-  const depositAmount = Math.ceil(totalPrice * depositRate);
+  const totalAfterDiscount = Math.max(0, charterFee - promoDiscount);
+  const depositRate = 0.3;
+  const depositAmount = Math.ceil(totalAfterDiscount * depositRate);
   const vehicleName = VEHICLE_NAMES[booking.vehicleType]?.[lang] || VEHICLE_NAMES[booking.vehicleType]?.['zh-TW'] || booking.vehicleType;
   const vehicleIcon = VEHICLE_ICONS[booking.vehicleType] || '🚗';
-
-  const handlePay = () => {
-    // TODO: Firebase login check → create booking → pay deposit → redirect to GomyPay
-    alert(t(UI.loginRequired, lang));
-  };
 
   return (
     <div className="charter-page">
       <div className="charter-header">
         <div className="charter-header-inner">
-          <a href={`${langPrefix}/booking/charter`} className="charter-back-link">
-            {t(UI.back, lang)}
-          </a>
+          <a href={`${langPrefix}/booking/charter`} className="charter-back-link">{t(UI.back, lang)}</a>
           <h1 className="charter-title">{t(UI.title, lang)}</h1>
         </div>
       </div>
@@ -237,37 +284,61 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
             <span className="confirm-label">{t(UI.pax, lang)}</span>
             <span className="confirm-value">👤 {booking.passengers} 🧳 {booking.luggage}</span>
           </div>
-
           {booking.addAirportPickup && booking.pickupFlightInfo && (
             <div className="confirm-row">
               <span className="confirm-label">✈️ {t(UI.airportPickup, lang)}</span>
               <span className="confirm-value">
                 {booking.pickupFlightInfo.airportName}({booking.pickupFlightInfo.airportCode})
                 {booking.pickupFlightInfo.terminal ? ` ${booking.pickupFlightInfo.terminal}` : ''}
-                {' '}{booking.pickupFlight}
-                {booking.pickupFlightInfo.scheduledTime ? ` ${booking.pickupFlightInfo.scheduledTime}` : ''}
+                {' '}{booking.pickupFlight} {booking.pickupFlightInfo.scheduledTime || ''}
               </span>
             </div>
           )}
-
           {booking.addAirportDropoff && booking.dropoffFlightInfo && (
             <div className="confirm-row">
               <span className="confirm-label">✈️ {t(UI.airportDropoff, lang)}</span>
               <span className="confirm-value">
                 {booking.dropoffFlightInfo.airportName}({booking.dropoffFlightInfo.airportCode})
                 {booking.dropoffFlightInfo.terminal ? ` ${booking.dropoffFlightInfo.terminal}` : ''}
-                {' '}{booking.dropoffFlight}
-                {booking.dropoffFlightInfo.scheduledTime ? ` ${booking.dropoffFlightInfo.scheduledTime}` : ''}
+                {' '}{booking.dropoffFlight} {booking.dropoffFlightInfo.scheduledTime || ''}
               </span>
             </div>
           )}
-
           {booking.notes && (
             <div className="confirm-row">
               <span className="confirm-label">{t(UI.notesLabel, lang)}</span>
               <span className="confirm-value">{booking.notes}</span>
             </div>
           )}
+        </div>
+
+        {/* Promo Code */}
+        <div className="charter-section">
+          <label className="charter-label">{t(UI.promoCode, lang)}</label>
+          <div className="confirm-promo-row">
+            <input
+              type="text"
+              className="charter-input"
+              placeholder={t(UI.promoPlaceholder, lang)}
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+              disabled={promoApplied}
+              style={{ flex: 1 }}
+            />
+            {promoApplied ? (
+              <button type="button" className="confirm-promo-btn clear" onClick={handleClearPromo}>
+                {t(UI.clear, lang)}
+              </button>
+            ) : (
+              <button type="button" className="confirm-promo-btn apply" onClick={handleApplyPromo} disabled={!promoCode.trim()}>
+                {t(UI.apply, lang)}
+              </button>
+            )}
+          </div>
+          {promoApplied && (
+            <p className="confirm-promo-success">✅ {t(UI.promoApplied, lang)} — -{formatPrice(promoDiscount)}</p>
+          )}
+          {promoError && <p className="confirm-promo-error">❌ {promoError}</p>}
         </div>
 
         {/* Price Breakdown */}
@@ -284,20 +355,111 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
             <span>{t(UI.overtime, lang)}: {formatPrice(booking.overtimeRate)}{t(UI.perHour, lang)}</span>
             <span></span>
           </div>
-
+          {promoApplied && promoDiscount > 0 && (
+            <div className="confirm-price-row" style={{ color: 'var(--accent)' }}>
+              <span>{t(UI.discount, lang)}</span>
+              <span>-{formatPrice(promoDiscount)}</span>
+            </div>
+          )}
           <div className="confirm-divider" />
-
           <div className="confirm-price-row deposit">
             <span>{t(UI.deposit, lang)}</span>
             <span className="confirm-deposit-amount">{formatPrice(depositAmount)}</span>
           </div>
         </div>
 
+        {/* Cancellation Policy */}
+        <div className="charter-section">
+          <label className="charter-label">{t(UI.cancelPolicy, lang)}</label>
+          <div className="confirm-policy-text">
+            {t(UI.cancelPolicyText, lang).split('\n').map((line, i) => (
+              <p key={i}>{line}</p>
+            ))}
+          </div>
+          <label className="confirm-policy-agree" onClick={() => setPolicyAgreed(!policyAgreed)}>
+            <span className={`confirm-checkbox ${policyAgreed ? 'checked' : ''}`}>
+              {policyAgreed && '✓'}
+            </span>
+            <span>{t(UI.agreePolicy, lang)}</span>
+          </label>
+        </div>
+
+        {/* Auth status */}
+        {!authLoading && user && (
+          <div className="charter-section confirm-auth-status">
+            <span>✅ {t(UI.loggedInAs, lang)}: {user.email}</span>
+            <button type="button" className="confirm-logout-btn" onClick={() => auth.signOut()}>
+              {t(UI.logout, lang)}
+            </button>
+          </div>
+        )}
+
         {/* Pay Button */}
-        <button type="button" className="charter-submit-btn" onClick={handlePay}>
+        <button
+          type="button"
+          className={`charter-submit-btn ${!policyAgreed ? 'disabled' : ''}`}
+          onClick={handlePay}
+          disabled={!policyAgreed}
+        >
           💳 {t(UI.payDeposit, lang)} — {formatPrice(depositAmount)}
         </button>
       </div>
+
+      {/* Login Modal */}
+      {showLogin && (
+        <div className="confirm-login-overlay" onClick={() => setShowLogin(false)}>
+          <div className="confirm-login-modal" onClick={(e) => e.stopPropagation()}>
+            <h2 className="confirm-login-title">{t(UI.loginTitle, lang)}</h2>
+
+            {/* Email/Password */}
+            <div className="confirm-login-field">
+              <input
+                type="email"
+                className="charter-input"
+                placeholder={t(UI.email, lang)}
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+              />
+            </div>
+            <div className="confirm-login-field">
+              <input
+                type="password"
+                className="charter-input"
+                placeholder={t(UI.password, lang)}
+                value={loginPassword}
+                onChange={(e) => setLoginPassword(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleEmailLogin()}
+              />
+            </div>
+            {loginError && <p className="confirm-login-error">{loginError}</p>}
+            <button
+              type="button"
+              className="confirm-login-btn email"
+              onClick={handleEmailLogin}
+              disabled={loginLoading}
+            >
+              📧 {t(UI.loginEmail, lang)}
+            </button>
+
+            <div className="confirm-login-divider"><span>or</span></div>
+
+            {/* Social login */}
+            <button type="button" className="confirm-login-btn google" onClick={handleGoogleLogin}>
+              <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+              {t(UI.loginGoogle, lang)}
+            </button>
+            <button type="button" className="confirm-login-btn apple" onClick={handleAppleLogin}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.32 2.32-1.62 4.22-3.74 4.25z"/></svg>
+              {t(UI.loginApple, lang)}
+            </button>
+
+            <p className="confirm-login-agree">
+              {t(UI.loginAgree, lang)}{' '}
+              <a href={`${langPrefix}/privacy-policy`} target="_blank" rel="noopener">{t(UI.privacyPolicy, lang)}</a>
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
