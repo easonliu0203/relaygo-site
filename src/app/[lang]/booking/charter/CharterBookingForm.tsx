@@ -428,7 +428,12 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedPkg) return;
+    // Manual validation
+    if (!city) { alert(lang === 'zh-TW' ? '請選擇目的城市' : 'Please select a destination city'); return; }
+    if (!dateTime) { alert(lang === 'zh-TW' ? '請選擇預約時間' : 'Please select a date and time'); return; }
+    if (!addAirportPickup && !pickup) { alert(lang === 'zh-TW' ? '請輸入上車地點' : 'Please enter a pickup location'); return; }
+    if (!addAirportDropoff && !dropoff) { alert(lang === 'zh-TW' ? '請輸入下車地點' : 'Please enter a dropoff location'); return; }
+    if (!selectedPkg) { alert(lang === 'zh-TW' ? '請選擇車型方案' : 'Please select a vehicle plan'); return; }
     const bookingData = {
       packageId: selectedPkg.id,
       packageName: selectedPkg.name,
@@ -501,7 +506,6 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
             className="charter-input charter-select"
             value={city}
             onChange={(e) => handleCityChange(e.target.value)}
-            required
           >
             <option value="">{t(UI.destCityPlaceholder, lang)}</option>
             {REGION_CITIES.map((rg) => (
@@ -523,7 +527,6 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
             value={dateTime}
             onChange={(e) => setDateTime(e.target.value)}
             min={minDateTime}
-            required
           />
         </div>
 
@@ -594,7 +597,6 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                 value={pickup}
                 onChange={(e) => handlePickupInput(e.target.value)}
                 onBlur={() => setTimeout(() => setPickupSuggestions([]), 200)}
-                required
                 autoComplete="off"
               />
               {pickupSuggestions.length > 0 && (
@@ -677,7 +679,6 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                 value={dropoff}
                 onChange={(e) => handleDropoffInput(e.target.value)}
                 onBlur={() => setTimeout(() => setDropoffSuggestions([]), 200)}
-                required
                 autoComplete="off"
               />
               {dropoffSuggestions.length > 0 && (
@@ -810,10 +811,9 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
 
         <button
           type="submit"
-          className={`charter-submit-btn ${!selectedPkg ? 'disabled' : ''}`}
-          disabled={!selectedPkg}
+          className="charter-submit-btn"
         >
-          {selectedPkg ? t(UI.submit, lang) : t(UI.selectPlan, lang)}
+          {t(UI.submit, lang)}
         </button>
       </form>
     </div>
