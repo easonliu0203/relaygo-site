@@ -432,9 +432,11 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
     const bookingData = {
       packageId: selectedPkg.id,
       packageName: selectedPkg.name,
+      packageDesc: selectedPkg.description,
       vehicleType: selectedPkg.vehicleType,
       duration: selectedPkg.duration,
       price: selectedPkg.discountPrice,
+      originalPrice: selectedPkg.originalPrice,
       overtimeRate: selectedPkg.overtimeRate,
       passengers,
       luggage,
@@ -447,14 +449,26 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
       addAirportPickup,
       pickupAirport: addAirportPickup ? pickupAirport : undefined,
       pickupFlight: addAirportPickup ? pickupFlight : undefined,
+      pickupFlightInfo: addAirportPickup && pickupSelectedFlight ? {
+        airportName: pickupSelectedFlight.airportName,
+        airportCode: pickupSelectedFlight.airportCode,
+        terminal: pickupSelectedFlight.terminal,
+        scheduledTime: pickupSelectedFlight.scheduledTime,
+      } : undefined,
       addAirportDropoff,
       dropoffAirport: addAirportDropoff ? dropoffAirport : undefined,
       dropoffFlight: addAirportDropoff ? dropoffFlight : undefined,
+      dropoffFlightInfo: addAirportDropoff && dropoffSelectedFlight ? {
+        airportName: dropoffSelectedFlight.airportName,
+        airportCode: dropoffSelectedFlight.airportCode,
+        terminal: dropoffSelectedFlight.terminal,
+        scheduledTime: dropoffSelectedFlight.scheduledTime,
+      } : undefined,
       guideSlug,
       lang: initialLang,
     };
-    console.log('Booking data:', bookingData);
-    alert(lang === 'zh-TW' || lang === 'zh-CN' ? '預約功能即將上線，敬請期待！' : 'Booking feature coming soon!');
+    sessionStorage.setItem('relaygo_booking', JSON.stringify(bookingData));
+    window.location.href = `${langPrefix}/booking/charter/confirm`;
   };
 
   // Minimum datetime: tomorrow 6AM

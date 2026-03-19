@@ -591,6 +591,80 @@
   cursor: not-allowed;
 }
 
+/* ===== Confirm Page ===== */
+.confirm-summary {
+  padding: 24px;
+}
+
+.confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  gap: 16px;
+}
+
+.confirm-row:last-child {
+  border-bottom: none;
+}
+
+.confirm-label {
+  font-size: 0.85rem;
+  color: var(--gray-500);
+  font-weight: 500;
+  flex-shrink: 0;
+  min-width: 80px;
+}
+
+.confirm-value {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--dark);
+  text-align: right;
+  word-break: break-word;
+}
+
+/* Pricing section */
+.confirm-pricing {
+  padding: 24px;
+}
+
+.confirm-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.confirm-price-row.sub {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--gray-500);
+  padding: 4px 0;
+}
+
+.confirm-price-row.deposit {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.confirm-deposit-amount {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.confirm-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(108, 99, 255, 0.2), transparent);
+  margin: 12px 0;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .charter-header {
