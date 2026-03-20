@@ -995,6 +995,42 @@
   text-align: center;
 }
 
+/* ===== Result Page Store Buttons ===== */
+.result-store-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.result-store-btn.apple {
+  background: #000;
+  color: #fff;
+}
+
+.result-store-btn.apple:hover {
+  background: #222;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.result-store-btn.google {
+  background: var(--white);
+  color: var(--dark);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.result-store-btn.google:hover {
+  border-color: rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .charter-header {
