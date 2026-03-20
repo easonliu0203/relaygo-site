@@ -329,11 +329,19 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
   // Place autocomplete
   const [pickupSuggestions, setPickupSuggestions] = useState<PlaceSuggestion[]>([]);
   const [dropoffSuggestions, setDropoffSuggestions] = useState<PlaceSuggestion[]>([]);
+  const [pickupSearching, setPickupSearching] = useState(false);
+  const [dropoffSearching, setDropoffSearching] = useState(false);
   const pickupPlaceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dropoffPlaceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchAbort = useRef<AbortController | null>(null);
 
-  const searchPlaces = useCallback((input: string, setter: (s: PlaceSuggestion[]) => void) => {
+  const searchPlaces = useCallback((input: string, setter: (s: PlaceSuggestion[]) => void, setSearching: (b: boolean) => void) => {
     if (input.length < 2) { setter([]); return; }
+    // Cancel previous request
+    if (searchAbort.current) searchAbort.current.abort();
+    const ctrl = new AbortController();
+    searchAbort.current = ctrl;
+    setSearching(true);
     fetch(`${API_BASE}/api/places/autocomplete`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -343,6 +351,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
         regionCode: 'TW',
         includedPrimaryTypes: ['establishment', 'geocode'],
       }),
+      signal: ctrl.signal,
     })
       .then(r => r.json())
       .then(res => {
@@ -356,19 +365,20 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
           .slice(0, 5);
         setter(suggestions);
       })
-      .catch(() => setter([]));
+      .catch(() => {})
+      .finally(() => setSearching(false));
   }, [lang]);
 
   const handlePickupInput = (val: string) => {
     setPickup(val);
     if (pickupPlaceTimer.current) clearTimeout(pickupPlaceTimer.current);
-    pickupPlaceTimer.current = setTimeout(() => searchPlaces(val, setPickupSuggestions), 300);
+    pickupPlaceTimer.current = setTimeout(() => searchPlaces(val, setPickupSuggestions, setPickupSearching), 150);
   };
 
   const handleDropoffInput = (val: string) => {
     setDropoff(val);
     if (dropoffPlaceTimer.current) clearTimeout(dropoffPlaceTimer.current);
-    dropoffPlaceTimer.current = setTimeout(() => searchPlaces(val, setDropoffSuggestions), 300);
+    dropoffPlaceTimer.current = setTimeout(() => searchPlaces(val, setDropoffSuggestions, setDropoffSearching), 150);
   };
 
   const fetchPlaceCoords = (placeId: string): Promise<{ lat: number; lng: number }> => {
@@ -622,6 +632,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                 onBlur={() => setTimeout(() => setPickupSuggestions([]), 200)}
                 autoComplete="off"
               />
+              {pickupSearching && <div className="charter-place-loading">搜尋中...</div>}
               {pickupSuggestions.length > 0 && (
                 <div className="charter-place-dropdown">
                   {pickupSuggestions.map((s) => (
@@ -704,6 +715,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                 onBlur={() => setTimeout(() => setDropoffSuggestions([]), 200)}
                 autoComplete="off"
               />
+              {dropoffSearching && <div className="charter-place-loading">搜尋中...</div>}
               {dropoffSuggestions.length > 0 && (
                 <div className="charter-place-dropdown">
                   {dropoffSuggestions.map((s) => (
