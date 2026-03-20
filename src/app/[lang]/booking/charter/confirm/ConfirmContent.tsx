@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import { auth, googleProvider, appleProvider } from '@/lib/firebase';
-import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithRedirect, getRedirectResult, type User } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, type User } from 'firebase/auth';
 import '../charter.css';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
@@ -183,15 +183,6 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
     return unsub;
   }, []);
 
-  // Handle redirect result (fallback for popup blocked)
-  useEffect(() => {
-    getRedirectResult(auth).then(async (result) => {
-      if (result?.user) {
-        await onAuthSuccess(result.user);
-      }
-    }).catch(() => {});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // Fetch cancellation policy from Supabase
   useEffect(() => {
@@ -393,12 +384,32 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
     } finally { setLoginLoading(false); }
   };
 
-  const handleGoogleLogin = () => {
-    signInWithRedirect(auth, googleProvider);
+  const handleGoogleLogin = async () => {
+    setLoginLoading(true);
+    setLoginError('');
+    try {
+      const cred = await signInWithPopup(auth, googleProvider);
+      await onAuthSuccess(cred.user);
+    } catch (e: unknown) {
+      const code = (e as { code?: string }).code || '';
+      if (!code.includes('cancelled') && !code.includes('closed')) {
+        setLoginError(code);
+      }
+    } finally { setLoginLoading(false); }
   };
 
-  const handleAppleLogin = () => {
-    signInWithRedirect(auth, appleProvider);
+  const handleAppleLogin = async () => {
+    setLoginLoading(true);
+    setLoginError('');
+    try {
+      const cred = await signInWithPopup(auth, appleProvider);
+      await onAuthSuccess(cred.user);
+    } catch (e: unknown) {
+      const code = (e as { code?: string }).code || '';
+      if (!code.includes('cancelled') && !code.includes('closed')) {
+        setLoginError(code);
+      }
+    } finally { setLoginLoading(false); }
   };
 
   // --- Pay handler ---
