@@ -66,7 +66,12 @@ const UI: Record<string, Record<string, string>> = {
   discount: { 'zh-TW': '優惠折扣', en: 'Discount' },
   crossRegion: { 'zh-TW': '跨區費', en: 'Cross-Region Fee' },
   calcSurcharge: { 'zh-TW': '計算跨區費中...', en: 'Calculating surcharge...' },
-  deposit: { 'zh-TW': '訂金（30%）', en: 'Deposit (30%)' },
+  total: { 'zh-TW': '預估總額', en: 'Estimated Total' },
+  deposit: { 'zh-TW': '訂金（25%）', en: 'Deposit (25%)' },
+  depositFull: { 'zh-TW': '全額付款（急單）', en: 'Full Payment (Urgent)' },
+  airportPickupFee: { 'zh-TW': '接機費用', en: 'Airport Pickup Fee' },
+  airportDropoffFee: { 'zh-TW': '送機費用', en: 'Airport Dropoff Fee' },
+  urgentNote: { 'zh-TW': '⚠️ 出發時間不足 2 小時，需支付全額', en: '⚠️ Less than 2 hours to departure, full payment required' },
   payDeposit: { 'zh-TW': '支付訂金', en: 'Pay Deposit' },
   hours: { 'zh-TW': '小時', en: 'hrs' },
   overtime: { 'zh-TW': '超時費率', en: 'Overtime rate' },
@@ -161,10 +166,12 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
   const [policyAgreed, setPolicyAgreed] = useState(false);
   const [policyHtml, setPolicyHtml] = useState('');
 
-  // Cross-region surcharge
+  // Fees
   const [surcharge, setSurcharge] = useState(0);
   const [surchargeLoading, setSurchargeLoading] = useState(false);
   const [surchargeInfo, setSurchargeInfo] = useState('');
+  const [airportPickupPrice, setAirportPickupPrice] = useState<number | null>(null);
+  const [airportDropoffPrice, setAirportDropoffPrice] = useState<number | null>(null);
 
   useEffect(() => {
     const raw = sessionStorage.getItem('relaygo_booking');
@@ -227,6 +234,29 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
       })
       .catch((err) => console.error('[Surcharge]', err))
       .finally(() => setSurchargeLoading(false));
+  }, [booking]);
+
+  // Fetch airport transfer prices
+  useEffect(() => {
+    if (!booking) return;
+    const fetchAirportPrice = (airportCode: string, city: string, lat?: number, lng?: number) => {
+      const params = new URLSearchParams({ airport_code: airportCode, vehicle_type: booking.vehicleType, city });
+      if (lat && lng) { params.set('lat', String(lat)); params.set('lng', String(lng)); }
+      return fetch(`${API_BASE}/api/pricing/airport-transfer-price?${params}`)
+        .then(r => r.json())
+        .then(res => res.success ? (res.data?.price ?? null) : null)
+        .catch(() => null);
+    };
+    if (booking.addAirportPickup && booking.pickupAirport) {
+      // 接機：用 dropoff 的座標/城市來查地區費率
+      fetchAirportPrice(booking.pickupAirport, booking.city, booking.dropoffLat, booking.dropoffLng)
+        .then(p => setAirportPickupPrice(p));
+    }
+    if (booking.addAirportDropoff && booking.dropoffAirport) {
+      // 送機：用 pickup 的座標/城市來查地區費率
+      fetchAirportPrice(booking.dropoffAirport, booking.city, booking.pickupLat, booking.pickupLng)
+        .then(p => setAirportDropoffPrice(p));
+    }
   }, [booking]);
 
   // --- Promo code handlers ---
@@ -413,10 +443,14 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
   }
 
   const charterFee = booking.price;
-  const totalBeforeDiscount = charterFee + surcharge;
-  const totalAfterDiscount = Math.max(0, totalBeforeDiscount - promoDiscount);
-  const depositRate = 0.3;
-  const depositAmount = Math.ceil(totalAfterDiscount * depositRate);
+  const pickupFee = airportPickupPrice || 0;
+  const dropoffFee = airportDropoffPrice || 0;
+  const estimatedFare = charterFee + pickupFee + dropoffFee + surcharge;
+  const actualPrice = promoApplied && promoDiscount > 0 ? Math.max(0, estimatedFare - promoDiscount) : estimatedFare;
+  // 同手機端：一般 25%，急單（<2hr）100%
+  const isUrgent = booking.dateTime ? (new Date(booking.dateTime).getTime() - Date.now()) < 2 * 60 * 60 * 1000 : false;
+  const depositRate = isUrgent ? 1.0 : 0.25;
+  const depositAmount = Math.ceil(actualPrice * depositRate);
   const vehicleName = VEHICLE_NAMES[booking.vehicleType]?.[lang] || VEHICLE_NAMES[booking.vehicleType]?.['zh-TW'] || booking.vehicleType;
   const vehicleIcon = VEHICLE_ICONS[booking.vehicleType] || '🚗';
 
@@ -515,6 +549,7 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
 
         {/* Price Breakdown */}
         <div className="charter-section confirm-pricing">
+          {/* Charter fee */}
           <div className="confirm-price-row">
             <span>{t(UI.charterFee, lang)}</span>
             <span>{formatPrice(charterFee)}</span>
@@ -527,10 +562,28 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
             <span>{t(UI.overtime, lang)}: {formatPrice(booking.overtimeRate)}{t(UI.perHour, lang)}</span>
             <span></span>
           </div>
+
+          {/* Airport pickup fee */}
+          {booking.addAirportPickup && (
+            <div className="confirm-price-row">
+              <span>✈️ {t(UI.airportPickupFee, lang)}</span>
+              <span>{airportPickupPrice != null ? `+${formatPrice(airportPickupPrice)}` : '...'}</span>
+            </div>
+          )}
+
+          {/* Airport dropoff fee */}
+          {booking.addAirportDropoff && (
+            <div className="confirm-price-row">
+              <span>✈️ {t(UI.airportDropoffFee, lang)}</span>
+              <span>{airportDropoffPrice != null ? `+${formatPrice(airportDropoffPrice)}` : '...'}</span>
+            </div>
+          )}
+
+          {/* Cross-region surcharge */}
           {surcharge > 0 && (
             <div className="confirm-price-row">
               <span>{t(UI.crossRegion, lang)}</span>
-              <span>{formatPrice(surcharge)}</span>
+              <span>+{formatPrice(surcharge)}</span>
             </div>
           )}
           {surcharge > 0 && surchargeInfo && (
@@ -545,17 +598,40 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
               <span></span>
             </div>
           )}
+
+          {/* Promo discount */}
           {promoApplied && promoDiscount > 0 && (
             <div className="confirm-price-row" style={{ color: 'var(--accent)' }}>
               <span>{t(UI.discount, lang)}</span>
               <span>-{formatPrice(promoDiscount)}</span>
             </div>
           )}
+
           <div className="confirm-divider" />
+
+          {/* Total */}
+          <div className="confirm-price-row">
+            <span>{t(UI.total, lang)}</span>
+            <span style={{ fontWeight: 700 }}>
+              {promoApplied && promoDiscount > 0 && (
+                <span style={{ textDecoration: 'line-through', color: 'var(--gray-500)', marginRight: 8, fontSize: '0.85rem' }}>{formatPrice(estimatedFare)}</span>
+              )}
+              {formatPrice(actualPrice)}
+            </span>
+          </div>
+
+          <div className="confirm-divider" />
+
+          {/* Deposit */}
           <div className="confirm-price-row deposit">
-            <span>{t(UI.deposit, lang)}</span>
+            <span>{isUrgent ? t(UI.depositFull, lang) : t(UI.deposit, lang)}</span>
             <span className="confirm-deposit-amount">{formatPrice(depositAmount)}</span>
           </div>
+
+          {/* Urgent warning */}
+          {isUrgent && (
+            <p className="confirm-urgent-note">{t(UI.urgentNote, lang)}</p>
+          )}
         </div>
 
         {/* Cancellation Policy */}

@@ -659,6 +659,17 @@
   color: var(--primary);
 }
 
+.confirm-urgent-note {
+  margin: 10px 0 0;
+  padding: 10px 14px;
+  background: rgba(229, 62, 62, 0.06);
+  border-left: 3px solid #e53e3e;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.82rem;
+  color: #e53e3e;
+  font-weight: 600;
+}
+
 .confirm-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(108, 99, 255, 0.2), transparent);
