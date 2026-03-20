@@ -71,7 +71,7 @@ const UI: Record<string, Record<string, string>> = {
   depositFull: { 'zh-TW': '全額付款（急單）', en: 'Full Payment (Urgent)' },
   airportPickupFee: { 'zh-TW': '接機費用', en: 'Airport Pickup Fee' },
   airportDropoffFee: { 'zh-TW': '送機費用', en: 'Airport Dropoff Fee' },
-  urgentNote: { 'zh-TW': '⚠️ 出發時間不足 2 小時，需支付全額', en: '⚠️ Less than 2 hours to departure, full payment required' },
+  urgentNote: { 'zh-TW': '⚠️ 出發時間不足 1 小時，需支付全額', en: '⚠️ Less than 1 hour to departure, full payment required' },
   payDeposit: { 'zh-TW': '支付訂金', en: 'Pay Deposit' },
   hours: { 'zh-TW': '小時', en: 'hrs' },
   overtime: { 'zh-TW': '超時費率', en: 'Overtime rate' },
@@ -557,7 +557,7 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
   const estimatedFare = charterFee + pickupFee + dropoffFee + surcharge;
   const actualPrice = promoApplied && promoDiscount > 0 ? Math.max(0, estimatedFare - promoDiscount) : estimatedFare;
   // 同手機端：一般 25%，急單（<2hr）100%
-  const isUrgent = booking.dateTime ? (new Date(booking.dateTime).getTime() - Date.now()) < 2 * 60 * 60 * 1000 : false;
+  const isUrgent = booking.dateTime ? (new Date(booking.dateTime).getTime() - Date.now()) < 1 * 60 * 60 * 1000 : false;
   const depositRate = isUrgent ? 1.0 : 0.25;
   const depositAmount = Math.ceil(actualPrice * depositRate);
   const vehicleName = VEHICLE_NAMES[booking.vehicleType]?.[lang] || VEHICLE_NAMES[booking.vehicleType]?.['zh-TW'] || booking.vehicleType;
