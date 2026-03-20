@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import { auth, googleProvider, appleProvider } from '@/lib/firebase';
-import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, signInWithRedirect, getRedirectResult, type User } from 'firebase/auth';
+import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithRedirect, getRedirectResult, type User } from 'firebase/auth';
 import '../charter.css';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
@@ -198,19 +198,21 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
   // Calculate cross-region surcharge (using coordinates from booking data)
   useEffect(() => {
     if (!booking?.city || !booking?.vehicleType) return;
-    const pLat = booking.pickupLat || 0;
-    const pLng = booking.pickupLng || 0;
-    const dLat = booking.dropoffLat || 0;
-    const dLng = booking.dropoffLng || 0;
-    // Need at least one real coordinate
-    if ((pLat === 0 && pLng === 0) && (dLat === 0 && dLng === 0) && !booking.pickupAirport && !booking.dropoffAirport) return;
     setSurchargeLoading(true);
     const params = new URLSearchParams({
       city: booking.city,
       vehicle_type: booking.vehicleType,
-      pickup_lat: String(pLat), pickup_lng: String(pLng),
-      dropoff_lat: String(dLat), dropoff_lng: String(dLng),
     });
+    // Add coordinates if available
+    if (booking.pickupLat && booking.pickupLng) {
+      params.set('pickup_lat', String(booking.pickupLat));
+      params.set('pickup_lng', String(booking.pickupLng));
+    }
+    if (booking.dropoffLat && booking.dropoffLng) {
+      params.set('dropoff_lat', String(booking.dropoffLat));
+      params.set('dropoff_lng', String(booking.dropoffLng));
+    }
+    // Airport codes override coordinates
     if (booking.addAirportPickup && booking.pickupAirport) params.set('pickup_airport_code', booking.pickupAirport);
     if (booking.addAirportDropoff && booking.dropoffAirport) params.set('dropoff_airport_code', booking.dropoffAirport);
     fetch(`${API_BASE}/api/pricing/charter-surcharge?${params}`)
@@ -223,7 +225,7 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
           }
         }
       })
-      .catch(() => {})
+      .catch((err) => console.error('[Surcharge]', err))
       .finally(() => setSurchargeLoading(false));
   }, [booking]);
 
@@ -361,34 +363,12 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
     } finally { setLoginLoading(false); }
   };
 
-  const handleGoogleLogin = async () => {
-    setLoginLoading(true);
-    try {
-      const cred = await signInWithPopup(auth, googleProvider);
-      await onAuthSuccess(cred.user);
-    } catch (e: unknown) {
-      const code = (e as { code?: string }).code || '';
-      if (code === 'auth/popup-blocked' || code === 'auth/popup-closed-by-browser') {
-        // Fallback to redirect
-        await signInWithRedirect(auth, googleProvider);
-        return;
-      }
-      // Other errors (user cancelled, etc.) — ignore
-    } finally { setLoginLoading(false); }
+  const handleGoogleLogin = () => {
+    signInWithRedirect(auth, googleProvider);
   };
 
-  const handleAppleLogin = async () => {
-    setLoginLoading(true);
-    try {
-      const cred = await signInWithPopup(auth, appleProvider);
-      await onAuthSuccess(cred.user);
-    } catch (e: unknown) {
-      const code = (e as { code?: string }).code || '';
-      if (code === 'auth/popup-blocked' || code === 'auth/popup-closed-by-browser') {
-        await signInWithRedirect(auth, appleProvider);
-        return;
-      }
-    } finally { setLoginLoading(false); }
+  const handleAppleLogin = () => {
+    signInWithRedirect(auth, appleProvider);
   };
 
   // --- Pay handler ---
