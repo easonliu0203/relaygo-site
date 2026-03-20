@@ -117,10 +117,6 @@ export default function LangLayout({ children, params }: Props) {
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
           rel="stylesheet"
         />
-        <Script
-          src="https://emrld.cc/NTAzNDIx.js?t=503421"
-          strategy="afterInteractive"
-        />
       </head>
       <body>
         <script
