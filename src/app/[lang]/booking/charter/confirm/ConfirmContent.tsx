@@ -413,6 +413,8 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
   };
 
   // --- Pay handler ---
+  const [paying, setPaying] = useState(false);
+
   const handlePay = async () => {
     if (!policyAgreed) {
       alert(t(UI.agreePolicyRequired, lang));
@@ -432,8 +434,104 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
       setShowLogin(true);
       return;
     }
-    // TODO: create booking → pay deposit → redirect to GomyPay
-    alert(lang === 'zh-TW' ? '支付功能即將上線，敬請期待！' : 'Payment coming soon!');
+
+    if (!booking) return;
+    setPaying(true);
+
+    try {
+      // 1. Create booking
+      const bookingBody = {
+        customerUid: user.uid,
+        serviceType: 'charter',
+        country: 'TW',
+        bookingTime: booking.dateTime,
+        passengerCount: booking.passengers,
+        luggageCount: booking.luggage,
+        notes: booking.notes || '',
+        policyAgreed: true,
+        vehicleType: booking.vehicleType,
+        packageId: booking.packageId,
+        packageName: booking.packageName,
+        estimatedFare: actualPrice,
+        originalPrice: estimatedFare,
+        finalPrice: actualPrice,
+        discountAmount: promoDiscount,
+        charterSurcharge: surcharge || 0,
+        promoCode: promoApplied ? promoCode : undefined,
+        urgentFullPayment: isUrgent,
+        // Pickup
+        pickupAddress: booking.addAirportPickup
+          ? `${booking.pickupFlightInfo?.airportName || ''}(${booking.pickupAirport}) ${booking.pickupFlight || ''}`
+          : booking.pickup,
+        pickupLatitude: booking.pickupLat || 0,
+        pickupLongitude: booking.pickupLng || 0,
+        // Dropoff
+        dropoffAddress: booking.addAirportDropoff
+          ? `${booking.dropoffFlightInfo?.airportName || ''}(${booking.dropoffAirport}) ${booking.dropoffFlight || ''}`
+          : booking.dropoff,
+        dropoffLatitude: booking.dropoffLat || 0,
+        dropoffLongitude: booking.dropoffLng || 0,
+        // Airport pickup
+        addAirportPickup: booking.addAirportPickup || false,
+        pickupFlightNumber: booking.pickupFlight || undefined,
+        pickupAirportCode: booking.pickupAirport || undefined,
+        pickupScheduledTime: booking.pickupFlightInfo?.scheduledTime || undefined,
+        pickupTerminal: booking.pickupFlightInfo?.terminal || undefined,
+        pickupTransferPrice: airportPickupPrice || undefined,
+        pickupTransferVehicleType: booking.addAirportPickup ? booking.vehicleType : undefined,
+        // Airport dropoff
+        addAirportDropoff: booking.addAirportDropoff || false,
+        dropoffFlightNumber: booking.dropoffFlight || undefined,
+        dropoffAirportCode: booking.dropoffAirport || undefined,
+        dropoffScheduledTime: booking.dropoffFlightInfo?.scheduledTime || undefined,
+        dropoffTerminal: booking.dropoffFlightInfo?.terminal || undefined,
+        dropoffTransferPrice: airportDropoffPrice || undefined,
+        dropoffTransferVehicleType: booking.addAirportDropoff ? booking.vehicleType : undefined,
+      };
+
+      const createRes = await fetch(`${API_BASE}/api/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingBody),
+      });
+      const createData = await createRes.json();
+
+      if (!createData.success || !createData.data?.id) {
+        alert(createData.error || createData.message || '建立訂單失敗');
+        setPaying(false);
+        return;
+      }
+
+      const bookingId = createData.data.id;
+
+      // 2. Pay deposit → get GomyPay URL
+      const webReturnUrl = `${window.location.origin}${langPrefix}/booking/charter/result`;
+      const payRes = await fetch(`${API_BASE}/api/bookings/${bookingId}/pay-deposit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bookingId,
+          customerUid: user.uid,
+          paymentMethod: 'credit_card',
+          webReturnUrl,
+        }),
+      });
+      const payData = await payRes.json();
+
+      if (!payData.success || !payData.data?.paymentUrl) {
+        alert(payData.error || '發起支付失敗');
+        setPaying(false);
+        return;
+      }
+
+      // 3. Redirect to GomyPay
+      sessionStorage.removeItem('relaygo_booking');
+      window.location.href = payData.data.paymentUrl;
+    } catch (err) {
+      console.error('[Pay]', err);
+      alert(lang === 'zh-TW' ? '支付過程發生錯誤，請重試' : 'Payment error, please try again');
+      setPaying(false);
+    }
   };
 
   // --- No data ---
@@ -665,11 +763,11 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
         {/* Pay Button */}
         <button
           type="button"
-          className={`charter-submit-btn ${!policyAgreed ? 'disabled' : ''}`}
+          className={`charter-submit-btn ${!policyAgreed || paying ? 'disabled' : ''}`}
           onClick={handlePay}
-          disabled={!policyAgreed}
+          disabled={!policyAgreed || paying}
         >
-          💳 {t(UI.payDeposit, lang)} — {formatPrice(depositAmount)}
+          {paying ? '處理中...' : `💳 ${t(UI.payDeposit, lang)} — ${formatPrice(depositAmount)}`}
         </button>
       </div>
 
