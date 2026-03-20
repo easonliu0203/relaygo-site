@@ -491,36 +491,28 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
           </div>
           <div className="confirm-row">
             <span className="confirm-label">{t(UI.pickupLabel, lang)}</span>
-            <span className="confirm-value">{booking.pickup || '—'}</span>
+            <span className="confirm-value">
+              {booking.addAirportPickup && booking.pickupFlightInfo ? (
+                <>✈️ {booking.pickupFlightInfo.airportName}({booking.pickupFlightInfo.airportCode})
+                {booking.pickupFlightInfo.terminal ? ` ${booking.pickupFlightInfo.terminal}` : ''}
+                {' '}{booking.pickupFlight} {booking.pickupFlightInfo.scheduledTime || ''}</>
+              ) : (booking.pickup || '—')}
+            </span>
           </div>
           <div className="confirm-row">
             <span className="confirm-label">{t(UI.dropoffLabel, lang)}</span>
-            <span className="confirm-value">{booking.dropoff || '—'}</span>
+            <span className="confirm-value">
+              {booking.addAirportDropoff && booking.dropoffFlightInfo ? (
+                <>✈️ {booking.dropoffFlightInfo.airportName}({booking.dropoffFlightInfo.airportCode})
+                {booking.dropoffFlightInfo.terminal ? ` ${booking.dropoffFlightInfo.terminal}` : ''}
+                {' '}{booking.dropoffFlight} {booking.dropoffFlightInfo.scheduledTime || ''}</>
+              ) : (booking.dropoff || '—')}
+            </span>
           </div>
           <div className="confirm-row">
             <span className="confirm-label">{t(UI.pax, lang)}</span>
             <span className="confirm-value">👤 {booking.passengers} 🧳 {booking.luggage}</span>
           </div>
-          {booking.addAirportPickup && booking.pickupFlightInfo && (
-            <div className="confirm-row">
-              <span className="confirm-label">✈️ {t(UI.airportPickup, lang)}</span>
-              <span className="confirm-value">
-                {booking.pickupFlightInfo.airportName}({booking.pickupFlightInfo.airportCode})
-                {booking.pickupFlightInfo.terminal ? ` ${booking.pickupFlightInfo.terminal}` : ''}
-                {' '}{booking.pickupFlight} {booking.pickupFlightInfo.scheduledTime || ''}
-              </span>
-            </div>
-          )}
-          {booking.addAirportDropoff && booking.dropoffFlightInfo && (
-            <div className="confirm-row">
-              <span className="confirm-label">✈️ {t(UI.airportDropoff, lang)}</span>
-              <span className="confirm-value">
-                {booking.dropoffFlightInfo.airportName}({booking.dropoffFlightInfo.airportCode})
-                {booking.dropoffFlightInfo.terminal ? ` ${booking.dropoffFlightInfo.terminal}` : ''}
-                {' '}{booking.dropoffFlight} {booking.dropoffFlightInfo.scheduledTime || ''}
-              </span>
-            </div>
-          )}
           {booking.notes && (
             <div className="confirm-row">
               <span className="confirm-label">{t(UI.notesLabel, lang)}</span>
