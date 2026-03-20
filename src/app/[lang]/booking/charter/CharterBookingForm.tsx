@@ -243,7 +243,11 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
   const [luggage, setLuggage] = useState(0);
   const [dateTime, setDateTime] = useState('');
   const [pickup, setPickup] = useState('');
+  const [pickupLat, setPickupLat] = useState(0);
+  const [pickupLng, setPickupLng] = useState(0);
   const [dropoff, setDropoff] = useState('');
+  const [dropoffLat, setDropoffLat] = useState(0);
+  const [dropoffLng, setDropoffLng] = useState(0);
   const [notes, setNotes] = useState('');
 
   // Airport add-ons (mutually exclusive)
@@ -367,14 +371,30 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
     dropoffPlaceTimer.current = setTimeout(() => searchPlaces(val, setDropoffSuggestions), 300);
   };
 
-  const selectPickupPlace = (s: PlaceSuggestion) => {
-    setPickup(s.text);
-    setPickupSuggestions([]);
+  const fetchPlaceCoords = (placeId: string): Promise<{ lat: number; lng: number }> => {
+    return fetch(`${API_BASE}/api/places/${placeId}/details?languageCode=zh-TW&regionCode=TW`)
+      .then(r => r.json())
+      .then(res => ({
+        lat: res?.location?.latitude || 0,
+        lng: res?.location?.longitude || 0,
+      }))
+      .catch(() => ({ lat: 0, lng: 0 }));
   };
 
-  const selectDropoffPlace = (s: PlaceSuggestion) => {
+  const selectPickupPlace = async (s: PlaceSuggestion) => {
+    setPickup(s.text);
+    setPickupSuggestions([]);
+    const coords = await fetchPlaceCoords(s.placeId);
+    setPickupLat(coords.lat);
+    setPickupLng(coords.lng);
+  };
+
+  const selectDropoffPlace = async (s: PlaceSuggestion) => {
     setDropoff(s.text);
     setDropoffSuggestions([]);
+    const coords = await fetchPlaceCoords(s.placeId);
+    setDropoffLat(coords.lat);
+    setDropoffLng(coords.lng);
   };
 
   // Fetch packages from backend (re-fetch when city/region changes)
@@ -446,7 +466,11 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
       luggage,
       dateTime,
       pickup,
+      pickupLat,
+      pickupLng,
       dropoff,
+      dropoffLat,
+      dropoffLng,
       notes,
       city,
       region,
