@@ -201,6 +201,9 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
       city: booking.city,
       vehicle_type: booking.vehicleType,
     });
+    // 加購接送機 → 後端直接回 surcharge=0
+    if (booking.addAirportPickup) params.set('has_airport_pickup', '1');
+    if (booking.addAirportDropoff) params.set('has_airport_dropoff', '1');
     // Add coordinates if available
     if (booking.pickupLat && booking.pickupLng) {
       params.set('pickup_lat', String(booking.pickupLat));
@@ -210,16 +213,14 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
       params.set('dropoff_lat', String(booking.dropoffLat));
       params.set('dropoff_lng', String(booking.dropoffLng));
     }
-    // Airport codes override coordinates
-    if (booking.addAirportPickup && booking.pickupAirport) params.set('pickup_airport_code', booking.pickupAirport);
-    if (booking.addAirportDropoff && booking.dropoffAirport) params.set('dropoff_airport_code', booking.dropoffAirport);
     fetch(`${API_BASE}/api/pricing/charter-surcharge?${params}`)
       .then(r => r.json())
       .then(res => {
         if (res.success && res.data) {
           setSurcharge(res.data.surcharge || 0);
           if (res.data.surcharge > 0) {
-            setSurchargeInfo(`${res.data.total_distance_km}km × ${formatPrice(res.data.rate_per_km)}/km`);
+            const d = res.data;
+            setSurchargeInfo(`${d.estimated_road_km || d.straight_distance_km || 0}km，超出${d.free_km || 50}km 部分 × ${formatPrice(d.rate_per_km)}/km`);
           }
         }
       })
