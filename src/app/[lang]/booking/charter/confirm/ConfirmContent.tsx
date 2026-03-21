@@ -193,7 +193,8 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
       .catch(() => {});
   }, [lang]);
 
-  // Calculate cross-region surcharge (using coordinates from booking data)
+  // 跨區費計算 — 與手機端 (package_selection_page.dart) 使用同一個後端 API
+  // 加購接送機時傳 has_airport_pickup/dropoff=1 → 後端直接回 surcharge=0
   useEffect(() => {
     if (!booking?.city || !booking?.vehicleType) return;
     setSurchargeLoading(true);
@@ -228,7 +229,8 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
       .finally(() => setSurchargeLoading(false));
   }, [booking]);
 
-  // Fetch airport transfer prices
+  // 接送機價格查詢 — 呼叫後端 /api/pricing/airport-transfer-price（查表制）
+  // 手機端直接查 Supabase（airport_transfer_pricing_service.dart），路徑不同但同表同價
   useEffect(() => {
     if (!booking) return;
     const fetchAirportPrice = (airportCode: string, city: string, lat?: number, lng?: number) => {
