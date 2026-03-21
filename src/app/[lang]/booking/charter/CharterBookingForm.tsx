@@ -464,7 +464,11 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
     if (!city) { alert(lang === 'zh-TW' ? '請選擇目的城市' : 'Please select a destination city'); return; }
     if (!dateTime) { alert(lang === 'zh-TW' ? '請選擇預約時間' : 'Please select a date and time'); return; }
     if (!addAirportPickup && !pickup) { alert(lang === 'zh-TW' ? '請輸入上車地點' : 'Please enter a pickup location'); return; }
+    if (addAirportPickup && !pickupAirport) { alert(lang === 'zh-TW' ? '請選擇接機機場' : 'Please select a pickup airport'); return; }
+    if (addAirportPickup && !pickupFlight) { alert(lang === 'zh-TW' ? '請輸入接機航班編號' : 'Please enter pickup flight number'); return; }
     if (!addAirportDropoff && !dropoff) { alert(lang === 'zh-TW' ? '請輸入下車地點' : 'Please enter a dropoff location'); return; }
+    if (addAirportDropoff && !dropoffAirport) { alert(lang === 'zh-TW' ? '請選擇送機機場' : 'Please select a dropoff airport'); return; }
+    if (addAirportDropoff && !dropoffFlight) { alert(lang === 'zh-TW' ? '請輸入送機航班編號' : 'Please enter dropoff flight number'); return; }
     if (!selectedPkg) { alert(lang === 'zh-TW' ? '請選擇車型方案' : 'Please select a vehicle plan'); return; }
     const bookingData = {
       packageId: selectedPkg.id,

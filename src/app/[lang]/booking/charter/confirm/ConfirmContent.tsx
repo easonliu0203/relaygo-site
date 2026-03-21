@@ -243,13 +243,19 @@ export default function ConfirmContent({ initialLang }: { initialLang: Locale })
     };
     if (booking.addAirportPickup && booking.pickupAirport) {
       // 接機：用 dropoff 的座標/城市來查地區費率
+      console.log('[ConfirmContent] 接機費查詢:', { airport: booking.pickupAirport, city: booking.city, lat: booking.dropoffLat, lng: booking.dropoffLng });
       fetchAirportPrice(booking.pickupAirport, booking.city, booking.dropoffLat, booking.dropoffLng)
-        .then(p => setAirportPickupPrice(p));
+        .then(p => { console.log('[ConfirmContent] 接機費結果:', p); setAirportPickupPrice(p); });
+    } else if (booking.addAirportPickup) {
+      console.warn('[ConfirmContent] 加購接機但缺少 pickupAirport:', booking.pickupAirport);
     }
     if (booking.addAirportDropoff && booking.dropoffAirport) {
       // 送機：用 pickup 的座標/城市來查地區費率
+      console.log('[ConfirmContent] 送機費查詢:', { airport: booking.dropoffAirport, city: booking.city, lat: booking.pickupLat, lng: booking.pickupLng });
       fetchAirportPrice(booking.dropoffAirport, booking.city, booking.pickupLat, booking.pickupLng)
-        .then(p => setAirportDropoffPrice(p));
+        .then(p => { console.log('[ConfirmContent] 送機費結果:', p); setAirportDropoffPrice(p); });
+    } else if (booking.addAirportDropoff) {
+      console.warn('[ConfirmContent] 加購送機但缺少 dropoffAirport:', booking.dropoffAirport);
     }
   }, [booking]);
 
