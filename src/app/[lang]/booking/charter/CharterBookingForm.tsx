@@ -195,11 +195,12 @@ const REGION_CITIES: { region: string; label: Record<string, string>; cities: st
 ];
 
 const AIRPORTS = [
-  { code: 'TPE', name: '桃園國際機場 (TPE)' },
-  { code: 'TSA', name: '台北松山機場 (TSA)' },
-  { code: 'RMQ', name: '台中清泉崗機場 (RMQ)' },
-  { code: 'KHH', name: '高雄小港機場 (KHH)' },
+  { code: 'TSA', name: '台北松山機場 (TSA)', lat: 25.0697, lng: 121.5524 },
+  { code: 'TPE', name: '桃園國際機場 (TPE)', lat: 25.0777, lng: 121.2325 },
+  { code: 'RMQ', name: '台中清泉崗機場 (RMQ)', lat: 24.2647, lng: 120.6211 },
+  { code: 'KHH', name: '高雄小港機場 (KHH)', lat: 22.5771, lng: 120.3499 },
 ];
+const TERMINALS = ['', 'T1', 'T2', 'T3'];
 
 const VEHICLE_ICONS: Record<string, string> = { S: '🚗', M: '🚙', L: '🚐', XL: '✨' };
 const VEHICLE_MAX_PAX: Record<string, number> = { S: 4, M: 4, L: 8, XL: 6 };
@@ -253,29 +254,29 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
   // Airport add-ons (mutually exclusive)
   const [addAirportPickup, setAddAirportPickup] = useState(false);
   const [pickupAirport, setPickupAirport] = useState('');
+  const [pickupTerminal, setPickupTerminal] = useState('');
   const [pickupFlight, setPickupFlight] = useState('');
   const [addAirportDropoff, setAddAirportDropoff] = useState(false);
   const [dropoffAirport, setDropoffAirport] = useState('');
+  const [dropoffTerminal, setDropoffTerminal] = useState('');
   const [dropoffFlight, setDropoffFlight] = useState('');
 
   const handleToggleAirportPickup = (on: boolean) => {
     setAddAirportPickup(on);
     if (on) {
       setAddAirportDropoff(false);
-      setDropoffAirport('');
-      setDropoffFlight('');
+      setDropoffAirport(''); setDropoffTerminal(''); setDropoffFlight('');
     }
-    if (!on) { setPickupAirport(''); setPickupFlight(''); setPickup(''); }
+    if (!on) { setPickupAirport(''); setPickupTerminal(''); setPickupFlight(''); setPickup(''); }
   };
 
   const handleToggleAirportDropoff = (on: boolean) => {
     setAddAirportDropoff(on);
     if (on) {
       setAddAirportPickup(false);
-      setPickupAirport('');
-      setPickupFlight('');
+      setPickupAirport(''); setPickupTerminal(''); setPickupFlight('');
     }
-    if (!on) { setDropoffAirport(''); setDropoffFlight(''); setDropoff(''); }
+    if (!on) { setDropoffAirport(''); setDropoffTerminal(''); setDropoffFlight(''); setDropoff(''); }
   };
 
   // Flight search
@@ -316,6 +317,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
     setPickupSelectedFlight(f);
     setPickupFlight(f.flightNo);
     setPickupAirport(f.airportCode);
+    if (f.terminal) setPickupTerminal(f.terminal);
     setPickupFlightResults([]);
   };
 
@@ -323,6 +325,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
     setDropoffSelectedFlight(f);
     setDropoffFlight(f.flightNo);
     setDropoffAirport(f.airportCode);
+    if (f.terminal) setDropoffTerminal(f.terminal);
     setDropoffFlightResults([]);
   };
 
@@ -487,20 +490,20 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
       addAirportPickup,
       pickupAirport: addAirportPickup ? pickupAirport : null,
       pickupFlight: addAirportPickup ? pickupFlight : null,
-      pickupFlightInfo: addAirportPickup && pickupSelectedFlight ? {
-        airportName: pickupSelectedFlight.airportName,
-        airportCode: pickupSelectedFlight.airportCode,
-        terminal: pickupSelectedFlight.terminal,
-        scheduledTime: pickupSelectedFlight.scheduledTime,
+      pickupFlightInfo: addAirportPickup ? {
+        airportName: AIRPORTS.find(a => a.code === pickupAirport)?.name || pickupAirport,
+        airportCode: pickupAirport,
+        terminal: pickupTerminal || pickupSelectedFlight?.terminal || null,
+        scheduledTime: pickupSelectedFlight?.scheduledTime || null,
       } : null,
       addAirportDropoff,
       dropoffAirport: addAirportDropoff ? dropoffAirport : null,
       dropoffFlight: addAirportDropoff ? dropoffFlight : null,
-      dropoffFlightInfo: addAirportDropoff && dropoffSelectedFlight ? {
-        airportName: dropoffSelectedFlight.airportName,
-        airportCode: dropoffSelectedFlight.airportCode,
-        terminal: dropoffSelectedFlight.terminal,
-        scheduledTime: dropoffSelectedFlight.scheduledTime,
+      dropoffFlightInfo: addAirportDropoff ? {
+        airportName: AIRPORTS.find(a => a.code === dropoffAirport)?.name || dropoffAirport,
+        airportCode: dropoffAirport,
+        terminal: dropoffTerminal || dropoffSelectedFlight?.terminal || null,
+        scheduledTime: dropoffSelectedFlight?.scheduledTime || null,
       } : null,
       guideSlug,
       lang: initialLang,
@@ -578,6 +581,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
           </div>
           {addAirportPickup ? (
             <div className="charter-airport-fields">
+              {/* ① 機場選單 */}
               <select
                 className="charter-input charter-select"
                 value={pickupAirport}
@@ -588,7 +592,20 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                   <option key={a.code} value={a.code}>{a.name}</option>
                 ))}
               </select>
-              <div className="charter-flight-search">
+              {/* ② 航廈選單 */}
+              <select
+                className="charter-input charter-select"
+                value={pickupTerminal}
+                onChange={(e) => setPickupTerminal(e.target.value)}
+                style={{ marginTop: 8 }}
+              >
+                <option value="">航廈（選填）</option>
+                {TERMINALS.filter(t => t).map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+              {/* ③ 航班編號（含自動完成建議） */}
+              <div className="charter-flight-search" style={{ marginTop: 8 }}>
                 <input
                   type="text"
                   className="charter-input"
@@ -598,7 +615,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                   maxLength={12}
                   autoComplete="off"
                 />
-                {pickupFlightResults.length > 0 && (
+                {pickupFlightResults.length > 0 && !pickupSelectedFlight && (
                   <div className="charter-flight-dropdown">
                     {pickupFlightResults.map((f, i) => (
                       <button key={i} type="button" className="charter-flight-item" onClick={() => selectPickupFlight(f)}>
@@ -611,15 +628,6 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                   </div>
                 )}
               </div>
-              {pickupSelectedFlight && (
-                <div className="charter-flight-selected">
-                  ✈️ {pickupSelectedFlight.airportName}({pickupSelectedFlight.airportCode})
-                  {pickupSelectedFlight.terminal ? ` ${pickupSelectedFlight.terminal}` : ''}
-                  {' '}{pickupSelectedFlight.flightNo}
-                  {' '}{pickupSelectedFlight.scheduledTime || ''}
-                  {pickupSelectedFlight.route ? ` — ${pickupSelectedFlight.route}` : ''}
-                </div>
-              )}
             </div>
           ) : (
             <div className="charter-place-search">
@@ -661,6 +669,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
           </div>
           {addAirportDropoff ? (
             <div className="charter-airport-fields">
+              {/* ① 機場選單 */}
               <select
                 className="charter-input charter-select"
                 value={dropoffAirport}
@@ -671,7 +680,20 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                   <option key={a.code} value={a.code}>{a.name}</option>
                 ))}
               </select>
-              <div className="charter-flight-search">
+              {/* ② 航廈選單 */}
+              <select
+                className="charter-input charter-select"
+                value={dropoffTerminal}
+                onChange={(e) => setDropoffTerminal(e.target.value)}
+                style={{ marginTop: 8 }}
+              >
+                <option value="">航廈（選填）</option>
+                {TERMINALS.filter(t => t).map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
+              </select>
+              {/* ③ 航班編號（含自動完成建議） */}
+              <div className="charter-flight-search" style={{ marginTop: 8 }}>
                 <input
                   type="text"
                   className="charter-input"
@@ -681,7 +703,7 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                   maxLength={12}
                   autoComplete="off"
                 />
-                {dropoffFlightResults.length > 0 && (
+                {dropoffFlightResults.length > 0 && !dropoffSelectedFlight && (
                   <div className="charter-flight-dropdown">
                     {dropoffFlightResults.map((f, i) => (
                       <button key={i} type="button" className="charter-flight-item" onClick={() => selectDropoffFlight(f)}>
@@ -694,15 +716,6 @@ function CharterBookingInner({ initialLang }: { initialLang: Locale }) {
                   </div>
                 )}
               </div>
-              {dropoffSelectedFlight && (
-                <div className="charter-flight-selected">
-                  ✈️ {dropoffSelectedFlight.airportName}({dropoffSelectedFlight.airportCode})
-                  {dropoffSelectedFlight.terminal ? ` ${dropoffSelectedFlight.terminal}` : ''}
-                  {' '}{dropoffSelectedFlight.flightNo}
-                  {' '}{dropoffSelectedFlight.scheduledTime || ''}
-                  {dropoffSelectedFlight.route ? ` — ${dropoffSelectedFlight.route}` : ''}
-                </div>
-              )}
             </div>
           ) : (
             <div className="charter-place-search">
