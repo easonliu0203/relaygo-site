@@ -105,6 +105,242 @@
       box-shadow: 0 4px 12px rgba(0,214,143,0.4);
     }
 
+    /* Nav Auth Button */
+    .nav-auth-item { display: flex; align-items: center; }
+    .nav-auth-btn {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-auth-btn:hover {
+      background: rgba(255,255,255,0.25);
+    }
+    .navbar.scrolled .nav-auth-btn {
+      color: var(--dark);
+      border-color: var(--gray-300);
+      background: var(--gray-100);
+    }
+    .nav-user-menu { position: relative; }
+    .nav-user-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    .nav-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .nav-user-dropdown {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      padding: 12px;
+      min-width: 200px;
+      z-index: 1001;
+    }
+    .nav-user-dropdown.open { display: block; }
+    .nav-user-email {
+      font-size: 13px;
+      color: var(--gray-600);
+      padding: 4px 8px 8px;
+      border-bottom: 1px solid var(--gray-200);
+      margin-bottom: 8px;
+      word-break: break-all;
+    }
+    .nav-user-logout {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 8px;
+      text-align: left;
+      font-size: 14px;
+      color: var(--gray-700);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+    .nav-user-logout:hover { background: var(--gray-100); }
+
+    /* Mobile auth */
+    .mobile-auth-section {
+      padding: 16px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      margin-top: 8px;
+    }
+    .mobile-auth-login {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .mobile-auth-user {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .mobile-auth-email {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .mobile-auth-logout {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--white);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    /* Login Modal */
+    .login-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-modal {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .login-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--gray-500);
+      cursor: pointer;
+      line-height: 1;
+    }
+    .login-modal-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--dark);
+    }
+    .login-modal-subtitle {
+      font-size: 14px;
+      color: var(--gray-600);
+      margin-bottom: 24px;
+    }
+    .login-modal-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 10px;
+      border: 1px solid var(--gray-200);
+      background: var(--white);
+      color: var(--dark);
+    }
+    .login-modal-btn:hover { background: var(--gray-50); }
+    .login-modal-btn.google { border-color: #ddd; }
+    .login-modal-btn.apple { background: #000; color: #fff; border-color: #000; }
+    .login-modal-btn.apple:hover { background: #222; }
+    .login-modal-btn.email {
+      background: var(--accent);
+      color: var(--white);
+      border-color: var(--accent);
+    }
+    .login-modal-btn.email:hover { opacity: 0.9; }
+    .login-modal-btn.register {
+      background: none;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+    .login-modal-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+      color: var(--gray-400);
+      font-size: 13px;
+    }
+    .login-modal-divider::before,
+    .login-modal-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-200);
+    }
+    .login-modal-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      font-size: 14px;
+      margin-bottom: 10px;
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+    .login-modal-input:focus { border-color: var(--accent); }
+    .login-modal-email-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .login-modal-email-actions .login-modal-btn {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    .login-modal-error {
+      color: #e53e3e;
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
     /* Language Switcher */
     .lang-switcher {
       position: relative;

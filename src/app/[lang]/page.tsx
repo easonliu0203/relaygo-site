@@ -5,6 +5,8 @@ import { I18N, LANG_LABELS, LANG_TITLES, type LangCode } from '@/lib/i18n';
 import { getBodyHTML } from '@/lib/bodyhtml';
 import { localePathMap, resolveLocale } from '@/lib/i18n-config';
 import { useParams } from 'next/navigation';
+import { auth, googleProvider, appleProvider } from '@/lib/firebase';
+import { onAuthStateChanged, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 
 export default function HomePage() {
   const params = useParams();
@@ -203,10 +205,145 @@ export default function HomePage() {
     };
   }, [applyLang, locale]);
 
+  // Firebase auth state → update nav login/logout UI
+  useEffect(() => {
+    const updateAuthUI = (user: User | null) => {
+      const loginBtn = document.getElementById('navLoginBtn');
+      const userMenu = document.getElementById('navUserMenu');
+      const userEmail = document.getElementById('navUserEmail');
+      const userAvatar = document.getElementById('navUserAvatar');
+      const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+      const mobileUserInfo = document.getElementById('mobileUserInfo');
+      const mobileUserEmail = document.getElementById('mobileUserEmail');
+
+      if (user) {
+        // Logged in
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'block';
+        if (userEmail) userEmail.textContent = user.email || '';
+        if (userAvatar) userAvatar.textContent = (user.email || '?')[0].toUpperCase();
+        if (mobileLoginBtn) mobileLoginBtn.style.display = 'none';
+        if (mobileUserInfo) { mobileUserInfo.style.display = 'flex'; }
+        if (mobileUserEmail) mobileUserEmail.textContent = user.email || '';
+      } else {
+        // Logged out
+        if (loginBtn) loginBtn.style.display = '';
+        if (userMenu) userMenu.style.display = 'none';
+        if (mobileLoginBtn) mobileLoginBtn.style.display = '';
+        if (mobileUserInfo) mobileUserInfo.style.display = 'none';
+      }
+    };
+
+    const unsub = onAuthStateChanged(auth, updateAuthUI);
+    return () => unsub();
+  }, []);
+
+  // Login modal handlers
+  const showLoginModal = useCallback(() => {
+    const modal = document.getElementById('loginModal');
+    if (modal) modal.style.display = 'flex';
+  }, []);
+
+  const hideLoginModal = useCallback(() => {
+    const modal = document.getElementById('loginModal');
+    if (modal) modal.style.display = 'none';
+    const errEl = document.getElementById('loginModalError');
+    if (errEl) errEl.style.display = 'none';
+  }, []);
+
+  const showModalError = useCallback((msg: string) => {
+    const errEl = document.getElementById('loginModalError');
+    if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+  }, []);
+
+  // Auth action handlers via event delegation
+  const handleAuthClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+
+    // Open login modal
+    if (target.closest('#navLoginBtn') || target.closest('#mobileLoginBtn')) {
+      e.stopPropagation();
+      showLoginModal();
+      // Close mobile menu if open
+      containerRef.current?.querySelector('#hamburger')?.classList.remove('open');
+      containerRef.current?.querySelector('#mobileMenu')?.classList.remove('open');
+      return;
+    }
+
+    // Toggle user dropdown
+    if (target.closest('#navUserBtn')) {
+      e.stopPropagation();
+      const dropdown = document.getElementById('navUserDropdown');
+      dropdown?.classList.toggle('open');
+      return;
+    }
+
+    // Logout
+    if (target.closest('#navLogoutBtn') || target.closest('#mobileLogoutBtn')) {
+      e.stopPropagation();
+      signOut(auth);
+      const dropdown = document.getElementById('navUserDropdown');
+      dropdown?.classList.remove('open');
+      return;
+    }
+
+    // Close login modal (overlay click or close button)
+    if (target.id === 'loginModal' || target.closest('#loginModalClose')) {
+      hideLoginModal();
+      return;
+    }
+
+    // Google login
+    if (target.closest('#modalGoogleBtn')) {
+      e.stopPropagation();
+      signInWithPopup(auth, googleProvider)
+        .then(() => hideLoginModal())
+        .catch((err) => showModalError(err.message));
+      return;
+    }
+
+    // Apple login
+    if (target.closest('#modalAppleBtn')) {
+      e.stopPropagation();
+      signInWithPopup(auth, appleProvider)
+        .then(() => hideLoginModal())
+        .catch((err) => showModalError(err.message));
+      return;
+    }
+
+    // Email login
+    if (target.closest('#modalEmailLoginBtn')) {
+      e.stopPropagation();
+      const email = (document.getElementById('loginEmailInput') as HTMLInputElement)?.value;
+      const pw = (document.getElementById('loginPasswordInput') as HTMLInputElement)?.value;
+      if (!email || !pw) { showModalError('Please enter email and password'); return; }
+      signInWithEmailAndPassword(auth, email, pw)
+        .then(() => hideLoginModal())
+        .catch((err) => showModalError(err.message));
+      return;
+    }
+
+    // Email register
+    if (target.closest('#modalEmailRegisterBtn')) {
+      e.stopPropagation();
+      const email = (document.getElementById('loginEmailInput') as HTMLInputElement)?.value;
+      const pw = (document.getElementById('loginPasswordInput') as HTMLInputElement)?.value;
+      if (!email || !pw) { showModalError('Please enter email and password'); return; }
+      if (pw.length < 6) { showModalError('Password must be at least 6 characters'); return; }
+      createUserWithEmailAndPassword(auth, email, pw)
+        .then(() => hideLoginModal())
+        .catch((err) => showModalError(err.message));
+      return;
+    }
+
+    // Close user dropdown when clicking elsewhere
+    document.getElementById('navUserDropdown')?.classList.remove('open');
+  }, [showLoginModal, hideLoginModal, showModalError]);
+
   return (
     <div
       ref={containerRef}
-      onClick={handleContainerClick}
+      onClick={(e) => { handleAuthClick(e); handleContainerClick(e); }}
       dangerouslySetInnerHTML={{ __html: getBodyHTML(langPrefix, locale) }}
     />
   );
