@@ -39,8 +39,36 @@ function t(obj: Record<string, string>, lang: LangCode): string {
   return obj[lang] || obj['zh-TW'] || obj['en'] || '';
 }
 
+function renderMarkdownTable(block: string): string {
+  const rows = block.trim().split('\n');
+  if (rows.length < 2) return block;
+  const parseRow = (row: string) =>
+    row.split('|').slice(1, -1).map(c => c.trim());
+  const headers = parseRow(rows[0]);
+  // rows[1] is the separator line (|---|---|)
+  const bodyRows = rows.slice(2);
+  let html = '<div class="guide-table-wrap"><table class="guide-table"><thead><tr>';
+  headers.forEach(h => { html += `<th>${h}</th>`; });
+  html += '</tr></thead><tbody>';
+  bodyRows.forEach(row => {
+    const cells = parseRow(row);
+    html += '<tr>';
+    cells.forEach(c => { html += `<td>${c}</td>`; });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
 function renderMarkdown(md: string): string {
-  let html = md
+  // Extract markdown tables first, replace with placeholders
+  const tables: string[] = [];
+  let processed = md.replace(/(^\|.+\|$\n^\|[-| :]+\|$\n(?:^\|.+\|$\n?)+)/gm, (match) => {
+    tables.push(renderMarkdownTable(match));
+    return `\n%%TABLE_${tables.length - 1}%%\n`;
+  });
+
+  let html = processed
     .replace(/^### (.+)$/gm, '<h3>$1</h3>')
     .replace(/^## (.+)$/gm, '<h2>$1</h2>')
     .replace(/^# (.+)$/gm, '<h1>$1</h1>')
@@ -57,11 +85,17 @@ function renderMarkdown(md: string): string {
     .replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>')
     .replace(/\n\n/g, '</p><p>');
 
+  // Restore tables
+  tables.forEach((t, i) => {
+    html = html.replace(`%%TABLE_${i}%%`, t);
+  });
+
   return `<p>${html}</p>`
     .replace(/<p><h/g, '<h').replace(/<\/h(\d)><\/p>/g, '</h$1>')
     .replace(/<p><ul>/g, '<ul>').replace(/<\/ul><\/p>/g, '</ul>')
     .replace(/<p><ol>/g, '<ol>').replace(/<\/ol><\/p>/g, '</ol>')
     .replace(/<p><blockquote>/g, '<blockquote>').replace(/<\/blockquote><\/p>/g, '</blockquote>')
+    .replace(/<p><div/g, '<div').replace(/<\/div><\/p>/g, '</div>')
     .replace(/<p><\/p>/g, '');
 }
 
