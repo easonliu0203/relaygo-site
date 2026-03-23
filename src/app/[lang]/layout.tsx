@@ -32,15 +32,15 @@ const LOCALE_DESCRIPTIONS: Record<Locale, string> = {
 
 const LOCALE_KEYWORDS: Record<Locale, string> = {
   'zh-TW': 'RelayGo, 台灣包車, 機場接送, 包車旅遊, 台北包車, 九份包車, 日月潭包車, 太魯閣包車, 墾丁包車, 阿里山包車, 桃園機場接送, 松山機場接送, 台灣自由行包車, 專業司機, 即時追蹤',
-  'zh-CN': 'RelayGo, 台湾包车, 机场接送, 包车旅游, 台北包车, 九份包车, 日月潭包车, 太鲁阁包车, 垦丁包车, 桃园机场接送, 台湾自由行包车, 专业司机',
-  en: 'RelayGo, Taiwan charter car, airport transfer Taiwan, Taipei private driver, Taiwan tour driver, Jiufen tour, Sun Moon Lake tour, Taroko Gorge tour, Taoyuan airport pickup, Taiwan day trip, private car service Taiwan',
+  'zh-CN': 'RelayGo, 台湾包车, 机场接送, 包车旅游, 台湾自由行包车, 台北包车, 九份包车, 日月潭包车, 太鲁阁包车, 垦丁包车, 桃园机场接送, 包车价格, 专业司机, 台湾一日游包车',
+  en: 'RelayGo, Taiwan private car charter, Taiwan airport transfer, Taipei private driver, Taiwan car rental with driver, Jiufen private tour, Sun Moon Lake day trip, Taroko Gorge tour, Taoyuan airport pickup, Taiwan day tour, private sightseeing car Taiwan',
   ja: 'RelayGo, 台湾 チャーター車, 台湾 貸切タクシー, 空港送迎 台湾, 台北 貸切車, 九份 タクシー チャーター, 日月潭 ツアー, 太魯閣 ツアー, 桃園空港 送迎, 台湾 ドライバー付き, 台湾 専用車 予約',
   ko: 'RelayGo, 대만 전용차량 투어, 대만 택시투어, 대만 공항 픽업, 지우펀 택시투어, 대만 프라이빗 차량, 르웨탄 투어, 타로코 투어, 타오위안 공항 픽업, 대만 일일투어, 대만 차량 예약',
   th: 'RelayGo, เช่ารถพร้อมคนขับ ไต้หวัน, รถเช่าส่วนตัว ไต้หวัน, รับส่งสนามบิน ไต้หวัน, ทัวร์ส่วนตัว ไต้หวัน, ทัวร์จิ่วเฟิ่น, ทัวร์ทะเลสาบสุริยันจันทรา, ทัวร์อุทยานทาโรโกะ, รถรับส่งสนามบินเถาหยวน, จองรถ ไต้หวัน',
-  vi: 'RelayGo, thuê xe Đài Loan, đưa đón sân bay Đài Loan, thuê xe riêng Đài Bắc, tour Cửu Phần, tour Hồ Nhật Nguyệt, tour Thái Lỗ Các, đón sân bay Đào Viên, tài xế riêng Đài Loan',
-  ms: 'RelayGo, sewa kereta Taiwan, pemindahan lapangan terbang Taiwan, kereta sewa dengan pemandu Taiwan, lawatan Jiufen, lawatan Tasik Matahari Bulan, lawatan Taroko, pengambilan lapangan terbang Taoyuan',
-  id: 'RelayGo, sewa mobil Taiwan, antar jemput bandara Taiwan, mobil carter Taiwan, tur Jiufen, tur Danau Matahari Bulan, tur Taroko, penjemputan bandara Taoyuan, sopir pribadi Taiwan',
-  fil: 'RelayGo, charter car Taiwan, airport transfer Taiwan, pribadong driver Taiwan, Jiufen tour, Sun Moon Lake tour, Taroko tour, Taoyuan airport pickup, Taiwan day tour',
+  vi: 'RelayGo, thuê xe riêng Đài Loan, đưa đón sân bay Đài Loan, thuê xe có tài xế Đài Loan, tour Cửu Phần, tour Hồ Nhật Nguyệt, tour Thái Lỗ Các, đón sân bay Đào Viên, xe riêng Đài Bắc, tour một ngày Đài Loan',
+  ms: 'RelayGo, sewa kereta dengan pemandu Taiwan, pindahan lapangan terbang Taiwan, kereta sewa peribadi Taiwan, lawatan Jiufen, lawatan Tasik Matahari Bulan, lawatan Taroko, pengambilan lapangan terbang Taoyuan, kereta sewa harian Taiwan',
+  id: 'RelayGo, sewa mobil dengan sopir Taiwan, antar jemput bandara Taiwan, sewa mobil pribadi Taiwan, tur Jiufen, tur Danau Matahari Bulan, tur Taroko, penjemputan bandara Taoyuan, sopir pribadi Taiwan, wisata Taiwan',
+  fil: 'RelayGo, Taiwan private car, Taiwan airport transfer, Taiwan tour package, Jiufen tour, Sun Moon Lake tour, Taroko tour, Taoyuan airport pickup, Taiwan day tour from Philippines, Taiwan travel 2026',
 };
 
 const OG_DESCRIPTIONS: Record<Locale, string> = {
