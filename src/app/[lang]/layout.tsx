@@ -30,6 +30,19 @@ const LOCALE_DESCRIPTIONS: Record<Locale, string> = {
   fil: 'Nag-aalok ang RelayGo ng propesyonal na serbisyo ng charter car sa Taiwan. Ligtas na driver, real-time na pagsubaybay, iba\'t ibang paraan ng pagbabayad. I-download ang app para mag-book ngayon!',
 };
 
+const LOCALE_KEYWORDS: Record<Locale, string> = {
+  'zh-TW': 'RelayGo, 台灣包車, 機場接送, 包車旅遊, 台北包車, 九份包車, 日月潭包車, 太魯閣包車, 墾丁包車, 阿里山包車, 桃園機場接送, 松山機場接送, 台灣自由行包車, 專業司機, 即時追蹤',
+  'zh-CN': 'RelayGo, 台湾包车, 机场接送, 包车旅游, 台北包车, 九份包车, 日月潭包车, 太鲁阁包车, 垦丁包车, 桃园机场接送, 台湾自由行包车, 专业司机',
+  en: 'RelayGo, Taiwan charter car, airport transfer Taiwan, Taipei private driver, Taiwan tour driver, Jiufen tour, Sun Moon Lake tour, Taroko Gorge tour, Taoyuan airport pickup, Taiwan day trip, private car service Taiwan',
+  ja: 'RelayGo, 台湾チャーター, 空港送迎 台湾, 台北 貸切車, 九份 チャーター, 日月潭 ツアー, 太魯閣 ツアー, 桃園空港 送迎, 台湾 専用車, 台湾 ドライバー付き',
+  ko: 'RelayGo, 대만 차터, 공항 픽업 대만, 타이베이 전세차, 지우펀 투어, 르웨탄 투어, 타로코 투어, 타오위안 공항 픽업, 대만 프라이빗 드라이버, 대만 일일투어',
+  th: 'RelayGo, เช่ารถไต้หวัน, รับส่งสนามบินไต้หวัน, เช่ารถพร้อมคนขับ ไต้หวัน, ทัวร์จิ่วเฟิ่น, ทัวร์ทะเลสาบสุริยันจันทรา, ทัวร์อุทยานทาโรโกะ, รถรับส่งสนามบินเถาหยวน',
+  vi: 'RelayGo, thuê xe Đài Loan, đưa đón sân bay Đài Loan, thuê xe riêng Đài Bắc, tour Cửu Phần, tour Hồ Nhật Nguyệt, tour Thái Lỗ Các, đón sân bay Đào Viên, tài xế riêng Đài Loan',
+  ms: 'RelayGo, sewa kereta Taiwan, pemindahan lapangan terbang Taiwan, kereta sewa dengan pemandu Taiwan, lawatan Jiufen, lawatan Tasik Matahari Bulan, lawatan Taroko, pengambilan lapangan terbang Taoyuan',
+  id: 'RelayGo, sewa mobil Taiwan, antar jemput bandara Taiwan, mobil carter Taiwan, tur Jiufen, tur Danau Matahari Bulan, tur Taroko, penjemputan bandara Taoyuan, sopir pribadi Taiwan',
+  fil: 'RelayGo, charter car Taiwan, airport transfer Taiwan, pribadong driver Taiwan, Jiufen tour, Sun Moon Lake tour, Taroko tour, Taoyuan airport pickup, Taiwan day tour',
+};
+
 const OG_DESCRIPTIONS: Record<Locale, string> = {
   'zh-TW': '安全可靠的專業包車服務，即時追蹤、多元支付、AI 旅遊規劃',
   'zh-CN': '安全可靠的专业包车服务，即时追踪、多元支付、AI 旅游规划',
@@ -71,7 +84,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   return {
     title,
     description,
-    keywords: 'RelayGo, 包車, charter service, 專業司機, 即時追蹤, 台灣包車, チャーターサービス',
+    keywords: LOCALE_KEYWORDS[locale] || LOCALE_KEYWORDS['zh-TW'],
     openGraph: {
       title,
       description: ogDesc,
