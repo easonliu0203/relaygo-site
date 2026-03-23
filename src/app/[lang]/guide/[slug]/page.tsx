@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${title} | RelayGo`,
     description,
     keywords: [
-      '包車旅遊', '台灣包車', title,
+      '包車旅遊', '台灣包車', '台灣美食', '台灣自由行', '大眾運輸', title,
       ...(guide.tags || []),
     ].join(', '),
     openGraph: {

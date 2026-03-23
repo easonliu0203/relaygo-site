@@ -32,8 +32,8 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 
   return {
     title: GUIDES_TITLES[locale],
-    description: '精選台灣包車旅遊路線攻略，九份、日月潭、清境、墾丁、花蓮太魯閣等熱門景點，專業司機帶路，行程規劃一次搞定。',
-    keywords: '台灣包車攻略, 包車旅遊路線, 九份包車, 日月潭包車, 花蓮包車, charter tour Taiwan',
+    description: '精選台灣旅遊路線攻略，九份、日月潭、清境、墾丁、花蓮太魯閣等熱門景點。包車行程、在地美食推薦、大眾運輸自由行路線一次搞定。',
+    keywords: '台灣包車攻略, 包車旅遊路線, 台灣美食攻略, 台灣自由行攻略, 大眾運輸自由行, 九份包車, 九份美食, 日月潭包車, 花蓮包車, charter tour Taiwan, Taiwan food guide, Taiwan independent travel',
     openGraph: {
       title: GUIDES_TITLES[locale],
       description: '精選台灣包車旅遊路線攻略，專業司機帶路',
