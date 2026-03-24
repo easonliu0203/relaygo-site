@@ -61,11 +61,12 @@ export default function HomePage() {
       return;
     }
 
-    // Language option click → navigate
+    // Language option click → set cookie + navigate
     const langOption = target.closest('.lang-option');
     if (langOption) {
       e.stopPropagation();
       const langCode = langOption.getAttribute('data-lang') as LangCode;
+      document.cookie = `preferred-lang=${langCode};path=/;max-age=${365 * 24 * 60 * 60};samesite=lax`;
       const pathSeg = localePathMap[langCode];
       window.location.href = pathSeg ? `/${pathSeg}/` : '/';
       return;
