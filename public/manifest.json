@@ -1,0 +1,26 @@
+{
+  "name": "RelayGo - Taiwan Charter Car Service",
+  "short_name": "RelayGo",
+  "description": "Professional charter car service in Taiwan. Airport transfers, day tours, and business transportation.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

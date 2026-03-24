@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const titles: Record<string, string> = {
     'zh-TW': '確認訂單 | RelayGo', 'zh-CN': '确认订单 | RelayGo', en: 'Confirm Order | RelayGo',
   };
-  return { title: titles[locale] || titles['zh-TW'] };
+  return { title: titles[locale] || titles['zh-TW'], robots: { index: false, follow: false } };
 }
 
 export default function ConfirmPage({ params }: { params: { lang: string } }) {

@@ -303,7 +303,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
       <div class="fleet-grid">
         <div class="fleet-card fade-up">
           <div class="fleet-img-wrap">
-            <img src="/images/5人座轎車.webp" alt="五人座轎車">
+            <img loading="lazy" decoding="async" src="/images/5人座轎車.webp" alt="五人座轎車">
             <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
           </div>
           <h3 data-i18n="fleet_s_name">五人座轎車</h3>
@@ -323,7 +323,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
         <div class="fleet-card fade-up">
           <div class="fleet-img-wrap">
-            <img src="/images/5人座休旅車.webp" alt="五人座休旅車">
+            <img loading="lazy" decoding="async" src="/images/5人座休旅車.webp" alt="五人座休旅車">
             <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
           </div>
           <h3 data-i18n="fleet_m_name">五人座休旅車</h3>
@@ -343,7 +343,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
         <div class="fleet-card popular fade-up">
           <div class="fleet-img-wrap">
-            <img src="/images/9人座.webp" alt="九人座休旅車">
+            <img loading="lazy" decoding="async" src="/images/9人座.webp" alt="九人座休旅車">
             <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
           </div>
           <h3 data-i18n="fleet_l_name">九人座休旅車</h3>
@@ -363,7 +363,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
         <div class="fleet-card fade-up">
           <div class="fleet-img-wrap">
-            <img src="/images/Toyota Alphard.webp" alt="Toyota Alphard">
+            <img loading="lazy" decoding="async" src="/images/Toyota Alphard.webp" alt="Toyota Alphard">
             <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
           </div>
           <h3>Toyota Alphard</h3>

@@ -9,7 +9,7 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  return { title: '付款結果 | RelayGo' };
+  return { title: '付款結果 | RelayGo', robots: { index: false, follow: false } };
 }
 
 export default function ResultPage({ params }: { params: { lang: string } }) {
