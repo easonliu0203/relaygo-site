@@ -108,6 +108,13 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       images: ['https://relaygo.pro/og-image.png'],
     },
     metadataBase: new URL('https://relaygo.pro'),
+    icons: {
+      icon: [
+        { url: '/favicon.svg', type: 'image/svg+xml' },
+        { url: '/favicon.png', type: 'image/png', sizes: '32x32' },
+      ],
+      apple: '/apple-touch-icon.png',
+    },
     alternates: {
       canonical,
       languages: buildAlternates(),
@@ -118,12 +125,20 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   };
 }
 
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || '';
+
 export default function LangLayout({ children, params }: Props) {
   const locale = resolveLocale(params.lang);
 
   return (
     <html lang={htmlLang(locale)}>
       <head>
+        {GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+            <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${GA_ID}');` }} />
+          </>
+        )}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
