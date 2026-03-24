@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import { FAQS, type LangCode } from '@/lib/faq-data';
 
-const UI = {
+const UI: Record<string, Record<string, string>> = {
   title: {
     'zh-TW': '常見問題',
     'zh-CN': '常见问题',
@@ -56,6 +56,8 @@ const LANGS: { code: LangCode; label: string }[] = [
   { code: 'th', label: 'TH' },
   { code: 'vi', label: 'VI' },
   { code: 'ms', label: 'MS' },
+  { code: 'id', label: 'ID' },
+  { code: 'fil', label: 'FIL' },
 ];
 
 export default function FAQContent({ initialLang }: { initialLang: Locale }) {
