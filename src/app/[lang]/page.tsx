@@ -15,11 +15,17 @@ export default function HomePage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mountKey, setMountKey] = useState(0);
 
-  // Force re-mount when navigating back (popstate), so fade-up animations re-trigger
+  // Force re-mount when navigating back, so fade-up animations re-trigger
   useEffect(() => {
-    const handlePopState = () => setMountKey((k) => k + 1);
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    const bump = () => setMountKey((k) => k + 1);
+    window.addEventListener('popstate', bump);
+    // bfcache restore: pageshow with persisted=true fires when popstate may not
+    const onPageShow = (e: PageTransitionEvent) => { if (e.persisted) bump(); };
+    window.addEventListener('pageshow', onPageShow);
+    return () => {
+      window.removeEventListener('popstate', bump);
+      window.removeEventListener('pageshow', onPageShow);
+    };
   }, []);
 
   const applyLang = useCallback((lang: LangCode) => {
@@ -221,7 +227,7 @@ export default function HomePage() {
       observer.disconnect();
       statsObserver.disconnect();
     };
-  }, [applyLang, locale]);
+  }, [applyLang, locale, mountKey]);
 
   // Firebase auth state → update nav login/logout UI
   useEffect(() => {
