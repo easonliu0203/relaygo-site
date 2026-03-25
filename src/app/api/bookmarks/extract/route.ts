@@ -205,9 +205,9 @@ export async function POST(req: Request) {
     }
 
     const platform = detectPlatform(url);
-    const { title, thumbnail_url, og_data } = await extractMetadata(url, platform);
+    const { title, description, thumbnail_url, author, og_data } = await extractMetadata(url, platform);
 
-    return NextResponse.json({ platform, title, thumbnail_url, og_data });
+    return NextResponse.json({ platform, title, description, thumbnail_url, author, og_data });
   } catch (error) {
     console.error('Extract API error:', error);
     return NextResponse.json({ error: 'Failed to extract metadata' }, { status: 500 });

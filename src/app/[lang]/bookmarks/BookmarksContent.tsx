@@ -5,10 +5,11 @@ import type { TravelBookmark } from '@/lib/bookmarks';
 import { CATEGORIES, CATEGORY_NAMES, CATEGORY_ICONS, type BookmarkCategory } from '@/lib/bookmark-categories';
 import { COUNTRIES, CITIES, localizedCountry, localizedCityBySlug } from '@/lib/bookmark-locations';
 import { localePathMap } from '@/lib/i18n-config';
-import { auth } from '@/lib/firebase';
-import { onAuthStateChanged, type User } from 'firebase/auth';
+import { auth, googleProvider } from '@/lib/firebase';
+import { onAuthStateChanged, signInWithPopup, signOut, type User } from 'firebase/auth';
 import BookmarkCard from './BookmarkCard';
 import SubmitBookmarkModal from './SubmitBookmarkModal';
+import EditBookmarkModal from './EditBookmarkModal';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
 
@@ -24,14 +25,6 @@ const UI: Record<string, Record<LangCode, string>> = {
   all: {
     'zh-TW': '全部', 'zh-CN': '全部', en: 'All', ja: 'すべて', ko: '전체',
     th: 'ทั้งหมด', vi: 'Tất cả', ms: 'Semua', id: 'Semua', fil: 'Lahat',
-  },
-  allCountries: {
-    'zh-TW': '所有國家', 'zh-CN': '所有国家', en: 'All Countries', ja: 'すべての国', ko: '모든 국가',
-    th: 'ทุกประเทศ', vi: 'Tất cả quốc gia', ms: 'Semua Negara', id: 'Semua Negara', fil: 'Lahat ng Bansa',
-  },
-  allCities: {
-    'zh-TW': '所有城市', 'zh-CN': '所有城市', en: 'All Cities', ja: 'すべての都市', ko: '모든 도시',
-    th: 'ทุกเมือง', vi: 'Tất cả thành phố', ms: 'Semua Bandar', id: 'Semua Kota', fil: 'Lahat ng Lungsod',
   },
   shareBtn: {
     'zh-TW': '＋ 分享靈感', 'zh-CN': '＋ 分享灵感', en: '+ Share Inspiration', ja: '＋ インスピレーション共有', ko: '+ 영감 공유',
@@ -49,9 +42,13 @@ const UI: Record<string, Record<LangCode, string>> = {
     'zh-TW': '♥ 我的最愛', 'zh-CN': '♥ 我的收藏', en: '♥ My Favorites', ja: '♥ お気に入り', ko: '♥ 즐겨찾기',
     th: '♥ รายการโปรด', vi: '♥ Yêu thích', ms: '♥ Kegemaran', id: '♥ Favorit', fil: '♥ Paborito',
   },
-  loginToFav: {
-    'zh-TW': '登入後即可收藏', 'zh-CN': '登录后即可收藏', en: 'Log in to save favorites', ja: 'ログインしてお気に入り登録', ko: '로그인하여 즐겨찾기 저장',
-    th: 'เข้าสู่ระบบเพื่อบันทึก', vi: 'Đăng nhập để lưu', ms: 'Log masuk untuk simpan', id: 'Masuk untuk menyimpan', fil: 'Mag-login para mag-save',
+  login: {
+    'zh-TW': '登入', 'zh-CN': '登录', en: 'Login', ja: 'ログイン', ko: '로그인',
+    th: 'เข้าสู่ระบบ', vi: 'Đăng nhập', ms: 'Log Masuk', id: 'Masuk', fil: 'Mag-login',
+  },
+  logout: {
+    'zh-TW': '登出', 'zh-CN': '登出', en: 'Logout', ja: 'ログアウト', ko: '로그아웃',
+    th: 'ออกจากระบบ', vi: 'Đăng xuất', ms: 'Log Keluar', id: 'Keluar', fil: 'Mag-logout',
   },
 };
 
@@ -73,6 +70,7 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
   const lang = initialLang;
   const langPrefix = localePathMap[lang as LangCode] ? `/${localePathMap[lang as LangCode]}` : '';
   const [modalOpen, setModalOpen] = useState(false);
+  const [editingBookmark, setEditingBookmark] = useState<TravelBookmark | null>(null);
   const [filterCat, setFilterCat] = useState<string>(currentCategory || '');
   const [showFavOnly, setShowFavOnly] = useState(false);
   const [user, setUser] = useState<User | null>(null);
@@ -93,10 +91,21 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
       .catch(() => {});
   }, [user]);
 
+  const handleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch { /* user cancelled */ }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch { /* ignore */ }
+  };
+
   const toggleFavorite = useCallback(async (bookmarkId: string) => {
     if (!user) return;
     const isFav = favIds.has(bookmarkId);
-    // Optimistic update
     setFavIds((prev) => {
       const next = new Set(prev);
       if (isFav) next.delete(bookmarkId); else next.add(bookmarkId);
@@ -109,7 +118,6 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
         body: JSON.stringify({ user_id: user.uid, bookmark_id: bookmarkId }),
       });
     } catch {
-      // Revert on error
       setFavIds((prev) => {
         const next = new Set(prev);
         if (isFav) next.add(bookmarkId); else next.delete(bookmarkId);
@@ -126,6 +134,10 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
   }
 
   const handleSubmitted = useCallback(() => {
+    setTimeout(() => window.location.reload(), 1500);
+  }, []);
+
+  const handleEditSaved = useCallback(() => {
     setTimeout(() => window.location.reload(), 1500);
   }, []);
 
@@ -160,6 +172,19 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
     <div className="bm-page">
       {/* Hero */}
       <section className="bm-hero">
+        <div className="bm-hero-auth">
+          {user ? (
+            <div className="bm-auth-info">
+              {user.photoURL && <img src={user.photoURL} alt="" className="bm-auth-avatar" referrerPolicy="no-referrer" />}
+              <span className="bm-auth-name">{user.displayName || user.email}</span>
+              <button className="bm-auth-btn" onClick={handleLogout}>{t('logout', lang)}</button>
+            </div>
+          ) : (
+            <button className="bm-auth-btn bm-auth-btn-login" onClick={handleLogin}>
+              {t('login', lang)}
+            </button>
+          )}
+        </div>
         <h1 className="bm-hero-title">{t('pageTitle', lang)}</h1>
         <p className="bm-hero-sub">{t('subtitle', lang)}</p>
       </section>
@@ -180,7 +205,6 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
 
       {/* Filters */}
       <div className="bm-filters">
-        {/* Country / City nav pills — only show on main page */}
         {!currentCountry && (
           <div className="bm-filter-row">
             {COUNTRIES.map((c) => (
@@ -200,7 +224,6 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
           </div>
         )}
 
-        {/* Category pills */}
         <div className="bm-filter-row">
           <button
             className={`bm-filter-pill ${!filterCat && !showFavOnly ? 'active' : ''}`}
@@ -217,7 +240,6 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
             </button>
           )}
           {CATEGORIES.map((cat) => {
-            // If on a category sub-page, link instead of filter
             if (currentCountry && currentCity && !currentCategory) {
               return (
                 <a
@@ -253,6 +275,8 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
               index={i}
               isFavorited={favIds.has(bm.id)}
               onToggleFavorite={user ? toggleFavorite : undefined}
+              isOwner={!!user && bm.created_by === user.uid}
+              onEdit={(b) => setEditingBookmark(b)}
             />
           ))}
         </div>
@@ -272,7 +296,19 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
         onClose={() => setModalOpen(false)}
         lang={lang}
         onSubmitted={handleSubmitted}
+        userId={user?.uid}
       />
+
+      {editingBookmark && user && (
+        <EditBookmarkModal
+          bookmark={editingBookmark}
+          userId={user.uid}
+          isOpen={true}
+          onClose={() => setEditingBookmark(null)}
+          onSaved={handleEditSaved}
+          lang={lang}
+        />
+      )}
     </div>
   );
 }

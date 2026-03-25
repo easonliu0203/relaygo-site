@@ -30,9 +30,11 @@ interface Props {
   index: number;
   isFavorited?: boolean;
   onToggleFavorite?: (bookmarkId: string) => void;
+  isOwner?: boolean;
+  onEdit?: (bookmark: TravelBookmark) => void;
 }
 
-export default function BookmarkCard({ bookmark, lang, index, isFavorited, onToggleFavorite }: Props) {
+export default function BookmarkCard({ bookmark, lang, index, isFavorited, onToggleFavorite, isOwner, onEdit }: Props) {
   const cats = bookmark.category.split(',').filter(Boolean);
   const mainCat = cats[0] || bookmark.category;
   const icon = categoryIcon(mainCat);
@@ -45,6 +47,12 @@ export default function BookmarkCard({ bookmark, lang, index, isFavorited, onTog
     e.preventDefault();
     e.stopPropagation();
     onToggleFavorite?.(bookmark.id);
+  };
+
+  const handleEdit = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onEdit?.(bookmark);
   };
 
   return (
@@ -73,6 +81,15 @@ export default function BookmarkCard({ bookmark, lang, index, isFavorited, onTog
             aria-label="Favorite"
           >
             {isFavorited ? '♥' : '♡'}
+          </button>
+        )}
+        {isOwner && onEdit && (
+          <button
+            className="bm-card-edit"
+            onClick={handleEdit}
+            aria-label="Edit"
+          >
+            &#9998;
           </button>
         )}
       </div>

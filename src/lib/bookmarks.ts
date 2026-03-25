@@ -24,6 +24,7 @@ export interface TravelBookmark {
   og_data: Record<string, unknown>;
   is_published: boolean;
   created_at: string;
+  created_by: string | null;
 }
 
 export async function getPublishedBookmarks(limit = 50): Promise<TravelBookmark[]> {
