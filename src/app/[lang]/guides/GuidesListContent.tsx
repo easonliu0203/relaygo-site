@@ -2,6 +2,7 @@
 
 import type { TourGuide } from '@/lib/supabase';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
+import { localizedCity } from '@/lib/city-names';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
 
@@ -74,7 +75,7 @@ function GuideCard({ guide, langPrefix, lang }: { guide: TourGuide; langPrefix: 
           {ROUTE_ICONS[guide.slug] || CITY_ICONS[guide.city] || '📍'}
         </span>
         <span className="guide-card-city-badge">
-          {CITY_ICONS[guide.city] || '📍'} {guide.city}
+          {CITY_ICONS[guide.city] || '📍'} {localizedCity(guide.city, lang)}
         </span>
       </div>
       <div className="guide-card-body">

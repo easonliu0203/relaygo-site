@@ -3,21 +3,22 @@
 import { useState, useMemo } from 'react';
 import type { TourGuide } from '@/lib/supabase';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
+import { localizedCity } from '@/lib/city-names';
 
-type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms';
+type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
 
 const UI: Record<string, Record<LangCode, string>> = {
-  back: { 'zh-TW': '返回攻略列表', 'zh-CN': '返回攻略列表', en: 'Back to Guides', ja: 'ガイド一覧へ', ko: '가이드 목록', th: 'กลับไปรายการไกด์', vi: 'Quay lại danh sách', ms: 'Kembali ke senarai panduan' },
-  hours: { 'zh-TW': '小時行程', 'zh-CN': '小时行程', en: 'hour trip', ja: '時間の旅', ko: '시간 여행', th: 'ชั่วโมง', vi: 'giờ', ms: 'jam' },
-  bookNow: { 'zh-TW': '立即預約包車', 'zh-CN': '立即预约包车', en: 'Book Charter Now', ja: '今すぐ予約する', ko: '지금 예약하기', th: 'จองรถเหมาเลย', vi: 'Đặt xe ngay', ms: 'Tempah sekarang' },
-  downloadApp: { 'zh-TW': '下載APP預約包車', 'zh-CN': '下载APP预约包车', en: 'Download App to Book', ja: 'アプリで予約', ko: '앱 다운로드하여 예약', th: 'ดาวน์โหลดแอปจอง', vi: 'Tải App để đặt', ms: 'Muat turun App untuk tempah' },
-  duration: { 'zh-TW': '建議時數', 'zh-CN': '建议时长', en: 'Duration', ja: '所要時間', ko: '소요 시간', th: 'ระยะเวลา', vi: 'Thời lượng', ms: 'Tempoh' },
-  departure: { 'zh-TW': '出發地', 'zh-CN': '出发地', en: 'Departure', ja: '出発地', ko: '출발지', th: 'จุดออกเดินทาง', vi: 'Điểm khởi hành', ms: 'Lokasi berlepas' },
-  tripInfo: { 'zh-TW': '行程資訊', 'zh-CN': '行程信息', en: 'Trip Info', ja: 'ツアー情報', ko: '여행 정보', th: 'ข้อมูลทริป', vi: 'Thông tin chuyến đi', ms: 'Maklumat perjalanan' },
-  share: { 'zh-TW': '分享', 'zh-CN': '分享', en: 'Share', ja: 'シェア', ko: '공유', th: 'แชร์', vi: 'Chia sẻ', ms: 'Kongsi' },
-  copy: { 'zh-TW': '複製連結', 'zh-CN': '复制链接', en: 'Copy Link', ja: 'リンクコピー', ko: '링크 복사', th: 'คัดลอกลิงก์', vi: 'Sao chép liên kết', ms: 'Salin pautan' },
-  copied: { 'zh-TW': '已複製！', 'zh-CN': '已复制！', en: 'Copied!', ja: 'コピー済み！', ko: '복사됨!', th: 'คัดลอกแล้ว!', vi: 'Đã sao chép!', ms: 'Disalin!' },
-  relatedGuides: { 'zh-TW': '其他攻略推薦', 'zh-CN': '其他攻略推荐', en: 'More Guides', ja: '他のガイド', ko: '다른 가이드', th: 'ไกด์อื่นๆ', vi: 'Hướng dẫn khác', ms: 'Panduan lain' },
+  back: { 'zh-TW': '返回攻略列表', 'zh-CN': '返回攻略列表', en: 'Back to Guides', ja: 'ガイド一覧へ', ko: '가이드 목록', th: 'กลับไปรายการไกด์', vi: 'Quay lại danh sách', ms: 'Kembali ke senarai panduan', id: 'Kembali ke Daftar Panduan', fil: 'Bumalik sa Listahan' },
+  hours: { 'zh-TW': '小時行程', 'zh-CN': '小时行程', en: 'hour trip', ja: '時間の旅', ko: '시간 여행', th: 'ชั่วโมง', vi: 'giờ', ms: 'jam', id: 'jam perjalanan', fil: 'oras na biyahe' },
+  bookNow: { 'zh-TW': '立即預約包車', 'zh-CN': '立即预约包车', en: 'Book Charter Now', ja: '今すぐ予約する', ko: '지금 예약하기', th: 'จองรถเหมาเลย', vi: 'Đặt xe ngay', ms: 'Tempah sekarang', id: 'Pesan Charter Sekarang', fil: 'Mag-book ng Charter Ngayon' },
+  downloadApp: { 'zh-TW': '下載APP預約包車', 'zh-CN': '下载APP预约包车', en: 'Download App to Book', ja: 'アプリで予約', ko: '앱 다운로드하여 예약', th: 'ดาวน์โหลดแอปจอง', vi: 'Tải App để đặt', ms: 'Muat turun App untuk tempah', id: 'Unduh Aplikasi untuk Memesan', fil: 'I-download ang App para Mag-book' },
+  duration: { 'zh-TW': '建議時數', 'zh-CN': '建议时长', en: 'Duration', ja: '所要時間', ko: '소요 시간', th: 'ระยะเวลา', vi: 'Thời lượng', ms: 'Tempoh', id: 'Durasi', fil: 'Tagal' },
+  departure: { 'zh-TW': '出發地', 'zh-CN': '出发地', en: 'Departure', ja: '出発地', ko: '출발지', th: 'จุดออกเดินทาง', vi: 'Điểm khởi hành', ms: 'Lokasi berlepas', id: 'Keberangkatan', fil: 'Pag-alis' },
+  tripInfo: { 'zh-TW': '行程資訊', 'zh-CN': '行程信息', en: 'Trip Info', ja: 'ツアー情報', ko: '여행 정보', th: 'ข้อมูลทริป', vi: 'Thông tin chuyến đi', ms: 'Maklumat perjalanan', id: 'Info Perjalanan', fil: 'Impormasyon ng Biyahe' },
+  share: { 'zh-TW': '分享', 'zh-CN': '分享', en: 'Share', ja: 'シェア', ko: '공유', th: 'แชร์', vi: 'Chia sẻ', ms: 'Kongsi', id: 'Bagikan', fil: 'Ibahagi' },
+  copy: { 'zh-TW': '複製連結', 'zh-CN': '复制链接', en: 'Copy Link', ja: 'リンクコピー', ko: '링크 복사', th: 'คัดลอกลิงก์', vi: 'Sao chép liên kết', ms: 'Salin pautan', id: 'Salin Tautan', fil: 'Kopyahin ang Link' },
+  copied: { 'zh-TW': '已複製！', 'zh-CN': '已复制！', en: 'Copied!', ja: 'コピー済み！', ko: '복사됨!', th: 'คัดลอกแล้ว!', vi: 'Đã sao chép!', ms: 'Disalin!', id: 'Tersalin!', fil: 'Nakopya na!' },
+  relatedGuides: { 'zh-TW': '其他攻略推薦', 'zh-CN': '其他攻略推荐', en: 'More Guides', ja: '他のガイド', ko: '다른 가이드', th: 'ไกด์อื่นๆ', vi: 'Hướng dẫn khác', ms: 'Panduan lain', id: 'Panduan Lainnya', fil: 'Iba Pang Gabay' },
   itineraryNote: {
     'zh-TW': '行程完全由您自訂，可以自由新增與刪除。網站上的景點路線僅供參考，司機會按照您的路線行駛，路線不順時也會提供專業建議以節省交通時間。',
     'zh-CN': '行程完全由您自定，可以自由新增与删除。网站上的景点路线仅供参考，司机会按照您的路线行驶，路线不顺时也会提供专业建议以节省交通时间。',
@@ -27,6 +28,8 @@ const UI: Record<string, Record<LangCode, string>> = {
     th: 'กำหนดการเดินทางปรับแต่งได้ตามใจ สามารถเพิ่มหรือลดจุดแวะได้อย่างอิสระ เส้นทางบนเว็บไซต์เป็นเพียงข้อมูลอ้างอิง คนขับจะขับตามเส้นทางของคุณ และแนะนำเส้นทางที่ดีกว่าเพื่อประหยัดเวลาเดินทาง',
     vi: 'Lộ trình hoàn toàn do bạn tùy chỉnh, có thể tự do thêm hoặc bớt điểm dừng. Các tuyến đường trên trang web chỉ mang tính tham khảo. Tài xế sẽ đi theo lộ trình của bạn và đưa ra gợi ý chuyên nghiệp để tiết kiệm thời gian di chuyển khi cần.',
     ms: 'Jadual perjalanan boleh disesuaikan sepenuhnya — anda bebas menambah atau membuang mana-mana perhentian. Laluan di laman web ini adalah untuk rujukan sahaja. Pemandu akan mengikut laluan pilihan anda dan memberi cadangan profesional untuk menjimatkan masa perjalanan jika perlu.',
+    id: 'Rute perjalanan sepenuhnya bisa Anda sesuaikan — bebas menambah atau menghapus titik pemberhentian. Rute di situs ini hanya sebagai referensi. Pengemudi akan mengikuti rute pilihan Anda dan memberikan saran profesional untuk menghemat waktu tempuh jika diperlukan.',
+    fil: 'Ang iyong itinerary ay ganap na nako-customize — malayang magdagdag o mag-alis ng mga hintuan. Ang mga ruta sa website na ito ay para sa reperensya lamang. Susundin ng iyong driver ang iyong napiling ruta at mag-aalok ng propesyonal na mungkahi para makatipid ng oras sa biyahe kung kinakailangan.',
   },
 };
 
@@ -138,7 +141,7 @@ export default function GuideContent({ guide, initialLang, relatedGuides = [] }:
             </div>
             <div className="guide-hero-stat">
               <span className="guide-hero-stat-icon">{cityIcon}</span>
-              <span>{guide.city}</span>
+              <span>{localizedCity(guide.city, lang)}</span>
             </div>
           </div>
 
@@ -179,7 +182,7 @@ export default function GuideContent({ guide, initialLang, relatedGuides = [] }:
                 <span className="guide-info-icon">{cityIcon}</span>
                 {UI.departure[lang]}
               </span>
-              <span className="guide-info-value">{guide.city}</span>
+              <span className="guide-info-value">{localizedCity(guide.city, lang)}</span>
             </div>
             <a href={`${langPrefix}/booking/charter?guide=${guide.slug}&city=${encodeURIComponent(guide.city)}&hours=${guide.duration_hours}`} className="guide-cta-btn">
               🚐 {UI.bookNow[lang]}
@@ -204,7 +207,7 @@ export default function GuideContent({ guide, initialLang, relatedGuides = [] }:
                     <span className="guide-related-icon">{rgIcon}</span>
                     <div>
                       <div className="guide-related-name">{rgTitle}</div>
-                      <div className="guide-related-meta">{rg.city} · {rg.duration_hours}h</div>
+                      <div className="guide-related-meta">{localizedCity(rg.city, lang)} · {rg.duration_hours}h</div>
                     </div>
                   </a>
                 );
