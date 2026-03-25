@@ -341,11 +341,14 @@ export default function HomePage() {
     document.getElementById('navUserDropdown')?.classList.remove('open');
   }, [showLoginModal, hideLoginModal, showModalError]);
 
+  const html = getBodyHTML(langPrefix, locale);
+
   return (
     <div
+      key={locale}
       ref={containerRef}
       onClick={(e) => { handleAuthClick(e); handleContainerClick(e); }}
-      dangerouslySetInnerHTML={{ __html: getBodyHTML(langPrefix, locale) }}
+      dangerouslySetInnerHTML={{ __html: html }}
     />
   );
 }
