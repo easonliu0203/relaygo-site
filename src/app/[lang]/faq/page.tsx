@@ -16,6 +16,19 @@ const FAQ_TITLES: Record<Locale, string> = {
   fil: 'FAQ | RelayGo Serbisyo ng Charter Car',
 };
 
+const FAQ_DESCS: Record<Locale, string> = {
+  'zh-TW': '包車旅遊常見問題：到府接送、司機素質、車輛合法性、費用說明、行程自訂、預約方式等。',
+  'zh-CN': '包车旅游常见问题：上门接送、司机素质、车辆合法性、费用说明、行程自定、预约方式等。',
+  en: 'Charter service FAQ: door-to-door pickup, driver quality, vehicle legality, pricing, itinerary customization, booking methods.',
+  ja: 'チャーターサービスFAQ：送迎、ドライバーの質、車両の安全性、料金、行程カスタマイズ、予約方法。',
+  ko: '차터 서비스 FAQ: 숙소 픽업, 기사 품질, 차량 안전, 요금, 일정 맞춤, 예약 방법.',
+  th: 'คำถามที่พบบ่อยเกี่ยวกับบริการรถเหมา: รับ-ส่งถึงที่ คุณภาพคนขับ ความปลอดภัยรถ ค่าบริการ ปรับแต่งเส้นทาง วิธีจอง',
+  vi: 'FAQ dịch vụ xe riêng: đón tận nơi, chất lượng tài xế, xe hợp pháp, giá cả, tùy chỉnh lộ trình, cách đặt xe.',
+  ms: 'FAQ perkhidmatan charter: jemput dari pintu ke pintu, kualiti pemandu, keselamatan kenderaan, harga, penyesuaian jadual, kaedah tempahan.',
+  id: 'FAQ layanan charter: jemput di lokasi, kualitas pengemudi, keamanan kendaraan, harga, kustomisasi rute, cara pemesanan.',
+  fil: 'FAQ ng charter service: door-to-door pickup, kalidad ng driver, ligalidad ng sasakyan, presyo, pag-customize ng ruta, paraan ng pag-book.',
+};
+
 const BREADCRUMB_HOME: Record<Locale, string> = {
   'zh-TW': 'RelayGo', 'zh-CN': 'RelayGo', en: 'RelayGo', ja: 'RelayGo',
   ko: 'RelayGo', th: 'RelayGo', vi: 'RelayGo', ms: 'RelayGo', id: 'RelayGo', fil: 'RelayGo',
@@ -43,12 +56,13 @@ export async function generateMetadata({ params }: { params: { lang: string } })
 
   return {
     title: FAQ_TITLES[locale],
-    description: '包車旅遊常見問題：到府接送、司機素質、車輛合法性、費用說明、行程自訂、預約方式等。Charter service FAQ: pickup, driver quality, pricing, booking.',
+    description: FAQ_DESCS[locale],
     openGraph: {
       title: FAQ_TITLES[locale],
-      description: '包車旅遊常見問題一次解答',
+      description: FAQ_DESCS[locale],
       type: 'website',
       url: canonical,
+      locale: locale.replace('-', '_'),
     },
     alternates: {
       canonical,

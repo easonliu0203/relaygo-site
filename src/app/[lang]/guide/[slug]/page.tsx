@@ -70,6 +70,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       type: 'article',
       url: canonical,
+      locale: locale.replace('-', '_'),
       images: guide.cover_image ? [{ url: guide.cover_image, width: 1200, height: 630 }] : [],
     },
     alternates: {

@@ -8,8 +8,15 @@ export function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  return { title: '付款結果 | RelayGo', robots: { index: false, follow: false } };
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
+  const locale = resolveLocale(params.lang);
+  const titles: Record<string, string> = {
+    'zh-TW': '付款結果 | RelayGo', 'zh-CN': '付款结果 | RelayGo', en: 'Payment Result | RelayGo',
+    ja: 'お支払い結果 | RelayGo', ko: '결제 결과 | RelayGo', th: 'ผลการชำระเงิน | RelayGo',
+    vi: 'Kết quả thanh toán | RelayGo', ms: 'Keputusan Pembayaran | RelayGo',
+    id: 'Hasil Pembayaran | RelayGo', fil: 'Resulta ng Bayad | RelayGo',
+  };
+  return { title: titles[locale] || titles['zh-TW'], robots: { index: false, follow: false } };
 }
 
 export default function ResultPage({ params }: { params: { lang: string } }) {

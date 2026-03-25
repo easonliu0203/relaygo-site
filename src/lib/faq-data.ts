@@ -16,6 +16,8 @@ export const FAQS: FAQ[] = [
       th: 'RelayGo รับ-ส่งถึงที่พักได้ไหม?',
       vi: 'RelayGo có đón tận nơi không?',
       ms: 'Adakah RelayGo menyediakan perkhidmatan jemput dari pintu ke pintu?',
+      id: 'Apakah RelayGo menyediakan layanan jemput dari pintu ke pintu?',
+      fil: 'Nag-aalok ba ang RelayGo ng door-to-door pickup?',
     },
     answer: {
       'zh-TW': '可以。包車就是免去自駕的困擾，直接在家到府或指定地點上下車接送。',
@@ -26,6 +28,8 @@ export const FAQS: FAQ[] = [
       th: 'ได้เลย บริการรถเหมาจะไปรับคุณถึงโรงแรม ที่พัก หรือจุดที่กำหนด โดยไม่ต้องเช่ารถหรือใช้ขนส่งสาธารณะ',
       vi: 'Có. Dịch vụ xe riêng sẽ đón bạn tại khách sạn, Airbnb hoặc bất kỳ địa điểm nào bạn chỉ định — không cần thuê xe hay tìm phương tiện công cộng.',
       ms: 'Ya. Perkhidmatan sewa kenderaan kami akan menjemput anda di hotel, Airbnb, atau mana-mana lokasi yang ditetapkan — tanpa perlu menyewa kereta atau menggunakan pengangkutan awam.',
+      id: 'Ya. Layanan sewa kendaraan kami akan menjemput Anda di hotel, Airbnb, atau lokasi mana pun yang ditentukan — tidak perlu sewa mobil sendiri atau naik transportasi umum.',
+      fil: 'Oo. Susunduin ka ng aming charter service sa hotel, Airbnb, o kahit saan mong gustong pick-up point — hindi na kailangan mag-rent ng kotse o sumakay ng public transpo.',
     },
   },
   {
@@ -38,6 +42,8 @@ export const FAQS: FAQ[] = [
       th: 'คนขับมีคุณภาพอย่างไร?',
       vi: 'Chất lượng tài xế được đảm bảo như thế nào?',
       ms: 'Bagaimana kualiti pemandu dijamin?',
+      id: 'Bagaimana kualitas sopir dijamin?',
+      fil: 'Paano sinisiguro ang kalidad ng driver?',
     },
     answer: {
       'zh-TW': '所有司機皆具長期包車經驗且無負評。曾受負評之司機一概不派用，確保每一趟旅程的服務品質。',
@@ -48,6 +54,8 @@ export const FAQS: FAQ[] = [
       th: 'คนขับทุกคนเป็นมืออาชีพที่มีประสบการณ์และไม่มีรีวิวเชิงลบ หากได้รับการร้องเรียนจะถูกถอดออกจากทีมทันที',
       vi: 'Tất cả tài xế đều là người có kinh nghiệm lâu năm và không có đánh giá tiêu cực. Tài xế nào nhận được khiếu nại sẽ bị loại khỏi đội ngũ ngay lập tức.',
       ms: 'Semua pemandu adalah profesional berpengalaman dengan sifar ulasan negatif. Mana-mana pemandu yang menerima aduan akan dikeluarkan daripada senarai serta-merta.',
+      id: 'Semua sopir adalah profesional berpengalaman tanpa ulasan negatif. Sopir yang menerima keluhan akan langsung dikeluarkan dari tim.',
+      fil: 'Lahat ng driver ay experienced professionals na walang negative reviews. Kapag may natanggap na reklamo, agad silang tinatanggal sa roster.',
     },
   },
   {
@@ -60,6 +68,8 @@ export const FAQS: FAQ[] = [
       th: 'รถที่ใช้ถูกกฎหมายหรือไม่?',
       vi: 'Xe có đăng ký hợp pháp không?',
       ms: 'Adakah kenderaan berdaftar secara sah?',
+      id: 'Apakah kendaraannya terdaftar secara legal?',
+      fil: 'Legal ba ang mga sasakyan?',
     },
     answer: {
       'zh-TW': '所有車輛皆為合法營業之租賃車或多元計程車，絕非無保險理賠的白牌車，乘客權益有完整保障。',
@@ -70,6 +80,8 @@ export const FAQS: FAQ[] = [
       th: 'รถทุกคันเป็นรถเช่าที่จดทะเบียนถูกต้องหรือรถร่วมบริการที่มีประกันครบถ้วน ไม่ใช่รถผิดกฎหมาย',
       vi: 'Tất cả xe đều là xe cho thuê có giấy phép hoặc xe hợp đồng đã đăng ký, có bảo hiểm đầy đủ — tuyệt đối không sử dụng xe trái phép.',
       ms: 'Sudah tentu. Setiap kenderaan adalah kereta sewa berlesen atau kenderaan e-hailing berdaftar dengan perlindungan insurans penuh — bukan kenderaan tanpa lesen.',
+      id: 'Tentu saja. Semua kendaraan adalah mobil rental berlisensi atau kendaraan ride-hailing terdaftar dengan asuransi lengkap — bukan kendaraan ilegal.',
+      fil: 'Oo. Lahat ng sasakyan ay licensed rental cars o registered rideshare vehicles na may buong insurance coverage — hindi kailanman unlicensed.',
     },
   },
   {
@@ -82,6 +94,8 @@ export const FAQS: FAQ[] = [
       th: 'ค่าทางด่วน ค่าจอดรถ และค่าน้ำมันรวมอยู่ในราคาแล้วหรือไม่?',
       vi: 'Phí cầu đường, đỗ xe và nhiên liệu có bao gồm trong giá không?',
       ms: 'Adakah tol, parkir, dan bahan api termasuk dalam harga?',
+      id: 'Apakah tol, parkir, dan bahan bakar sudah termasuk dalam harga?',
+      fil: 'Kasama na ba ang toll, parking, at gas sa presyo?',
     },
     answer: {
       'zh-TW': '報價時會將司機誤餐費、住宿費、停車費、燃料費、過路費等詳細記載，絕不會在用車過程中臨時加價。',
@@ -92,6 +106,8 @@ export const FAQS: FAQ[] = [
       th: 'ค่าใช้จ่ายทั้งหมด ได้แก่ ค่าอาหารคนขับ ที่พัก ค่าจอดรถ ค่าน้ำมัน และค่าทางด่วน จะแจ้งให้ทราบล่วงหน้าอย่างชัดเจน ไม่มีค่าใช้จ่ายเพิ่มเติมระหว่างทาง',
       vi: 'Tất cả chi phí — bữa ăn tài xế, chỗ ở, đỗ xe, nhiên liệu và phí cầu đường — đều được liệt kê rõ ràng từ đầu. Không có phụ phí phát sinh trong suốt chuyến đi.',
       ms: 'Semua kos — makan pemandu, penginapan, parkir, bahan api, dan tol — disenaraikan dengan jelas terlebih dahulu. Tiada caj tambahan tersembunyi sepanjang perjalanan anda.',
+      id: 'Semua biaya — makan sopir, penginapan, parkir, BBM, dan tol — tercantum jelas di awal. Tidak ada biaya tambahan mendadak selama perjalanan.',
+      fil: 'Lahat ng gastos — driver meals, accommodation, parking, gas, at toll — malinaw na nakalista sa simula. Walang surprise surcharges habang nasa biyahe ka.',
     },
   },
   {
@@ -104,6 +120,8 @@ export const FAQS: FAQ[] = [
       th: 'ต้องให้ทิปคนขับไหม?',
       vi: 'Có cần tip cho tài xế không?',
       ms: 'Perlukah memberi tip kepada pemandu?',
+      id: 'Apakah perlu memberi tip kepada sopir?',
+      fil: 'Kailangan bang mag-tip sa driver?',
     },
     answer: {
       'zh-TW': '小費為鼓勵性質的額外補貼，並非強制。若您覺得司機服務周到且辛苦，歡迎自由給予小費鼓勵。',
@@ -114,6 +132,8 @@ export const FAQS: FAQ[] = [
       th: 'ทิปไม่ได้บังคับ ขึ้นอยู่กับความพึงพอใจของคุณ หากคุณรู้สึกว่าคนขับให้บริการดีเยี่ยม การให้ทิปจะเป็นกำลังใจที่ดี',
       vi: 'Tip không bắt buộc. Hoàn toàn tùy thuộc vào bạn — nếu bạn hài lòng với dịch vụ của tài xế, một khoản tip nhỏ luôn được trân trọng.',
       ms: 'Memberi tip tidak diwajibkan. Ia bergantung sepenuhnya kepada anda — jika anda berpuas hati dengan perkhidmatan pemandu, tip sentiasa dihargai.',
+      id: 'Tip tidak wajib. Sepenuhnya terserah Anda — jika merasa sopir memberikan layanan yang sangat baik, tip selalu dihargai.',
+      fil: 'Hindi obligatory ang tip. Nasa iyo lang — kung masaya ka sa service ng driver, laging appreciated ang tip.',
     },
   },
   {
@@ -126,6 +146,8 @@ export const FAQS: FAQ[] = [
       th: 'ต้องให้ข้อมูลอะไรบ้างเพื่อขอใบเสนอราคา?',
       vi: 'Cần cung cấp thông tin gì để nhận báo giá?',
       ms: 'Apakah maklumat yang diperlukan untuk mendapatkan sebut harga?',
+      id: 'Informasi apa saja yang diperlukan untuk mendapatkan penawaran harga?',
+      fil: 'Anong impormasyon ang kailangan para makakuha ng quote?',
     },
     answer: {
       'zh-TW': '需要提供：日期（確認是否還有車）、人數（確認車款容納）、出發位置（確認安排哪區的車）、大致行程及用車天數（確認路程遠近及司機住宿等費用）。',
@@ -136,6 +158,8 @@ export const FAQS: FAQ[] = [
       th: 'กรุณาแจ้งข้อมูลต่อไปนี้: วันที่ (เพื่อตรวจสอบว่ามีรถว่าง), จำนวนผู้โดยสาร (เพื่อจัดรถที่เหมาะสม), จุดรับ (เพื่อจัดคนขับในพื้นที่ใกล้เคียง) และกำหนดการคร่าว ๆ พร้อมจำนวนวัน (เพื่อประเมินระยะทางและค่าที่พักคนขับ)',
       vi: 'Vui lòng cung cấp: ngày đi (để kiểm tra xe trống), số lượng hành khách (để sắp xếp loại xe phù hợp), điểm đón (để bố trí tài xế gần nhất), và lịch trình sơ bộ cùng số ngày sử dụng (để ước tính khoảng cách và chi phí ăn ở cho tài xế).',
       ms: 'Sila berikan: tarikh (untuk semak ketersediaan), bilangan penumpang (untuk pilih jenis kenderaan), lokasi jemput (untuk atur pemandu berdekatan), dan anggaran jadual perjalanan dengan bilangan hari (untuk menganggar jarak dan kos penginapan pemandu).',
+      id: 'Silakan berikan: tanggal (untuk cek ketersediaan), jumlah penumpang (untuk menentukan jenis kendaraan), lokasi penjemputan (untuk mengatur sopir terdekat), dan perkiraan rute serta jumlah hari (untuk memperkirakan jarak dan biaya akomodasi sopir).',
+      fil: 'Pakibigay ang: petsa (para i-check ang availability), bilang ng pasahero (para sa tamang sasakyan), pickup location (para i-assign ang pinakamalapit na driver), at rough itinerary kasama ang bilang ng araw (para ma-estimate ang distansya at accommodation cost ng driver).',
     },
   },
   {
@@ -148,6 +172,8 @@ export const FAQS: FAQ[] = [
       th: 'กำหนดเส้นทางเองได้ไหม?',
       vi: 'Tôi có thể tùy chỉnh lịch trình không?',
       ms: 'Bolehkah saya menyesuaikan jadual perjalanan?',
+      id: 'Bisakah saya menyesuaikan rute perjalanan sendiri?',
+      fil: 'Pwede ko bang i-customize ang itinerary?',
     },
     answer: {
       'zh-TW': '行程完全由您自訂。網站上的景點路線僅供參考，司機會按照您的路線行駛，路線不順時也會提供專業建議以節省交通時間。',
@@ -158,6 +184,8 @@ export const FAQS: FAQ[] = [
       th: 'ได้เลย คุณวางแผนเส้นทางเอง แล้วคนขับจะขับตามเส้นทางของคุณ เส้นทางบนเว็บไซต์เป็นเพียงคำแนะนำ หากเส้นทางไม่เหมาะสม คนขับจะแนะนำเพื่อประหยัดเวลาเดินทาง',
       vi: 'Hoàn toàn được. Bạn lên lịch trình và tài xế sẽ đi theo. Các tuyến đường trên website chỉ mang tính tham khảo. Nếu tuyến đường chưa tối ưu, tài xế sẽ tư vấn chuyên môn để tiết kiệm thời gian di chuyển.',
       ms: 'Sudah tentu. Anda merancang laluan dan pemandu akan mengikutinya. Laluan di laman web kami hanyalah cadangan. Jika laluan tidak optimum, pemandu akan memberikan nasihat profesional untuk menjimatkan masa perjalanan.',
+      id: 'Tentu saja. Anda yang merencanakan rute dan sopir akan mengikutinya. Rute di website kami hanya saran. Jika rute kurang efisien, sopir akan memberikan saran profesional untuk menghemat waktu perjalanan.',
+      fil: 'Oo naman. Ikaw ang magpaplano ng ruta at susundin ito ng driver. Ang mga ruta sa website namin ay suggestions lang. Kung hindi optimal ang ruta, magbibigay ang driver ng professional advice para makatipid sa travel time.',
     },
   },
   {
@@ -170,6 +198,8 @@ export const FAQS: FAQ[] = [
       th: 'มีข้อจำกัดเรื่องเวลาออกเดินทางไหม?',
       vi: 'Có giới hạn giờ khởi hành không?',
       ms: 'Adakah sekatan pada waktu berlepas?',
+      id: 'Apakah ada batasan waktu keberangkatan?',
+      fil: 'May restriction ba sa oras ng pag-alis?',
     },
     answer: {
       'zh-TW': '每日出發時間由您自訂，請最晚於前一天告知客服或司機。建議不要晚於上午 11 點出發，以確保充足的遊覽時間。',
@@ -180,6 +210,8 @@ export const FAQS: FAQ[] = [
       th: 'คุณเลือกเวลาออกเดินทางได้เอง เพียงแจ้งฝ่ายบริการลูกค้าหรือคนขับล่วงหน้าอย่างน้อยหนึ่งวัน แนะนำให้ออกเดินทางไม่เกิน 11.00 น. เพื่อให้มีเวลาเที่ยวเต็มที่',
       vi: 'Bạn tự chọn giờ khởi hành. Chỉ cần thông báo cho bộ phận chăm sóc khách hàng hoặc tài xế trước một ngày. Chúng tôi khuyên nên khởi hành trước 11 giờ sáng để có đủ thời gian tham quan.',
       ms: 'Anda bebas memilih waktu berlepas. Maklumkan kepada khidmat pelanggan atau pemandu anda selewat-lewatnya sehari sebelumnya. Kami syorkan berlepas sebelum pukul 11 pagi untuk memaksimumkan masa lawatan anda.',
+      id: 'Anda bebas memilih waktu keberangkatan. Cukup informasikan ke customer service atau sopir paling lambat sehari sebelumnya. Kami sarankan berangkat sebelum jam 11 pagi agar waktu wisata lebih maksimal.',
+      fil: 'Ikaw ang pipili ng departure time. I-inform lang ang customer service o driver mo ng isang araw bago. Nirerekomenda namin ang pag-alis bago mag-11 AM para mas maraming oras sa pag-tour.',
     },
   },
   {
@@ -192,6 +224,8 @@ export const FAQS: FAQ[] = [
       th: 'ขอคืนเงินสำหรับชั่วโมงที่ไม่ได้ใช้ได้ไหม?',
       vi: 'Có được hoàn tiền cho số giờ chưa sử dụng không?',
       ms: 'Bolehkah saya mendapat bayaran balik untuk jam yang tidak digunakan?',
+      id: 'Bisakah saya mendapat pengembalian dana untuk jam yang tidak terpakai?',
+      fil: 'Pwede bang ma-refund ang mga oras na hindi nagamit?',
     },
     answer: {
       'zh-TW': '包車為預約制，司機出發後工作時間已保留給您。若因行程提早結束而未用完時數，恕無法另外退費。',
@@ -202,6 +236,8 @@ export const FAQS: FAQ[] = [
       th: 'บริการรถเหมาเป็นระบบจอง เมื่อคนขับออกเดินทางแล้ว เวลาจะถูกสำรองไว้สำหรับคุณ หากทริปจบเร็วกว่ากำหนด ไม่สามารถคืนเงินสำหรับชั่วโมงที่เหลือได้',
       vi: 'Dịch vụ xe riêng hoạt động theo hình thức đặt trước. Khi tài xế đã khởi hành, thời gian được dành riêng cho bạn. Nếu lịch trình kết thúc sớm, số giờ chưa sử dụng sẽ không được hoàn lại.',
       ms: 'Perkhidmatan sewa kenderaan kami berdasarkan tempahan. Setelah pemandu berlepas, masa tersebut dikhaskan untuk anda. Jika perjalanan tamat awal, jam yang tidak digunakan tidak boleh dibayar balik.',
+      id: 'Layanan sewa kendaraan kami berbasis reservasi. Setelah sopir berangkat, waktu tersebut sudah dialokasikan untuk Anda. Jika perjalanan selesai lebih awal, jam yang tidak terpakai tidak dapat dikembalikan.',
+      fil: 'Ang charter service namin ay reservation-based. Kapag umalis na ang driver, ang oras ay naka-reserve na para sa iyo. Kung matapos nang maaga ang trip, ang hindi nagamit na oras ay hindi na mare-refund.',
     },
   },
   {
@@ -214,6 +250,8 @@ export const FAQS: FAQ[] = [
       th: 'จองรถเหมาอย่างไร?',
       vi: 'Làm thế nào để đặt xe riêng?',
       ms: 'Bagaimana cara membuat tempahan sewa kenderaan?',
+      id: 'Bagaimana cara memesan sewa kendaraan?',
+      fil: 'Paano mag-book ng charter?',
     },
     answer: {
       'zh-TW': '使用 RelayGo App 預約，預約完畢後可在 App 聊天頁面聯繫客服完成預約流程。建議一個月前預訂，以免旺季無車可訂。',
@@ -224,6 +262,8 @@ export const FAQS: FAQ[] = [
       th: 'จองผ่านแอป RelayGo หลังจองแล้วสามารถติดต่อฝ่ายบริการลูกค้าผ่านแชทในแอปได้ แนะนำให้จองล่วงหน้าอย่างน้อย 1 เดือนในช่วงไฮซีซั่น',
       vi: 'Đặt xe qua ứng dụng RelayGo. Sau khi đặt, bạn có thể liên hệ bộ phận chăm sóc khách hàng qua tính năng chat trong ứng dụng. Chúng tôi khuyên nên đặt trước ít nhất 1 tháng vào mùa cao điểm.',
       ms: 'Tempah melalui aplikasi RelayGo. Selepas tempahan, anda boleh menghubungi khidmat pelanggan melalui ruangan sembang dalam aplikasi. Kami syorkan membuat tempahan sekurang-kurangnya sebulan lebih awal semasa musim puncak.',
+      id: 'Pesan melalui aplikasi RelayGo. Setelah pemesanan, Anda bisa menghubungi customer service melalui fitur chat di aplikasi. Kami sarankan memesan minimal 1 bulan sebelumnya saat musim ramai.',
+      fil: 'Mag-book sa RelayGo app. Pagkatapos mag-book, pwede kang makipag-ugnay sa customer service sa in-app chat. Nirerekomenda namin na mag-book ng least 1 buwan in advance lalo na kapag peak season.',
     },
   },
   {
@@ -236,6 +276,8 @@ export const FAQS: FAQ[] = [
       th: 'ต้องวางมัดจำล่วงหน้าไหม?',
       vi: 'Có cần đặt cọc trước không?',
       ms: 'Adakah deposit diperlukan?',
+      id: 'Apakah diperlukan uang muka?',
+      fil: 'Kailangan bang magbayad ng deposit?',
     },
     answer: {
       'zh-TW': '是的，訂車皆須預付訂金才算完成訂車程序。',
@@ -246,6 +288,8 @@ export const FAQS: FAQ[] = [
       th: 'ใช่ ต้องชำระเงินมัดจำเพื่อยืนยันการจอง',
       vi: 'Có. Cần đặt cọc để xác nhận đơn đặt xe.',
       ms: 'Ya. Deposit diperlukan untuk mengesahkan tempahan anda.',
+      id: 'Ya. Uang muka diperlukan untuk mengkonfirmasi pemesanan Anda.',
+      fil: 'Oo. Kailangan ng deposit para ma-confirm ang booking mo.',
     },
   },
   {
@@ -258,6 +302,8 @@ export const FAQS: FAQ[] = [
       th: 'รองรับช่องทางชำระเงินอะไรบ้าง?',
       vi: 'Chấp nhận những phương thức thanh toán nào?',
       ms: 'Apakah kaedah pembayaran yang diterima?',
+      id: 'Metode pembayaran apa saja yang diterima?',
+      fil: 'Anong mga payment methods ang tinatanggap?',
     },
     answer: {
       'zh-TW': '支援 App 內線上刷卡支付，需預付訂金才完成訂車程序。',
@@ -268,6 +314,8 @@ export const FAQS: FAQ[] = [
       th: 'ชำระเงินผ่านบัตรเครดิตออนไลน์ในแอป โดยต้องชำระเงินมัดจำเพื่อยืนยันการจอง',
       vi: 'Thanh toán bằng thẻ tín dụng trực tuyến qua ứng dụng. Cần đặt cọc để xác nhận đơn đặt xe.',
       ms: 'Pembayaran kad kredit dalam talian melalui aplikasi. Deposit diperlukan untuk mengesahkan tempahan anda.',
+      id: 'Pembayaran kartu kredit online melalui aplikasi. Uang muka diperlukan untuk mengkonfirmasi pemesanan.',
+      fil: 'Online credit card payment sa app. Kailangan ng deposit para ma-confirm ang booking.',
     },
   },
   {
@@ -280,6 +328,8 @@ export const FAQS: FAQ[] = [
       th: 'ติดต่อคนขับก่อนออกเดินทางได้อย่างไร?',
       vi: 'Làm thế nào để liên hệ tài xế trước chuyến đi?',
       ms: 'Bagaimana untuk menghubungi pemandu sebelum perjalanan?',
+      id: 'Bagaimana cara menghubungi sopir sebelum perjalanan?',
+      fil: 'Paano ko makakausap ang driver bago ang trip?',
     },
     answer: {
       'zh-TW': '出發前一日即可透過 App 聊天頁面與司機直接聯絡，確認接送細節。',
@@ -290,6 +340,8 @@ export const FAQS: FAQ[] = [
       th: 'คุณสามารถส่งข้อความถึงคนขับโดยตรงผ่านแชทในแอป ล่วงหน้าหนึ่งวันก่อนออกเดินทาง เพื่อยืนยันรายละเอียดการรับ-ส่ง',
       vi: 'Bạn có thể nhắn tin trực tiếp cho tài xế qua tính năng chat trong ứng dụng vào ngày trước khi khởi hành để xác nhận chi tiết đón.',
       ms: 'Anda boleh menghantar mesej terus kepada pemandu melalui ruangan sembang dalam aplikasi sehari sebelum berlepas untuk mengesahkan butiran jemput.',
+      id: 'Anda bisa langsung mengirim pesan ke sopir melalui fitur chat di aplikasi sehari sebelum keberangkatan untuk mengkonfirmasi detail penjemputan.',
+      fil: 'Pwede kang mag-message nang direkta sa driver sa in-app chat isang araw bago ang departure para ma-confirm ang pickup details.',
     },
   },
   {
@@ -302,6 +354,8 @@ export const FAQS: FAQ[] = [
       th: 'ควรจองล่วงหน้านานแค่ไหน?',
       vi: 'Nên đặt trước bao lâu?',
       ms: 'Berapa awal saya perlu membuat tempahan?',
+      id: 'Berapa lama sebelumnya saya harus memesan?',
+      fil: 'Gaano kaaga dapat mag-book?',
     },
     answer: {
       'zh-TW': '建議一個月前預訂，旺季期間車輛容易額滿。越早預訂，越能確保有車可用。',
@@ -312,6 +366,8 @@ export const FAQS: FAQ[] = [
       th: 'แนะนำให้จองล่วงหน้าอย่างน้อย 1 เดือน ในช่วงไฮซีซั่นรถจะเต็มเร็ว ยิ่งจองเร็วยิ่งมั่นใจ',
       vi: 'Chúng tôi khuyên nên đặt trước ít nhất 1 tháng. Trong mùa cao điểm, xe hết rất nhanh — đặt càng sớm càng tốt.',
       ms: 'Kami syorkan membuat tempahan sekurang-kurangnya sebulan lebih awal. Semasa musim puncak, kenderaan cepat penuh — lebih awal anda menempah, lebih baik.',
+      id: 'Kami sarankan memesan minimal 1 bulan sebelumnya. Saat musim ramai, kendaraan cepat penuh — semakin awal memesan, semakin baik.',
+      fil: 'Nirerekomenda namin mag-book ng least 1 buwan in advance. Kapag peak season, mabilis mapuno ang mga sasakyan — mas maaga, mas maganda.',
     },
   },
   // ── Route & Travel FAQs (GEO-optimized for AI search engines) ──

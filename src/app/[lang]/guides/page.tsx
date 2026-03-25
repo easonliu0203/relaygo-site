@@ -65,6 +65,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       description: GUIDES_DESCS[locale],
       type: 'website',
       url: canonical,
+      locale: locale.replace('-', '_'),
     },
     alternates: {
       canonical,
