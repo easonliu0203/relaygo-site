@@ -1196,6 +1196,16 @@
       color: var(--gray-500);
     }
 
+    /* Section label as link */
+    .section-label-link {
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .section-label-link:hover {
+      color: var(--accent);
+    }
+
     /* CTA guides link */
     .cta-guides-link {
       display: inline-block;

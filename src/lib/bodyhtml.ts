@@ -209,7 +209,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
   <section class="featured-guides-section" id="guides-preview">
     <div class="section-inner">
       <div class="section-header fade-up">
-        <div class="section-label" data-i18n="guides_label">行程攻略</div>
+        <a href="${langPrefix}/guides" class="section-label section-label-link" data-i18n="guides_label">行程攻略</a>
         <h2 class="section-title" data-i18n="guides_title">探索台灣熱門路線</h2>
         <p class="section-desc" data-i18n="guides_desc">精選四大經典路線，從北到南、山海兼備，每條都是旅人最愛。</p>
       </div>
