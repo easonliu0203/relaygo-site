@@ -108,31 +108,49 @@ async function extractMetadata(url: string, platform: string) {
   if (description) description = decodeHTMLEntities(description);
   if (thumbnail_url) thumbnail_url = decodeHTMLEntities(thumbnail_url);
 
-  // Extract author from og:description or og:title
-  // IG description: "43K likes, 125 comments - username on March 2, 2026: "caption""
-  // IG title: "username on Instagram: "caption""
+  // Extract author from multiple sources
   let author: string | undefined;
+
+  // 1. From og:description: "43K likes - username on March 2, 2026: "caption""
   if (description) {
     const authorMatch = description.match(/- (.+?) on \w+ \d/);
     if (authorMatch) author = authorMatch[1];
   }
+  // 2. From title: "username on Instagram: "caption""  or  "display_name (@handle) • Instagram reel"
   if (!author && title) {
-    const authorMatch = title.match(/^(.+?) on Instagram/);
-    if (authorMatch) author = authorMatch[1];
+    const m1 = title.match(/^(.+?) on Instagram/);
+    if (m1) author = m1[1];
+    if (!author) {
+      const m2 = title.match(/\(@([^)]+)\)/);
+      if (m2) author = m2[1];
+    }
   }
-  // Fallback: extract from URL for IG/TikTok
+  // 3. From og:url: "instagram.com/username/reel/..."
+  if (!author && og_data) {
+    const ogUrl = (og_data['og:url'] || '') as string;
+    if (ogUrl) {
+      const m = ogUrl.match(/instagram\.com\/([^/]+)\/(reel|p)\//);
+      if (m) author = m[1];
+    }
+  }
+  // 4. From input URL path
   if (!author) {
     try {
       const urlObj = new URL(url);
       if (platform === 'instagram') {
         const pathMatch = urlObj.pathname.match(/^\/([^/]+)\//);
-        if (pathMatch && !['reel', 'p', 'stories'].includes(pathMatch[1])) {
+        if (pathMatch && !['reel', 'p', 'stories', 'explore'].includes(pathMatch[1])) {
           author = pathMatch[1];
         }
       }
     } catch {}
   }
   if (author) author = author.replace(/^@/, '');
+
+  // Clean up title: remove " • Instagram reel" suffix
+  if (title) {
+    title = title.replace(/\s*[•·]\s*Instagram\s*(reel|photo|video)?$/i, '').trim();
+  }
 
   // Clean up description: extract the actual post caption
   // IG format: "43K likes, 125 comments - user on March 2, 2026: "actual caption""
