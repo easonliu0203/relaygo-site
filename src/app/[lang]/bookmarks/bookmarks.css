@@ -31,6 +31,13 @@
   line-height: 1.6;
 }
 
+.bm-hero-hint {
+  font-size: 0.85rem;
+  opacity: 0.65;
+  margin: 10px auto 0;
+  max-width: 500px;
+}
+
 /* Auth */
 .bm-hero-auth {
   position: absolute;
@@ -93,26 +100,25 @@
   position: absolute;
   bottom: 12px;
   right: 12px;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
+  background: var(--primary, #6C63FF);
+  border: 2px solid #fff;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s, background 0.2s;
-  color: var(--gray-500, #6b7280);
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: #fff;
   line-height: 1;
-  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 8px rgba(108, 99, 255, 0.4);
 }
 
 .bm-card-edit:hover {
-  transform: scale(1.15);
-  background: #fff;
-  color: var(--primary, #6C63FF);
+  transform: scale(1.2);
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.5);
 }
 
 /* Breadcrumbs */

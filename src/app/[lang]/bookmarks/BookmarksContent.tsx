@@ -42,6 +42,10 @@ const UI: Record<string, Record<LangCode, string>> = {
     'zh-TW': '♥ 我的最愛', 'zh-CN': '♥ 我的收藏', en: '♥ My Favorites', ja: '♥ お気に入り', ko: '♥ 즐겨찾기',
     th: '♥ รายการโปรด', vi: '♥ Yêu thích', ms: '♥ Kegemaran', id: '♥ Favorit', fil: '♥ Paborito',
   },
+  loginHint: {
+    'zh-TW': '登入後可收藏、編輯自己分享的書籤', 'zh-CN': '登录后可收藏、编辑自己分享的书签', en: 'Log in to save favorites and edit your bookmarks', ja: 'ログインしてお気に入り保存・編集', ko: '로그인하여 즐겨찾기 저장 및 편집',
+    th: 'เข้าสู่ระบบเพื่อบันทึกและแก้ไข', vi: 'Đăng nhập để lưu và chỉnh sửa', ms: 'Log masuk untuk simpan dan edit', id: 'Masuk untuk menyimpan dan mengedit', fil: 'Mag-login para mag-save at mag-edit',
+  },
   login: {
     'zh-TW': '登入', 'zh-CN': '登录', en: 'Login', ja: 'ログイン', ko: '로그인',
     th: 'เข้าสู่ระบบ', vi: 'Đăng nhập', ms: 'Log Masuk', id: 'Masuk', fil: 'Mag-login',
@@ -187,6 +191,7 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
         </div>
         <h1 className="bm-hero-title">{t('pageTitle', lang)}</h1>
         <p className="bm-hero-sub">{t('subtitle', lang)}</p>
+        <p className="bm-hero-hint">{t('loginHint', lang)}</p>
       </section>
 
       {/* Breadcrumbs */}
