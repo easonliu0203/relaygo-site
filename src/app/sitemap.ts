@@ -1,9 +1,13 @@
 import { MetadataRoute } from 'next';
 import { getPublishedGuides } from '@/lib/supabase';
+import { getBookmarkCombinations } from '@/lib/bookmarks';
 import { locales, localePathMap } from '@/lib/i18n-config';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const guides = await getPublishedGuides();
+  const [guides, bmCombos] = await Promise.all([
+    getPublishedGuides(),
+    getBookmarkCombinations(),
+  ]);
   const base = 'https://relaygo.pro';
 
   const entries: MetadataRoute.Sitemap = [];
@@ -38,6 +42,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(guide.updated_at),
         changeFrequency: 'weekly',
         priority: 0.7,
+      });
+    }
+
+    // Bookmarks main page
+    entries.push({
+      url: `${base}${prefix}/bookmarks`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.8,
+    });
+
+    // Bookmarks sub-pages based on actual data
+    const countrySlugs = Array.from(new Set(bmCombos.map((c) => c.country_slug)));
+    const cityCombos = Array.from(new Set(bmCombos.map((c) => `${c.country_slug}/${c.city_slug}`)));
+
+    for (const country of countrySlugs) {
+      entries.push({
+        url: `${base}${prefix}/bookmarks/${country}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      });
+    }
+
+    for (const combo of cityCombos) {
+      entries.push({
+        url: `${base}${prefix}/bookmarks/${combo}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      });
+    }
+
+    for (const bm of bmCombos) {
+      entries.push({
+        url: `${base}${prefix}/bookmarks/${bm.country_slug}/${bm.city_slug}/${bm.category}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.6,
       });
     }
   }

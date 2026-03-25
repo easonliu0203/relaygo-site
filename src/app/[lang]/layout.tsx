@@ -3,6 +3,7 @@ import Script from 'next/script';
 import '../globals.css';
 import './guide/[slug]/guide.css';
 import './faq/faq.css';
+import './bookmarks/bookmarks.css';
 import {
   locales,
   localePathMap,
