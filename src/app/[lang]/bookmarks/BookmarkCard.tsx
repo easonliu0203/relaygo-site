@@ -80,6 +80,7 @@ export default function BookmarkCard({ bookmark, lang, index, isFavorited, onTog
           <span className="bm-card-cat">{icon} {cat}</span>
           <span className="bm-card-loc">{city}, {country}</span>
         </div>
+        {bookmark.author && <span className="bm-card-author">@{bookmark.author}</span>}
         {bookmark.title && <h3 className="bm-card-title">{bookmark.title}</h3>}
         {bookmark.description && <p className="bm-card-desc bm-card-desc-full">{bookmark.description}</p>}
         {bookmark.district && <span className="bm-card-district">{bookmark.district}</span>}

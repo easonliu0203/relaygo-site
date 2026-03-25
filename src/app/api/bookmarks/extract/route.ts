@@ -103,6 +103,37 @@ async function extractMetadata(url: string, platform: string) {
     }
   }
 
+  // Decode HTML entities FIRST, then extract caption & author
+  if (title) title = decodeHTMLEntities(title);
+  if (description) description = decodeHTMLEntities(description);
+  if (thumbnail_url) thumbnail_url = decodeHTMLEntities(thumbnail_url);
+
+  // Extract author from og:description or og:title
+  // IG description: "43K likes, 125 comments - username on March 2, 2026: "caption""
+  // IG title: "username on Instagram: "caption""
+  let author: string | undefined;
+  if (description) {
+    const authorMatch = description.match(/- (.+?) on \w+ \d/);
+    if (authorMatch) author = authorMatch[1];
+  }
+  if (!author && title) {
+    const authorMatch = title.match(/^(.+?) on Instagram/);
+    if (authorMatch) author = authorMatch[1];
+  }
+  // Fallback: extract from URL for IG/TikTok
+  if (!author) {
+    try {
+      const urlObj = new URL(url);
+      if (platform === 'instagram') {
+        const pathMatch = urlObj.pathname.match(/^\/([^/]+)\//);
+        if (pathMatch && !['reel', 'p', 'stories'].includes(pathMatch[1])) {
+          author = pathMatch[1];
+        }
+      }
+    } catch {}
+  }
+  if (author) author = author.replace(/^@/, '');
+
   // Clean up description: extract the actual post caption
   // IG format: "43K likes, 125 comments - user on March 2, 2026: "actual caption""
   if (description) {
@@ -113,9 +144,10 @@ async function extractMetadata(url: string, platform: string) {
   }
 
   return {
-    title: title ? decodeHTMLEntities(title) : null,
-    description: description ? decodeHTMLEntities(description) : null,
-    thumbnail_url: thumbnail_url ? decodeHTMLEntities(thumbnail_url) : null,
+    title: title || null,
+    description: description || null,
+    thumbnail_url: thumbnail_url || null,
+    author: author || null,
     og_data,
   };
 }

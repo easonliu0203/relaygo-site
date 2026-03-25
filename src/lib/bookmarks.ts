@@ -20,6 +20,7 @@ export interface TravelBookmark {
   city_slug: string;
   district: string | null;
   category: string;
+  author: string | null;
   og_data: Record<string, unknown>;
   is_published: boolean;
   created_at: string;

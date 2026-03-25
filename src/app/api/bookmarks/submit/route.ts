@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { url, platform, title, description, thumbnail_url, country_slug, city_slug, district, category, og_data } = body;
+    const { url, platform, title, description, thumbnail_url, country_slug, city_slug, district, category, og_data, author } = body;
 
     // Validation
     if (!url || !platform || !city_slug || !category) {
@@ -30,6 +30,7 @@ export async function POST(req: Request) {
       city_slug,
       district: district || null,
       category,
+      author: author || null,
       og_data: og_data || {},
       is_published: true,
     };

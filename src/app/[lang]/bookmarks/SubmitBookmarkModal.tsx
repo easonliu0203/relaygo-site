@@ -77,7 +77,7 @@ interface Props {
 export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted }: Props) {
   const [url, setUrl] = useState('');
   const [extracting, setExtracting] = useState(false);
-  const [extracted, setExtracted] = useState<{ platform: string; title: string | null; description: string | null; thumbnail_url: string | null; og_data: Record<string, unknown> } | null>(null);
+  const [extracted, setExtracted] = useState<{ platform: string; title: string | null; description: string | null; thumbnail_url: string | null; author: string | null; og_data: Record<string, unknown> } | null>(null);
   const [description, setDescription] = useState('');
   const [countrySlug, setCountrySlug] = useState('taiwan');
   const [citySlug, setCitySlug] = useState('');
@@ -129,6 +129,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
           title: extracted.title,
           description: description.trim() || null,
           thumbnail_url: extracted.thumbnail_url,
+          author: extracted.author,
           country_slug: countrySlug,
           city_slug: citySlug,
           district: district.trim() || null,
@@ -208,6 +209,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
                 )}
                 <div className="bm-modal-preview-info">
                   <span className="bm-modal-preview-platform">{extracted.platform}</span>
+                  {extracted.author && <span className="bm-modal-preview-author">@{extracted.author}</span>}
                   {extracted.title && <p className="bm-modal-preview-title">{extracted.title}</p>}
                 </div>
               </div>
