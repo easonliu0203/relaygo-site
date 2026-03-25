@@ -17,6 +17,18 @@ function detectPlatform(url: string): string {
   }
 }
 
+/** Decode common HTML entities (&#x...; &#...; &amp; &quot; etc.) */
+function decodeHTMLEntities(str: string): string {
+  return str
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(parseInt(dec, 10)))
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&apos;/g, "'");
+}
+
 function extractOGTags(html: string): Record<string, string> {
   const tags: Record<string, string> = {};
   const regex = /<meta\s+(?:property|name)=["'](og:|twitter:)?([^"']+)["']\s+content=["']([^"']*)["']/gi;
@@ -89,7 +101,11 @@ async function extractMetadata(url: string, platform: string) {
     }
   }
 
-  return { title: title || null, thumbnail_url: thumbnail_url || null, og_data };
+  return {
+    title: title ? decodeHTMLEntities(title) : null,
+    thumbnail_url: thumbnail_url ? decodeHTMLEntities(thumbnail_url) : null,
+    og_data,
+  };
 }
 
 export async function POST(req: Request) {

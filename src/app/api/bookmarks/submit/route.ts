@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 
 export const dynamic = 'force-dynamic';
 
@@ -51,6 +52,18 @@ export async function POST(req: Request) {
     }
 
     const data = await res.json();
+
+    // Revalidate bookmark pages so the new card shows immediately
+    const cs = row.country_slug;
+    const cty = row.city_slug;
+    const cat = row.category;
+    try {
+      revalidatePath('/[lang]/bookmarks', 'page');
+      revalidatePath(`/[lang]/bookmarks/${cs}`, 'page');
+      revalidatePath(`/[lang]/bookmarks/${cs}/${cty}`, 'page');
+      revalidatePath(`/[lang]/bookmarks/${cs}/${cty}/${cat}`, 'page');
+    } catch { /* revalidation is best-effort */ }
+
     return NextResponse.json({ success: true, bookmark: data[0] });
   } catch (error) {
     console.error('Submit API error:', error);
