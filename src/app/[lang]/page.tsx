@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { I18N, LANG_LABELS, LANG_TITLES, type LangCode } from '@/lib/i18n';
 import { getBodyHTML } from '@/lib/bodyhtml';
 import { localePathMap, resolveLocale } from '@/lib/i18n-config';
@@ -13,6 +13,14 @@ export default function HomePage() {
   const locale = resolveLocale(params.lang as string) as LangCode;
   const langPrefix = localePathMap[locale] ? `/${localePathMap[locale]}` : '';
   const containerRef = useRef<HTMLDivElement>(null);
+  const [mountKey, setMountKey] = useState(0);
+
+  // Force re-mount when navigating back (popstate), so fade-up animations re-trigger
+  useEffect(() => {
+    const handlePopState = () => setMountKey((k) => k + 1);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const applyLang = useCallback((lang: LangCode) => {
     const dict = I18N[lang];
@@ -120,8 +128,15 @@ export default function HomePage() {
     };
     window.addEventListener('scroll', handleScroll);
 
-    // Fade-up animations
+    // Fade-up animations — immediately show elements already in viewport
+    // (fixes back-navigation where IntersectionObserver doesn't re-fire)
     const fadeEls = document.querySelectorAll('.fade-up');
+    fadeEls.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add('visible');
+      }
+    });
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -129,7 +144,9 @@ export default function HomePage() {
         }
       });
     }, { threshold: 0.1 });
-    fadeEls.forEach((el) => observer.observe(el));
+    fadeEls.forEach((el) => {
+      if (!el.classList.contains('visible')) observer.observe(el);
+    });
 
     // Counter animation for stats
     const statNumbers = document.querySelectorAll('.stat-number');
@@ -345,7 +362,7 @@ export default function HomePage() {
 
   return (
     <div
-      key={locale}
+      key={`${locale}-${mountKey}`}
       ref={containerRef}
       onClick={(e) => { handleAuthClick(e); handleContainerClick(e); }}
       dangerouslySetInnerHTML={{ __html: html }}
