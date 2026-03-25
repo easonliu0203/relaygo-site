@@ -186,6 +186,46 @@
   letter-spacing: 0.3px;
 }
 
+.bm-card-fav {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background 0.2s;
+  color: var(--gray-400, #9ca3af);
+  line-height: 1;
+  backdrop-filter: blur(4px);
+}
+
+.bm-card-fav:hover {
+  transform: scale(1.15);
+  background: #fff;
+}
+
+.bm-card-fav.active {
+  color: #ef4444;
+  background: #fff;
+}
+
+.bm-filter-pill-fav {
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.bm-filter-pill-fav.active {
+  background: #ef4444 !important;
+  color: #fff !important;
+}
+
 .bm-card-body {
   padding: 16px;
   display: flex;

@@ -28,15 +28,23 @@ interface Props {
   bookmark: TravelBookmark;
   lang: string;
   index: number;
+  isFavorited?: boolean;
+  onToggleFavorite?: (bookmarkId: string) => void;
 }
 
-export default function BookmarkCard({ bookmark, lang, index }: Props) {
+export default function BookmarkCard({ bookmark, lang, index, isFavorited, onToggleFavorite }: Props) {
   const cat = localizedCategory(bookmark.category, lang);
   const icon = categoryIcon(bookmark.category);
   const city = localizedCityBySlug(bookmark.country_slug, bookmark.city_slug, lang);
   const country = localizedCountry(bookmark.country_slug, lang);
   const platform = PLATFORM_LABELS[bookmark.platform] || bookmark.platform;
   const platformColor = PLATFORM_COLORS[bookmark.platform] || '#6C63FF';
+
+  const handleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggleFavorite?.(bookmark.id);
+  };
 
   return (
     <a
@@ -57,6 +65,15 @@ export default function BookmarkCard({ bookmark, lang, index }: Props) {
         <span className="bm-card-platform" style={{ backgroundColor: platformColor }}>
           {platform}
         </span>
+        {onToggleFavorite && (
+          <button
+            className={`bm-card-fav ${isFavorited ? 'active' : ''}`}
+            onClick={handleFavorite}
+            aria-label="Favorite"
+          >
+            {isFavorited ? '♥' : '♡'}
+          </button>
+        )}
       </div>
       <div className="bm-card-body">
         <div className="bm-card-tags">

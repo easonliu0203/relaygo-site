@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { TravelBookmark } from '@/lib/bookmarks';
 import { CATEGORIES, CATEGORY_NAMES, CATEGORY_ICONS, type BookmarkCategory } from '@/lib/bookmark-categories';
 import { COUNTRIES, CITIES, localizedCountry, localizedCityBySlug } from '@/lib/bookmark-locations';
 import { localePathMap } from '@/lib/i18n-config';
+import { auth } from '@/lib/firebase';
+import { onAuthStateChanged, type User } from 'firebase/auth';
 import BookmarkCard from './BookmarkCard';
 import SubmitBookmarkModal from './SubmitBookmarkModal';
 
@@ -43,6 +45,14 @@ const UI: Record<string, Record<LangCode, string>> = {
     'zh-TW': '首頁', 'zh-CN': '首页', en: 'Home', ja: 'ホーム', ko: '홈',
     th: 'หน้าแรก', vi: 'Trang chủ', ms: 'Utama', id: 'Beranda', fil: 'Home',
   },
+  favorites: {
+    'zh-TW': '♥ 我的最愛', 'zh-CN': '♥ 我的收藏', en: '♥ My Favorites', ja: '♥ お気に入り', ko: '♥ 즐겨찾기',
+    th: '♥ รายการโปรด', vi: '♥ Yêu thích', ms: '♥ Kegemaran', id: '♥ Favorit', fil: '♥ Paborito',
+  },
+  loginToFav: {
+    'zh-TW': '登入後即可收藏', 'zh-CN': '登录后即可收藏', en: 'Log in to save favorites', ja: 'ログインしてお気に入り登録', ko: '로그인하여 즐겨찾기 저장',
+    th: 'เข้าสู่ระบบเพื่อบันทึก', vi: 'Đăng nhập để lưu', ms: 'Log masuk untuk simpan', id: 'Masuk untuk menyimpan', fil: 'Mag-login para mag-save',
+  },
 };
 
 function t(key: string, lang: string): string {
@@ -64,13 +74,58 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
   const langPrefix = localePathMap[lang as LangCode] ? `/${localePathMap[lang as LangCode]}` : '';
   const [modalOpen, setModalOpen] = useState(false);
   const [filterCat, setFilterCat] = useState<string>(currentCategory || '');
+  const [showFavOnly, setShowFavOnly] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [favIds, setFavIds] = useState<Set<string>>(new Set());
 
-  const filtered = filterCat
+  // Listen for auth state
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => setUser(u));
+    return () => unsub();
+  }, []);
+
+  // Load favorites when user logs in
+  useEffect(() => {
+    if (!user) { setFavIds(new Set()); return; }
+    fetch(`/api/bookmarks/favorite?user_id=${encodeURIComponent(user.uid)}`)
+      .then((r) => r.json())
+      .then((data) => { if (data.ids) setFavIds(new Set(data.ids)); })
+      .catch(() => {});
+  }, [user]);
+
+  const toggleFavorite = useCallback(async (bookmarkId: string) => {
+    if (!user) return;
+    const isFav = favIds.has(bookmarkId);
+    // Optimistic update
+    setFavIds((prev) => {
+      const next = new Set(prev);
+      if (isFav) next.delete(bookmarkId); else next.add(bookmarkId);
+      return next;
+    });
+    try {
+      await fetch('/api/bookmarks/favorite', {
+        method: isFav ? 'DELETE' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.uid, bookmark_id: bookmarkId }),
+      });
+    } catch {
+      // Revert on error
+      setFavIds((prev) => {
+        const next = new Set(prev);
+        if (isFav) next.add(bookmarkId); else next.delete(bookmarkId);
+        return next;
+      });
+    }
+  }, [user, favIds]);
+
+  let filtered = filterCat
     ? bookmarks.filter((b) => b.category === filterCat)
     : bookmarks;
+  if (showFavOnly) {
+    filtered = filtered.filter((b) => favIds.has(b.id));
+  }
 
   const handleSubmitted = useCallback(() => {
-    // Reload page to show new bookmark (ISR will catch up)
     setTimeout(() => window.location.reload(), 1500);
   }, []);
 
@@ -148,11 +203,19 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
         {/* Category pills */}
         <div className="bm-filter-row">
           <button
-            className={`bm-filter-pill ${!filterCat ? 'active' : ''}`}
-            onClick={() => setFilterCat('')}
+            className={`bm-filter-pill ${!filterCat && !showFavOnly ? 'active' : ''}`}
+            onClick={() => { setFilterCat(''); setShowFavOnly(false); }}
           >
             {t('all', lang)}
           </button>
+          {user && (
+            <button
+              className={`bm-filter-pill bm-filter-pill-fav ${showFavOnly ? 'active' : ''}`}
+              onClick={() => { setShowFavOnly(!showFavOnly); setFilterCat(''); }}
+            >
+              {t('favorites', lang)}
+            </button>
+          )}
           {CATEGORIES.map((cat) => {
             // If on a category sub-page, link instead of filter
             if (currentCountry && currentCity && !currentCategory) {
@@ -183,7 +246,14 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
       {filtered.length > 0 ? (
         <div className="bm-grid">
           {filtered.map((bm, i) => (
-            <BookmarkCard key={bm.id} bookmark={bm} lang={lang} index={i} />
+            <BookmarkCard
+              key={bm.id}
+              bookmark={bm}
+              lang={lang}
+              index={i}
+              isFavorited={favIds.has(bm.id)}
+              onToggleFavorite={user ? toggleFavorite : undefined}
+            />
           ))}
         </div>
       ) : (
