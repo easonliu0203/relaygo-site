@@ -53,7 +53,11 @@ async function extractViaOEmbed(oembedUrl: string): Promise<{ title?: string; th
   try {
     const res = await fetch(oembedUrl, { signal: AbortSignal.timeout(8000) });
     if (!res.ok) return null;
-    return res.json();
+    const ct = res.headers.get('content-type') || '';
+    if (!ct.includes('json')) return null;
+    const text = await res.text();
+    if (!text || text[0] === '<') return null;
+    return JSON.parse(text);
   } catch {
     return null;
   }
