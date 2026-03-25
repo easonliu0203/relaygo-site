@@ -130,6 +130,7 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_ID || '';
 
 export default function LangLayout({ children, params }: Props) {
   const locale = resolveLocale(params.lang);
+  const orgDesc = OG_DESCRIPTIONS[locale];
 
   return (
     <html lang={htmlLang(locale)}>
@@ -157,14 +158,13 @@ export default function LangLayout({ children, params }: Props) {
               name: 'RelayGo',
               url: 'https://relaygo.pro',
               logo: 'https://relaygo.pro/og-image.png',
-              description:
-                '台灣專業包車服務平台，提供機場接送、包車旅遊、商務用車服務。App 內建多語翻譯（中/英/日/韓/泰/越/馬來文）。Professional charter car service in Taiwan with built-in multilingual translation (Chinese, English, Japanese, Korean, Thai, Vietnamese, Malay).',
+              description: orgDesc,
               foundingDate: '2024',
               areaServed: {
                 '@type': 'Country',
                 name: 'Taiwan',
               },
-              knowsLanguage: ['zh-TW', 'en', 'ja', 'ko', 'th', 'vi', 'ms', 'id', 'fil'],
+              knowsLanguage: ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms', 'id', 'fil'],
               serviceType: [
                 '機場接送', '包車旅遊', '商務用車',
                 'Airport Transfer', 'Charter Tour', 'Business Transportation',
