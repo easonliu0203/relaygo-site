@@ -61,6 +61,7 @@ async function extractViaOEmbed(oembedUrl: string): Promise<{ title?: string; th
 
 async function extractMetadata(url: string, platform: string) {
   let title: string | undefined;
+  let description: string | undefined;
   let thumbnail_url: string | undefined;
   let og_data: Record<string, unknown> = {};
 
@@ -95,14 +96,25 @@ async function extractMetadata(url: string, platform: string) {
         og_data = { ...og_data, ...tags };
         if (!title) title = tags['og:title'] || tags['twitter:title'] || tags['page_title'];
         if (!thumbnail_url) thumbnail_url = tags['og:image'] || tags['twitter:image'];
+        if (!description) description = tags['og:description'] || tags['description'];
       }
     } catch {
       // ignore scrape errors
     }
   }
 
+  // Clean up description: extract the actual post caption
+  // IG format: "43K likes, 125 comments - user on March 2, 2026: "actual caption""
+  if (description) {
+    const captionMatch = description.match(/:\s*"(.+)"\.?\s*$/s);
+    if (captionMatch) {
+      description = captionMatch[1];
+    }
+  }
+
   return {
     title: title ? decodeHTMLEntities(title) : null,
+    description: description ? decodeHTMLEntities(description) : null,
     thumbnail_url: thumbnail_url ? decodeHTMLEntities(thumbnail_url) : null,
     og_data,
   };

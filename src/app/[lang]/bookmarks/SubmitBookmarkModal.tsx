@@ -77,7 +77,7 @@ interface Props {
 export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted }: Props) {
   const [url, setUrl] = useState('');
   const [extracting, setExtracting] = useState(false);
-  const [extracted, setExtracted] = useState<{ platform: string; title: string | null; thumbnail_url: string | null; og_data: Record<string, unknown> } | null>(null);
+  const [extracted, setExtracted] = useState<{ platform: string; title: string | null; description: string | null; thumbnail_url: string | null; og_data: Record<string, unknown> } | null>(null);
   const [description, setDescription] = useState('');
   const [countrySlug, setCountrySlug] = useState('taiwan');
   const [citySlug, setCitySlug] = useState('');
@@ -104,6 +104,10 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
         setError(data.error);
       } else {
         setExtracted(data);
+        // Auto-fill description from extracted post content
+        if (data.description && !description) {
+          setDescription(data.description);
+        }
       }
     } catch {
       setError('Failed to extract');
@@ -218,8 +222,8 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="bm-modal-textarea"
-                    rows={2}
-                    maxLength={200}
+                    rows={4}
+                    maxLength={500}
                   />
                 </div>
 
