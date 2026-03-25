@@ -33,8 +33,9 @@ interface Props {
 }
 
 export default function BookmarkCard({ bookmark, lang, index, isFavorited, onToggleFavorite }: Props) {
-  const cat = localizedCategory(bookmark.category, lang);
-  const icon = categoryIcon(bookmark.category);
+  const cats = bookmark.category.split(',').filter(Boolean);
+  const mainCat = cats[0] || bookmark.category;
+  const icon = categoryIcon(mainCat);
   const city = localizedCityBySlug(bookmark.country_slug, bookmark.city_slug, lang);
   const country = localizedCountry(bookmark.country_slug, lang);
   const platform = PLATFORM_LABELS[bookmark.platform] || bookmark.platform;
@@ -77,7 +78,9 @@ export default function BookmarkCard({ bookmark, lang, index, isFavorited, onTog
       </div>
       <div className="bm-card-body">
         <div className="bm-card-tags">
-          <span className="bm-card-cat">{icon} {cat}</span>
+          {cats.map((c) => (
+            <span key={c} className="bm-card-cat">{categoryIcon(c)} {localizedCategory(c, lang)}</span>
+          ))}
           <span className="bm-card-loc">{city}, {country}</span>
         </div>
         {bookmark.author && <span className="bm-card-author">@{bookmark.author}</span>}

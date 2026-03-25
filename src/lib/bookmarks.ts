@@ -55,7 +55,7 @@ export async function getBookmarksByCity(countrySlug: string, citySlug: string, 
 
 export async function getBookmarksByCityAndCategory(countrySlug: string, citySlug: string, category: string, limit = 50): Promise<TravelBookmark[]> {
   const res = await fetch(
-    `${SUPABASE_URL}/travel_bookmarks?is_published=eq.true&country_slug=eq.${encodeURIComponent(countrySlug)}&city_slug=eq.${encodeURIComponent(citySlug)}&category=eq.${encodeURIComponent(category)}&order=created_at.desc&limit=${limit}&select=*`,
+    `${SUPABASE_URL}/travel_bookmarks?is_published=eq.true&country_slug=eq.${encodeURIComponent(countrySlug)}&city_slug=eq.${encodeURIComponent(citySlug)}&category=like.*${encodeURIComponent(category)}*&order=created_at.desc&limit=${limit}&select=*`,
     { headers: getHeaders(), next: { revalidate: 3600 } }
   );
   if (!res.ok) return [];

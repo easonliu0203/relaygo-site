@@ -82,7 +82,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
   const [countrySlug, setCountrySlug] = useState('taiwan');
   const [citySlug, setCitySlug] = useState('');
   const [district, setDistrict] = useState('');
-  const [category, setCategory] = useState<BookmarkCategory | ''>('');
+  const [categories, setCategories] = useState<BookmarkCategory[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
@@ -116,7 +116,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
   };
 
   const handleSubmit = async () => {
-    if (!citySlug || !category || !extracted) return;
+    if (!citySlug || categories.length === 0 || !extracted) return;
     setSubmitting(true);
     setError('');
     try {
@@ -133,7 +133,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
           country_slug: countrySlug,
           city_slug: citySlug,
           district: district.trim() || null,
-          category,
+          category: categories.join(','),
           og_data: extracted.og_data,
         }),
       });
@@ -157,7 +157,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
     setCountrySlug('taiwan');
     setCitySlug('');
     setDistrict('');
-    setCategory('');
+    setCategories([]);
     setSuccess(false);
     setError('');
     onClose();
@@ -278,8 +278,8 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
                     {CATEGORIES.map((cat) => (
                       <button
                         key={cat}
-                        className={`bm-modal-cat-btn ${category === cat ? 'active' : ''}`}
-                        onClick={() => setCategory(cat)}
+                        className={`bm-modal-cat-btn ${categories.includes(cat) ? 'active' : ''}`}
+                        onClick={() => setCategories((prev) => prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat])}
                         type="button"
                       >
                         {CATEGORY_ICONS[cat]} {CATEGORY_NAMES[cat][lang as LangCode] || CATEGORY_NAMES[cat]['zh-TW']}
@@ -293,7 +293,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
                 <button
                   className="bm-modal-btn bm-modal-btn-submit"
                   onClick={handleSubmit}
-                  disabled={submitting || !citySlug || !category}
+                  disabled={submitting || !citySlug || categories.length === 0}
                 >
                   {submitting ? t('submitting', lang) : t('submit', lang)}
                 </button>

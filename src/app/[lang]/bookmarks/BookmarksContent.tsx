@@ -119,7 +119,7 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
   }, [user, favIds]);
 
   let filtered = filterCat
-    ? bookmarks.filter((b) => b.category === filterCat)
+    ? bookmarks.filter((b) => b.category.split(',').includes(filterCat))
     : bookmarks;
   if (showFavOnly) {
     filtered = filtered.filter((b) => favIds.has(b.id));
