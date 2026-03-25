@@ -106,7 +106,7 @@ async function extractMetadata(url: string, platform: string) {
   // Clean up description: extract the actual post caption
   // IG format: "43K likes, 125 comments - user on March 2, 2026: "actual caption""
   if (description) {
-    const captionMatch = description.match(/:\s*"(.+)"\.?\s*$/s);
+    const captionMatch = description.match(/:\s*"([\s\S]+)"\.?\s*$/);
     if (captionMatch) {
       description = captionMatch[1];
     }
