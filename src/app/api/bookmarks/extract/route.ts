@@ -156,12 +156,26 @@ async function extractMetadata(url: string, platform: string) {
     title = title.replace(/\s*[•·]\s*Instagram\s*(reel|photo|video)?$/i, '').trim();
   }
 
-  // Clean up description: extract the actual post caption
-  // IG format: "43K likes, 125 comments - user on March 2, 2026: "actual caption""
+  // Extract post caption from description or title
+  // IG format: "43K likes - user on March 2, 2026: "actual caption""
+  // or title: "display_name on Instagram: "actual caption""
+  const extractCaption = (text: string): string | null => {
+    const m = text.match(/:\s*"([\s\S]+)"\.?\s*$/);
+    return m ? m[1] : null;
+  };
+
   if (description) {
-    const captionMatch = description.match(/:\s*"([\s\S]+)"\.?\s*$/);
-    if (captionMatch) {
-      description = captionMatch[1];
+    const caption = extractCaption(description);
+    if (caption) description = caption;
+  }
+
+  // If no description, try extracting caption from title
+  if (!description && title) {
+    const caption = extractCaption(title);
+    if (caption) {
+      description = caption;
+      // Clean title to just the author/display name part
+      title = title.replace(/\s*on Instagram.*$/, '').trim();
     }
   }
 
