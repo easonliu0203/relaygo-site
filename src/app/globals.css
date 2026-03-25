@@ -1133,6 +1133,88 @@
       line-height: 1.5;
     }
 
+    /* ===== Featured Guides Section ===== */
+    .featured-guides-section {
+      padding: 80px 24px;
+      background: linear-gradient(180deg, #f8f9ff 0%, #fff 100%);
+    }
+    .featured-guides-scroll {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 8px 0 16px;
+      scrollbar-width: none;
+    }
+    .featured-guides-scroll::-webkit-scrollbar { display: none; }
+    .featured-guide-card {
+      flex: 0 0 260px;
+      scroll-snap-align: start;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .featured-guide-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(108,99,255,0.15);
+    }
+    .featured-guide-img {
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .featured-guide-badge {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(4px);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .featured-guide-body {
+      padding: 14px 16px 16px;
+    }
+    .featured-guide-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: var(--dark);
+      line-height: 1.4;
+    }
+    .featured-guide-meta {
+      font-size: 0.8rem;
+      color: var(--gray-500);
+    }
+
+    /* CTA guides link */
+    .cta-guides-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: rgba(255,255,255,0.85);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 10px 24px;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 30px;
+      transition: all 0.3s;
+    }
+    .cta-guides-link:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.6);
+      color: #fff;
+    }
+
     /* ===== CTA Section ===== */
     .cta-section {
       padding: 100px 24px;
@@ -1323,6 +1405,10 @@
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .mobile-menu { display: flex; }
+      .featured-guides-section { padding: 50px 16px; }
+      .featured-guide-card { flex: 0 0 220px; }
+      .featured-guide-img { height: 130px; }
+      .featured-guide-title { font-size: 0.88rem; }
       .hero { min-height: auto; padding-top: 40px; }
       .hero-inner { padding: 100px 20px 60px; }
       .hero h1 { font-size: 32px; }

@@ -205,6 +205,55 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
     </div>
   </div>
 
+  <!-- Featured Guides -->
+  <section class="featured-guides-section" id="guides-preview">
+    <div class="section-inner">
+      <div class="section-header fade-up">
+        <div class="section-label" data-i18n="guides_label">行程攻略</div>
+        <h2 class="section-title" data-i18n="guides_title">探索台灣熱門路線</h2>
+        <p class="section-desc" data-i18n="guides_desc">精選四大經典路線，從北到南、山海兼備，每條都是旅人最愛。</p>
+      </div>
+      <div class="featured-guides-scroll">
+        <a href="${langPrefix}/guide/taipei-classic" class="featured-guide-card fade-up">
+          <div class="featured-guide-img" style="background-image:url(https://images.unsplash.com/photo-1662720262802-91f9373dcac6?w=600&q=80)">
+            <span class="featured-guide-badge">🏙️ ${t('guides_card_city_taipei', '台北')}</span>
+          </div>
+          <div class="featured-guide-body">
+            <h3 class="featured-guide-title" data-i18n="guides_card_1_title">台北經典一日遊</h3>
+            <span class="featured-guide-meta">⏱️ 8 ${t('guides_card_hours', '小時')}</span>
+          </div>
+        </a>
+        <a href="${langPrefix}/guide/taipei-jiufen-shifen" class="featured-guide-card fade-up">
+          <div class="featured-guide-img" style="background-image:url(https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80)">
+            <span class="featured-guide-badge">🏮 ${t('guides_card_city_xinbei', '新北')}</span>
+          </div>
+          <div class="featured-guide-body">
+            <h3 class="featured-guide-title" data-i18n="guides_card_2_title">九份十分一日遊</h3>
+            <span class="featured-guide-meta">⏱️ 8 ${t('guides_card_hours', '小時')}</span>
+          </div>
+        </a>
+        <a href="${langPrefix}/guide/tainan-heritage" class="featured-guide-card fade-up">
+          <div class="featured-guide-img" style="background-image:url(https://images.unsplash.com/photo-1677607223752-aa6ae7e582ae?w=600&q=80)">
+            <span class="featured-guide-badge">🏯 ${t('guides_card_city_tainan', '台南')}</span>
+          </div>
+          <div class="featured-guide-body">
+            <h3 class="featured-guide-title" data-i18n="guides_card_3_title">台南古蹟巡禮</h3>
+            <span class="featured-guide-meta">⏱️ 8 ${t('guides_card_hours', '小時')}</span>
+          </div>
+        </a>
+        <a href="${langPrefix}/guide/kaohsiung-port-art" class="featured-guide-card fade-up">
+          <div class="featured-guide-img" style="background-image:url(https://images.unsplash.com/photo-1677607221983-630ffb5ea1d8?w=600&q=80)">
+            <span class="featured-guide-badge">🌊 ${t('guides_card_city_kaohsiung', '高雄')}</span>
+          </div>
+          <div class="featured-guide-body">
+            <h3 class="featured-guide-title" data-i18n="guides_card_4_title">高雄港都一日遊</h3>
+            <span class="featured-guide-meta">⏱️ 8 ${t('guides_card_hours', '小時')}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Features -->
   <section class="features-section" id="features">
     <div class="section-inner">
@@ -543,6 +592,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           </div>
         </a>
       </div>
+      <a href="${langPrefix}/guides" class="cta-guides-link" data-i18n="guides_view_all">查看全部攻略 →</a>
     </div>
   </section>
 
