@@ -33,6 +33,9 @@ function detectLocale(acceptLanguage: string | null): Locale | null {
   return null;
 }
 
+// Search engine bots should never be redirected — always serve zh-TW via rewrite
+const BOT_UA = /googlebot|bingbot|yandex|baiduspider|duckduckbot|slurp|facebookexternalhit|twitterbot|linkedinbot|applebot|petalbot|gptbot|chatgpt|perplexity|anthropic/i;
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -52,6 +55,14 @@ export function middleware(request: NextRequest) {
     (prefix) => pathname === `/${prefix}` || pathname.startsWith(`/${prefix}/`)
   );
   if (hasLocale) return NextResponse.next();
+
+  // Bots → always rewrite to zh-TW, never redirect
+  const ua = request.headers.get('user-agent') || '';
+  if (BOT_UA.test(ua)) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/zh-TW${pathname}`;
+    return NextResponse.rewrite(url);
+  }
 
   // No locale prefix → detect browser language
   const acceptLang = request.headers.get('accept-language');
