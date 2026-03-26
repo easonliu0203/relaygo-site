@@ -5,6 +5,28 @@ export const dynamic = 'force-dynamic';
 
 const SUPABASE_URL = 'https://vlyhwegpvpnjyocqmfqc.supabase.co/rest/v1';
 
+/** Geocode an address string → { lat, lng } or null */
+async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
+  const geoKey = process.env.GOOGLE_GEOCODING_KEY;
+  if (!geoKey || !address) return null;
+
+  try {
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${geoKey}&language=zh-TW`,
+      { signal: AbortSignal.timeout(5000) }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.status === 'OK' && data.results?.[0]) {
+      const { lat, lng } = data.results[0].geometry.location;
+      return { lat, lng };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export async function PATCH(req: Request) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!key) {
@@ -13,7 +35,7 @@ export async function PATCH(req: Request) {
 
   try {
     const body = await req.json();
-    const { bookmark_id, user_id, description, country_slug, city_slug, district, category } = body;
+    const { bookmark_id, user_id, description, country_slug, city_slug, district, category, address } = body;
 
     if (!bookmark_id || !user_id) {
       return NextResponse.json({ error: 'Missing bookmark_id or user_id' }, { status: 400 });
@@ -21,7 +43,7 @@ export async function PATCH(req: Request) {
 
     // Verify ownership: only the creator can edit
     const checkRes = await fetch(
-      `${SUPABASE_URL}/travel_bookmarks?id=eq.${encodeURIComponent(bookmark_id)}&created_by=eq.${encodeURIComponent(user_id)}&select=id`,
+      `${SUPABASE_URL}/travel_bookmarks?id=eq.${encodeURIComponent(bookmark_id)}&created_by=eq.${encodeURIComponent(user_id)}&select=id,address`,
       { headers: { apikey: key, Authorization: `Bearer ${key}` } }
     );
     const rows = await checkRes.json();
@@ -36,6 +58,19 @@ export async function PATCH(req: Request) {
     if (city_slug) update.city_slug = city_slug;
     if (district !== undefined) update.district = district || null;
     if (category) update.category = category;
+
+    // 地址更新 → re-geocode
+    if (address !== undefined) {
+      update.address = address || null;
+      const oldAddress = rows[0]?.address || '';
+      if (address && address !== oldAddress) {
+        const coords = await geocodeAddress(address);
+        if (coords) {
+          update.latitude = coords.lat;
+          update.longitude = coords.lng;
+        }
+      }
+    }
 
     if (Object.keys(update).length === 0) {
       return NextResponse.json({ error: 'Nothing to update' }, { status: 400 });

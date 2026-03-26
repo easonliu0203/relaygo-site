@@ -25,6 +25,9 @@ export interface TravelBookmark {
   is_published: boolean;
   created_at: string;
   created_by: string | null;
+  address: string | null;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 export async function getPublishedBookmarks(limit = 50): Promise<TravelBookmark[]> {

@@ -50,6 +50,14 @@ const UI: Record<string, Record<LangCode, string>> = {
     'zh-TW': '輸入地區名稱', 'zh-CN': '输入地区名称', en: 'Enter district name', ja: '地区名を入力', ko: '지역 이름 입력',
     th: 'ป้อนชื่อเขต', vi: 'Nhập tên quận', ms: 'Masukkan nama daerah', id: 'Masukkan nama kecamatan', fil: 'Ilagay ang pangalan ng distrito',
   },
+  address: {
+    'zh-TW': '完整地址（選填）', 'zh-CN': '完整地址（选填）', en: 'Full Address (optional)', ja: '住所（任意）', ko: '주소 (선택)',
+    th: 'ที่อยู่ (ไม่จำเป็น)', vi: 'Địa chỉ (tùy chọn)', ms: 'Alamat (pilihan)', id: 'Alamat (opsional)', fil: 'Address (opsyonal)',
+  },
+  addressHint: {
+    'zh-TW': '輸入完整地址以取得精確座標', 'zh-CN': '输入完整地址以获取精确坐标', en: 'Enter full address for accurate location', ja: '正確な位置を取得するため住所を入力', ko: '정확한 위치를 위해 주소 입력',
+    th: 'ป้อนที่อยู่เพื่อระบุตำแหน่ง', vi: 'Nhập địa chỉ để định vị chính xác', ms: 'Masukkan alamat untuk lokasi tepat', id: 'Masukkan alamat untuk lokasi akurat', fil: 'Ilagay ang address para sa tumpak na lokasyon',
+  },
   category: {
     'zh-TW': '分類', 'zh-CN': '分类', en: 'Category', ja: 'カテゴリー', ko: '카테고리',
     th: 'หมวดหมู่', vi: 'Danh mục', ms: 'Kategori', id: 'Kategori', fil: 'Kategorya',
@@ -167,6 +175,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
   const [country, setCountry] = useState('');
   const [city, setCity] = useState('');
   const [district, setDistrict] = useState('');
+  const [address, setAddress] = useState('');
   const [categories, setCategories] = useState<BookmarkCategory[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -192,6 +201,10 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
         // Auto-fill description
         if (data.description && !description) {
           setDescription(data.description);
+        }
+        // Auto-fill address field
+        if (data.address && !address) {
+          setAddress(data.address);
         }
         // Auto-fill country/city/district from address
         if (data.address) {
@@ -229,7 +242,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
           category: categories.join(','),
           og_data: extracted.og_data,
           created_by: userId || null,
-          address: extracted.address || null,
+          address: address.trim() || extracted.address || null,
         }),
       });
       const data = await res.json();
@@ -252,6 +265,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
     setCountry('');
     setCity('');
     setDistrict('');
+    setAddress('');
     setCategories([]);
     setSuccess(false);
     setError('');
@@ -363,6 +377,18 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
                     placeholder={t('districtHint', lang)}
                     className="bm-modal-input"
                     maxLength={30}
+                  />
+                </div>
+
+                <div className="bm-modal-field">
+                  <label>{t('address', lang)}</label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    placeholder={t('addressHint', lang)}
+                    className="bm-modal-input"
+                    maxLength={100}
                   />
                 </div>
 
