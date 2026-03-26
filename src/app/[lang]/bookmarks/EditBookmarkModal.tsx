@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import type { TravelBookmark } from '@/lib/bookmarks';
 import { CATEGORIES, CATEGORY_NAMES, CATEGORY_ICONS, type BookmarkCategory } from '@/lib/bookmark-categories';
-import { COUNTRIES, CITIES } from '@/lib/bookmark-locations';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
 
@@ -20,13 +19,25 @@ const UI: Record<string, Record<LangCode, string>> = {
     'zh-TW': '國家', 'zh-CN': '国家', en: 'Country', ja: '国', ko: '국가',
     th: 'ประเทศ', vi: 'Quốc gia', ms: 'Negara', id: 'Negara', fil: 'Bansa',
   },
+  countryHint: {
+    'zh-TW': '輸入國家名稱', 'zh-CN': '输入国家名称', en: 'Enter country name', ja: '国名を入力', ko: '국가 이름 입력',
+    th: 'ป้อนชื่อประเทศ', vi: 'Nhập tên quốc gia', ms: 'Masukkan nama negara', id: 'Masukkan nama negara', fil: 'Ilagay ang pangalan ng bansa',
+  },
   city: {
     'zh-TW': '城市', 'zh-CN': '城市', en: 'City', ja: '都市', ko: '도시',
     th: 'เมือง', vi: 'Thành phố', ms: 'Bandar', id: 'Kota', fil: 'Lungsod',
   },
+  cityHint: {
+    'zh-TW': '輸入城市名稱', 'zh-CN': '输入城市名称', en: 'Enter city name', ja: '都市名を入力', ko: '도시 이름 입력',
+    th: 'ป้อนชื่อเมือง', vi: 'Nhập tên thành phố', ms: 'Masukkan nama bandar', id: 'Masukkan nama kota', fil: 'Ilagay ang pangalan ng lungsod',
+  },
   district: {
     'zh-TW': '地區（選填）', 'zh-CN': '地区（选填）', en: 'District (optional)', ja: '地区（任意）', ko: '지역 (선택)',
     th: 'เขต (ไม่จำเป็น)', vi: 'Quận (tùy chọn)', ms: 'Daerah (pilihan)', id: 'Kecamatan (opsional)', fil: 'Distrito (opsyonal)',
+  },
+  districtHint: {
+    'zh-TW': '輸入地區名稱', 'zh-CN': '输入地区名称', en: 'Enter district name', ja: '地区名を入力', ko: '지역 이름 입력',
+    th: 'ป้อนชื่อเขต', vi: 'Nhập tên quận', ms: 'Masukkan nama daerah', id: 'Masukkan nama kecamatan', fil: 'Ilagay ang pangalan ng distrito',
   },
   category: {
     'zh-TW': '分類', 'zh-CN': '分类', en: 'Category', ja: 'カテゴリー', ko: '카테고리',
@@ -63,8 +74,8 @@ interface Props {
 
 export default function EditBookmarkModal({ bookmark, userId, isOpen, onClose, onSaved, lang }: Props) {
   const [description, setDescription] = useState(bookmark.description || '');
-  const [countrySlug, setCountrySlug] = useState(bookmark.country_slug);
-  const [citySlug, setCitySlug] = useState(bookmark.city_slug);
+  const [country, setCountry] = useState(bookmark.country_slug || '');
+  const [city, setCity] = useState(bookmark.city_slug || '');
   const [district, setDistrict] = useState(bookmark.district || '');
   const [categories, setCategories] = useState<BookmarkCategory[]>(
     bookmark.category.split(',').filter(Boolean) as BookmarkCategory[]
@@ -73,13 +84,11 @@ export default function EditBookmarkModal({ bookmark, userId, isOpen, onClose, o
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
 
-  const cities = CITIES[countrySlug] || [];
-
   // Reset form when bookmark changes
   useEffect(() => {
     setDescription(bookmark.description || '');
-    setCountrySlug(bookmark.country_slug);
-    setCitySlug(bookmark.city_slug);
+    setCountry(bookmark.country_slug || '');
+    setCity(bookmark.city_slug || '');
     setDistrict(bookmark.district || '');
     setCategories(bookmark.category.split(',').filter(Boolean) as BookmarkCategory[]);
     setSaved(false);
@@ -87,7 +96,7 @@ export default function EditBookmarkModal({ bookmark, userId, isOpen, onClose, o
   }, [bookmark]);
 
   const handleSave = async () => {
-    if (categories.length === 0 || !citySlug) return;
+    if (categories.length === 0 || !city.trim()) return;
     setSaving(true);
     setError('');
     try {
@@ -98,8 +107,8 @@ export default function EditBookmarkModal({ bookmark, userId, isOpen, onClose, o
           bookmark_id: bookmark.id,
           user_id: userId,
           description: description.trim(),
-          country_slug: countrySlug,
-          city_slug: citySlug,
+          country_slug: country.trim(),
+          city_slug: city.trim(),
           district: district.trim(),
           category: categories.join(','),
         }),
@@ -159,32 +168,25 @@ export default function EditBookmarkModal({ bookmark, userId, isOpen, onClose, o
             <div className="bm-modal-row">
               <div className="bm-modal-field bm-modal-field-half">
                 <label>{t('country', lang)}</label>
-                <select
-                  value={countrySlug}
-                  onChange={(e) => { setCountrySlug(e.target.value); setCitySlug(''); }}
-                  className="bm-modal-select"
-                >
-                  {COUNTRIES.map((c) => (
-                    <option key={c.slug} value={c.slug}>
-                      {c.names[lang as LangCode] || c.names['zh-TW']}
-                    </option>
-                  ))}
-                </select>
+                <input
+                  type="text"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  placeholder={t('countryHint', lang)}
+                  className="bm-modal-input"
+                  maxLength={30}
+                />
               </div>
               <div className="bm-modal-field bm-modal-field-half">
                 <label>{t('city', lang)}</label>
-                <select
-                  value={citySlug}
-                  onChange={(e) => setCitySlug(e.target.value)}
-                  className="bm-modal-select"
-                >
-                  <option value="">--</option>
-                  {cities.map((c) => (
-                    <option key={c.slug} value={c.slug}>
-                      {c.names[lang as LangCode] || c.names['zh-TW']}
-                    </option>
-                  ))}
-                </select>
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder={t('cityHint', lang)}
+                  className="bm-modal-input"
+                  maxLength={30}
+                />
               </div>
             </div>
 
@@ -194,6 +196,7 @@ export default function EditBookmarkModal({ bookmark, userId, isOpen, onClose, o
                 type="text"
                 value={district}
                 onChange={(e) => setDistrict(e.target.value)}
+                placeholder={t('districtHint', lang)}
                 className="bm-modal-input"
                 maxLength={30}
               />
@@ -222,7 +225,7 @@ export default function EditBookmarkModal({ bookmark, userId, isOpen, onClose, o
             <button
               className="bm-modal-btn bm-modal-btn-submit"
               onClick={handleSave}
-              disabled={saving || !citySlug || categories.length === 0}
+              disabled={saving || !city.trim() || categories.length === 0}
             >
               {saving ? t('saving', lang) : t('save', lang)}
             </button>

@@ -647,6 +647,15 @@
   border-color: var(--primary, #6C63FF);
 }
 
+.bm-modal-autofill-hint {
+  color: #22c55e;
+  font-size: 0.8rem;
+  margin: 4px 0 8px;
+}
+.bm-modal-autofill-hint::before {
+  content: '\2713  ';
+}
+
 .bm-modal-error {
   color: #ef4444;
   font-size: 0.85rem;
