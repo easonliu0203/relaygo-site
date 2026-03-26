@@ -182,12 +182,18 @@ async function extractMetadata(url: string, platform: string) {
   // Extract address from description or title
   let address: string | null = null;
   const addrText = [description, title].filter(Boolean).join('\n');
-  // Patterns: 📍：地址, 地址：xxx, 住所：xxx, 📍 台北市..., or lines containing 市...區...路/街...號
+  // Priority: specific street address (with 號/号) > labeled address > Japan address
+  // 1. Taiwan full address anywhere in text (市...區...路/街...號)
+  // 2. 🗺️/地址/住所 prefix + ends with 號
+  // 3. 📍 prefix + ends with 號
+  // 4. Japan address pattern
+  // 5. 📍/地址 prefix (generic fallback, only if > 10 chars to avoid "Taipei, Taiwan")
   const addrPatterns = [
-    /(?:📍|地址|住所|Address)[：:\s]*([^\n]{5,60}[號号])/i,
-    /(?:📍|地址|住所|Address)[：:\s]*([^\n]{5,60})/i,
     /((?:台[北中南東]|新北|高雄|基隆|桃園|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|澎湖)[市縣][\S]{3,50}[號号])/,
+    /(?:🗺️|地址|住所|Address)[：:\s]*([^\n]{5,60}[號号])/i,
+    /(?:📍)[：:\s]*([^\n]{5,60}[號号])/i,
     /((?:東京|大阪|京都|神戸|福岡|名古屋|札幌|沖縄)(?:都|府|県)?[\S]{3,50})/,
+    /(?:🗺️|地址|住所|Address)[：:\s]*([^\n]{10,60})/i,
   ];
   for (const pattern of addrPatterns) {
     const m = addrText.match(pattern);
