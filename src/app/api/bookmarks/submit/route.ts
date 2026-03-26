@@ -5,6 +5,23 @@ export const dynamic = 'force-dynamic';
 
 const SUPABASE_URL = 'https://vlyhwegpvpnjyocqmfqc.supabase.co/rest/v1';
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 架構決策：統一 Submit API（方案 B）
+// ─────────────────────────────────────────────────────────────────────────────
+// 所有書籤提交（網頁端 + 手機端 APP）都統一走這個 API。
+//
+// 為什麼不讓手機端直接寫 Supabase？
+// 1. 單一真實來源 — 地址擷取、geocoding、分類邏輯改一次就全平台生效
+// 2. API key 安全 — Google Geocoding key 只在伺服器端，不暴露在手機端
+// 3. 可擴展 — 之後加審核、spam 過濾、AI 分類都只改這個 API
+// 4. 一致性 — 網頁和 APP 提交的資料經過相同的處理流程
+//
+// 手機端做法：
+// - 用 http.post 呼叫 https://relaygo.pro/api/bookmarks/submit
+// - 傳入 url, platform, description, city_slug, category, created_by 等欄位
+// - 不需要傳 address/latitude/longitude，伺服器端會自動從 description 擷取
+// ─────────────────────────────────────────────────────────────────────────────
+
 /** Geocode an address string → { lat, lng } or null */
 async function geocodeAddress(address: string): Promise<{ lat: number; lng: number } | null> {
   const geoKey = process.env.GOOGLE_GEOCODING_KEY;
@@ -29,6 +46,52 @@ async function geocodeAddress(address: string): Promise<{ lat: number; lng: numb
   }
 }
 
+/**
+ * 從貼文內文自動擷取地址（國際化支援）
+ *
+ * 支援格式：
+ * - 台灣：台北市中山區民生東路一段41號
+ * - 日本：東京都渋谷区神宮前1-2-3
+ * - 韓國：서울시 강남구 역삼동 123-45
+ * - 泰國：กรุงเทพมหานคร / ถนน / ซอย 等
+ * - 英文：123 Main Street, City（帶門牌號碼）
+ * - 通用：📍/🗺️/地址/Address/住所 前綴
+ */
+function extractAddress(text: string): string | null {
+  if (!text) return null;
+
+  const patterns = [
+    // 1. 台灣完整地址（市/縣 + 區 + 路/街 + 號）— 最高優先
+    /((?:台[北中南東]|新北|高雄|基隆|桃園|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|澎湖)[市縣][\S]{3,50}[號号])/,
+
+    // 2. 日本地址（都/府/県/市 + 区/町/村 + 番地/号）
+    /((?:東京都?|大阪府?|京都府?|北海道|神[奈戸]川?県?|福岡県?|愛知県?|沖縄県?)[\S]{3,60})/,
+
+    // 3. 韓國地址（시/구/동/로 + 番號）
+    /((?:서울|부산|인천|대구|대전|광주|울산|제주)[\S가-힣\s]{5,60})/,
+
+    // 4. 帶前綴標記的地址（🗺️/地址/住所/Address/ที่อยู่/주소）+ 結尾有號
+    /(?:🗺️|地址|住所|Address|ที่อยู่|주소|Alamat)[：:\s]*([^\n]{5,80}[號号])/i,
+
+    // 5. 📍 前綴 + 結尾有號
+    /📍[：:\s]*([^\n]{5,80}[號号])/i,
+
+    // 6. 英文地址（門牌號碼 + 路名 + Street/Road/Ave 等）
+    /(\d{1,5}\s+[\w\s]{3,40}(?:Street|St|Road|Rd|Avenue|Ave|Boulevard|Blvd|Lane|Ln|Drive|Dr)[\w\s,]{0,40})/i,
+
+    // 7. 帶前綴的通用地址（≥15 字，避免匹配 "Taipei, Taiwan" 這種太短的）
+    /(?:🗺️|地址|住所|Address|ที่อยู่|주소|Alamat)[：:\s]*([^\n]{15,80})/i,
+  ];
+
+  for (const pattern of patterns) {
+    const m = text.match(pattern);
+    if (m) {
+      return m[1].trim().replace(/\n.*$/, '').trim();
+    }
+  }
+  return null;
+}
+
 export async function POST(req: Request) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!key) {
@@ -37,14 +100,18 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { url, platform, title, description, thumbnail_url, country_slug, city_slug, district, category, og_data, author, created_by, address } = body;
+    const { url, platform, title, description, thumbnail_url, country_slug, city_slug, district, category, og_data, author, created_by, address: clientAddress } = body;
 
     // Validation
     if (!url || !platform || !city_slug || !category) {
       return NextResponse.json({ error: 'Missing required fields: url, platform, city_slug, category' }, { status: 400 });
     }
 
-    // Geocode address if provided
+    // 地址擷取：優先使用客戶端傳來的，否則從 description/title 自動擷取
+    const addrText = [description, title].filter(Boolean).join('\n');
+    const address = clientAddress || extractAddress(addrText);
+
+    // Geocode address → 座標
     let latitude: number | null = null;
     let longitude: number | null = null;
     if (address) {

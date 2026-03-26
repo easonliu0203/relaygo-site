@@ -179,21 +179,34 @@ async function extractMetadata(url: string, platform: string) {
     }
   }
 
-  // Extract address from description or title
+  // ── 地址擷取（國際化）──
+  // 目前能正確提取的語言/格式：
+  //   ✅ 繁體中文（台灣）：台北市中山區民生東路一段41號
+  //   ✅ 簡體中文（中國）：北京市朝阳区建国路XX号
+  //   ✅ 日文：東京都渋谷区神宮前1-2-3
+  //   ✅ 韓文：서울시 강남구 역삼동 123-45
+  //   ✅ 英文：123 Main Street, City
+  //   ✅ 通用前綴：📍/🗺️/地址/Address/住所/ที่อยู่/주소/Alamat
+  //   ⚠️ 泰文：僅支援有前綴（ที่อยู่）的格式
+  //   ⚠️ 越南/馬來/印尼：僅支援有 Address/Alamat 前綴的格式
+  // 不在上述格式的地址無法自動擷取，需使用者手動填入
   let address: string | null = null;
   const addrText = [description, title].filter(Boolean).join('\n');
-  // Priority: specific street address (with 號/号) > labeled address > Japan address
-  // 1. Taiwan full address anywhere in text (市...區...路/街...號)
-  // 2. 🗺️/地址/住所 prefix + ends with 號
-  // 3. 📍 prefix + ends with 號
-  // 4. Japan address pattern
-  // 5. 📍/地址 prefix (generic fallback, only if > 10 chars to avoid "Taipei, Taiwan")
   const addrPatterns = [
+    // 1. 台灣完整地址（市/縣 + 區 + 路/街 + 號）
     /((?:台[北中南東]|新北|高雄|基隆|桃園|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|澎湖)[市縣][\S]{3,50}[號号])/,
-    /(?:🗺️|地址|住所|Address)[：:\s]*([^\n]{5,60}[號号])/i,
-    /(?:📍)[：:\s]*([^\n]{5,60}[號号])/i,
-    /((?:東京|大阪|京都|神戸|福岡|名古屋|札幌|沖縄)(?:都|府|県)?[\S]{3,50})/,
-    /(?:🗺️|地址|住所|Address)[：:\s]*([^\n]{10,60})/i,
+    // 2. 日本地址（都/府/県 + 区/町 + 番地）
+    /((?:東京都?|大阪府?|京都府?|北海道|神[奈戸]川?県?|福岡県?|愛知県?|沖縄県?)[\S]{3,60})/,
+    // 3. 韓國地址（시/구/동/로）
+    /((?:서울|부산|인천|대구|대전|광주|울산|제주)[\S가-힣\s]{5,60})/,
+    // 4. 帶前綴 + 結尾有號
+    /(?:🗺️|地址|住所|Address|ที่อยู่|주소|Alamat)[：:\s]*([^\n]{5,80}[號号])/i,
+    // 5. 📍 + 結尾有號
+    /📍[：:\s]*([^\n]{5,80}[號号])/i,
+    // 6. 英文地址（門牌 + Street/Road/Ave 等）
+    /(\d{1,5}\s+[\w\s]{3,40}(?:Street|St|Road|Rd|Avenue|Ave|Boulevard|Blvd|Lane|Ln|Drive|Dr)[\w\s,]{0,40})/i,
+    // 7. 通用前綴（≥15 字，避免太短的泛地名）
+    /(?:🗺️|地址|住所|Address|ที่อยู่|주소|Alamat)[：:\s]*([^\n]{15,80})/i,
   ];
   for (const pattern of addrPatterns) {
     const m = addrText.match(pattern);
