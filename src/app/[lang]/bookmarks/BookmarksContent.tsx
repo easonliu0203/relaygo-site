@@ -42,6 +42,10 @@ const UI: Record<string, Record<LangCode, string>> = {
     'zh-TW': '♥ 我的最愛', 'zh-CN': '♥ 我的收藏', en: '♥ My Favorites', ja: '♥ お気に入り', ko: '♥ 즐겨찾기',
     th: '♥ รายการโปรด', vi: '♥ Yêu thích', ms: '♥ Kegemaran', id: '♥ Favorit', fil: '♥ Paborito',
   },
+  myShares: {
+    'zh-TW': '✎ 我的分享', 'zh-CN': '✎ 我的分享', en: '✎ My Shares', ja: '✎ 自分の共有', ko: '✎ 내 공유',
+    th: '✎ การแชร์ของฉัน', vi: '✎ Chia sẻ của tôi', ms: '✎ Perkongsian Saya', id: '✎ Bagikan Saya', fil: '✎ Aking Ibinahagi',
+  },
   loginHint: {
     'zh-TW': '登入後可收藏、編輯自己分享的書籤', 'zh-CN': '登录后可收藏、编辑自己分享的书签', en: 'Log in to save favorites and edit your bookmarks', ja: 'ログインしてお気に入り保存・編集', ko: '로그인하여 즐겨찾기 저장 및 편집',
     th: 'เข้าสู่ระบบเพื่อบันทึกและแก้ไข', vi: 'Đăng nhập để lưu và chỉnh sửa', ms: 'Log masuk untuk simpan dan edit', id: 'Masuk untuk menyimpan dan mengedit', fil: 'Mag-login para mag-save at mag-edit',
@@ -77,6 +81,7 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
   const [editingBookmark, setEditingBookmark] = useState<TravelBookmark | null>(null);
   const [filterCat, setFilterCat] = useState<string>(currentCategory || '');
   const [showFavOnly, setShowFavOnly] = useState(false);
+  const [showMyShares, setShowMyShares] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [favIds, setFavIds] = useState<Set<string>>(new Set());
 
@@ -135,6 +140,9 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
     : bookmarks;
   if (showFavOnly) {
     filtered = filtered.filter((b) => favIds.has(b.id));
+  }
+  if (showMyShares && user) {
+    filtered = filtered.filter((b) => b.created_by === user.uid);
   }
 
   const handleSubmitted = useCallback(() => {
@@ -231,17 +239,25 @@ export default function BookmarksContent({ bookmarks, initialLang, currentCountr
 
         <div className="bm-filter-row">
           <button
-            className={`bm-filter-pill ${!filterCat && !showFavOnly ? 'active' : ''}`}
-            onClick={() => { setFilterCat(''); setShowFavOnly(false); }}
+            className={`bm-filter-pill ${!filterCat && !showFavOnly && !showMyShares ? 'active' : ''}`}
+            onClick={() => { setFilterCat(''); setShowFavOnly(false); setShowMyShares(false); }}
           >
             {t('all', lang)}
           </button>
           {user && (
             <button
               className={`bm-filter-pill bm-filter-pill-fav ${showFavOnly ? 'active' : ''}`}
-              onClick={() => { setShowFavOnly(!showFavOnly); setFilterCat(''); }}
+              onClick={() => { setShowFavOnly(!showFavOnly); setShowMyShares(false); setFilterCat(''); }}
             >
               {t('favorites', lang)}
+            </button>
+          )}
+          {user && (
+            <button
+              className={`bm-filter-pill bm-filter-pill-mine ${showMyShares ? 'active' : ''}`}
+              onClick={() => { setShowMyShares(!showMyShares); setShowFavOnly(false); setFilterCat(''); }}
+            >
+              {t('myShares', lang)}
             </button>
           )}
           {CATEGORIES.map((cat) => {

@@ -316,6 +316,16 @@
   color: #fff !important;
 }
 
+.bm-filter-pill-mine {
+  border-color: var(--primary, #6C63FF) !important;
+  color: var(--primary, #6C63FF) !important;
+}
+
+.bm-filter-pill-mine.active {
+  background: var(--primary, #6C63FF) !important;
+  color: #fff !important;
+}
+
 .bm-card-body {
   padding: 16px;
   display: flex;
