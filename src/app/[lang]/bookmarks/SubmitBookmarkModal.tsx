@@ -78,7 +78,7 @@ interface Props {
 export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted, userId }: Props) {
   const [url, setUrl] = useState('');
   const [extracting, setExtracting] = useState(false);
-  const [extracted, setExtracted] = useState<{ platform: string; title: string | null; description: string | null; thumbnail_url: string | null; author: string | null; og_data: Record<string, unknown> } | null>(null);
+  const [extracted, setExtracted] = useState<{ platform: string; title: string | null; description: string | null; thumbnail_url: string | null; author: string | null; address: string | null; og_data: Record<string, unknown> } | null>(null);
   const [description, setDescription] = useState('');
   const [countrySlug, setCountrySlug] = useState('taiwan');
   const [citySlug, setCitySlug] = useState('');
@@ -137,6 +137,7 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
           category: categories.join(','),
           og_data: extracted.og_data,
           created_by: userId || null,
+          address: extracted.address || null,
         }),
       });
       const data = await res.json();

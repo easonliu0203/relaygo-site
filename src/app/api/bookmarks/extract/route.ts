@@ -179,11 +179,30 @@ async function extractMetadata(url: string, platform: string) {
     }
   }
 
+  // Extract address from description or title
+  let address: string | null = null;
+  const addrText = [description, title].filter(Boolean).join('\n');
+  // Patterns: 📍：地址, 地址：xxx, 住所：xxx, 📍 台北市..., or lines containing 市...區...路/街...號
+  const addrPatterns = [
+    /(?:📍|地址|住所|Address)[：:\s]*([^\n]{5,60}[號号])/i,
+    /(?:📍|地址|住所|Address)[：:\s]*([^\n]{5,60})/i,
+    /((?:台[北中南東]|新北|高雄|基隆|桃園|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|澎湖)[市縣][\S]{3,50}[號号])/,
+    /((?:東京|大阪|京都|神戸|福岡|名古屋|札幌|沖縄)(?:都|府|県)?[\S]{3,50})/,
+  ];
+  for (const pattern of addrPatterns) {
+    const m = addrText.match(pattern);
+    if (m) {
+      address = m[1].trim().replace(/\n.*$/, '').trim();
+      break;
+    }
+  }
+
   return {
     title: title || null,
     description: description || null,
     thumbnail_url: thumbnail_url || null,
     author: author || null,
+    address,
     og_data,
   };
 }
@@ -205,9 +224,9 @@ export async function POST(req: Request) {
     }
 
     const platform = detectPlatform(url);
-    const { title, description, thumbnail_url, author, og_data } = await extractMetadata(url, platform);
+    const { title, description, thumbnail_url, author, address, og_data } = await extractMetadata(url, platform);
 
-    return NextResponse.json({ platform, title, description, thumbnail_url, author, og_data });
+    return NextResponse.json({ platform, title, description, thumbnail_url, author, address, og_data });
   } catch (error) {
     console.error('Extract API error:', error);
     return NextResponse.json({ error: 'Failed to extract metadata' }, { status: 500 });
