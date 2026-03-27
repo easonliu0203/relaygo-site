@@ -11,9 +11,45 @@ function detectPlatform(url: string): string {
     if (host.includes('tiktok.com')) return 'tiktok';
     if (host.includes('threads.net')) return 'threads';
     if (host.includes('xiaohongshu.com') || host.includes('xhslink.com')) return 'xiaohongshu';
+    if (host.includes('maps.google') || host.includes('maps.app.goo.gl')) return 'google_maps';
+    if (host.includes('google.com') && new URL(url).pathname.startsWith('/maps')) return 'google_maps';
     return 'other';
   } catch {
     return 'other';
+  }
+}
+
+/** 從 Google Maps URL 解析地點名稱和座標 */
+function parseGoogleMapsUrl(url: string): { placeName: string | null; lat: number | null; lng: number | null } {
+  try {
+    const urlObj = new URL(url);
+    const path = decodeURIComponent(urlObj.pathname);
+
+    // 格式: /maps/place/PLACE_NAME/@LAT,LNG,ZOOM
+    let placeName: string | null = null;
+    const placeMatch = path.match(/\/place\/([^/@]+)/);
+    if (placeMatch) {
+      placeName = placeMatch[1].replace(/\+/g, ' ');
+    }
+
+    // 從 query 解析（某些格式用 q= 參數）
+    if (!placeName) {
+      const q = urlObj.searchParams.get('q');
+      if (q) placeName = q;
+    }
+
+    // 座標: /@LAT,LNG 或 @LAT,LNG
+    let lat: number | null = null;
+    let lng: number | null = null;
+    const coordMatch = url.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+    if (coordMatch) {
+      lat = parseFloat(coordMatch[1]);
+      lng = parseFloat(coordMatch[2]);
+    }
+
+    return { placeName, lat, lng };
+  } catch {
+    return { placeName: null, lat: null, lng: null };
   }
 }
 
@@ -68,6 +104,16 @@ async function extractMetadata(url: string, platform: string) {
   let description: string | undefined;
   let thumbnail_url: string | undefined;
   let og_data: Record<string, unknown> = {};
+
+  // Google Maps: 從 URL 解析地點名稱和座標
+  let gmapsLat: number | null = null;
+  let gmapsLng: number | null = null;
+  if (platform === 'google_maps') {
+    const parsed = parseGoogleMapsUrl(url);
+    if (parsed.placeName) title = parsed.placeName;
+    gmapsLat = parsed.lat;
+    gmapsLng = parsed.lng;
+  }
 
   // Try oEmbed for supported platforms
   if (platform === 'instagram') {
@@ -218,6 +264,8 @@ async function extractMetadata(url: string, platform: string) {
     aiCountry,
     aiCity,
     aiDistrict,
+    latitude: gmapsLat,
+    longitude: gmapsLng,
     og_data,
   };
 }
@@ -239,9 +287,9 @@ export async function POST(req: Request) {
     }
 
     const platform = detectPlatform(url);
-    const { title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, og_data } = await extractMetadata(url, platform);
+    const { title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, latitude, longitude, og_data } = await extractMetadata(url, platform);
 
-    return NextResponse.json({ platform, title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, og_data });
+    return NextResponse.json({ platform, title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, latitude, longitude, og_data });
   } catch (error) {
     console.error('Extract API error:', error);
     return NextResponse.json({ error: 'Failed to extract metadata' }, { status: 500 });
