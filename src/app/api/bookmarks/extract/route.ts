@@ -232,9 +232,14 @@ async function extractMetadata(url: string, platform: string) {
   let aiCountry: string | null = null;
   let aiCity: string | null = null;
   let aiDistrict: string | null = null;
-  const addrText = [description, title].filter(Boolean).join('\n');
+  // Google Maps: 地點名稱 + 座標提供更多 context 給 AI
+  const addrParts = [description, title].filter(Boolean);
+  if (platform === 'google_maps' && gmapsLat && gmapsLng) {
+    addrParts.push(`Location coordinates: ${gmapsLat},${gmapsLng}`);
+  }
+  const addrText = addrParts.join('\n');
 
-  if (addrText.length > 10) {
+  if (addrText.length > 3) {
     try {
       const aiRes = await fetch('https://api.relaygo.pro/api/ai/extract-address', {
         method: 'POST',
