@@ -190,39 +190,14 @@ async function extractMetadata(url: string, platform: string) {
   //   ⚠️ 泰文：僅支援有前綴（ที่อยู่）的格式
   //   ⚠️ 越南/馬來/印尼：僅支援有 Address/Alamat 前綴的格式
   // 不在上述格式的地址無法自動擷取，需使用者手動填入
+  // 用 AI（Gemini Flash）擷取地址
   let address: string | null = null;
-  const addrText = [description, title].filter(Boolean).join('\n');
-  const addrPatterns = [
-    // 0. 📍 + 〒 日本郵遞區號（最高優先，明確地址標記）
-    /📍[：:\s]*([〒\d][^\n]{8,80})/,
-    // 1. 📍 前綴（通用，不限結尾）
-    /📍[：:\s]*([^\n]{10,80})/,
-    // 2. 台灣完整地址（市/縣 + 區 + 路/街 + 號）
-    /((?:台[北中南東]|新北|高雄|基隆|桃園|新竹|苗栗|彰化|南投|雲林|嘉義|屏東|宜蘭|花蓮|台東|澎湖)[市縣][\S]{3,50}[號号])/,
-    // 3. 日本地址（〒郵遞區號開頭）
-    /(〒\d{3}-?\d{4}\s*[\S\s]{5,60})/,
-    // 4. 日本地址（都/府/県 + 必須含「区/市/町/村/郡」才算地址）
-    /((?:東京都|大阪府|京都府|北海道|[^\n]{1,4}県)[\S]*?(?:区|市|町|村|郡)[\S]{2,50})/,
-    // 5. 韓國地址（시/구/동/로）
-    /((?:서울|부산|인천|대구|대전|광주|울산|제주)[\S가-힣\s]{5,60})/,
-    // 6. 帶前綴標記的地址
-    /(?:🗺️|地址|住所|Address|ที่อยู่|주소|Alamat)[：:\s]*([^\n]{10,80})/i,
-    // 7. 英文地址（門牌 + Street/Road/Ave 等）
-    /(\d{1,5}\s+[\w\s]{3,40}(?:Street|St|Road|Rd|Avenue|Ave|Boulevard|Blvd|Lane|Ln|Drive|Dr)[\w\s,]{0,40})/i,
-  ];
-  for (const pattern of addrPatterns) {
-    const m = addrText.match(pattern);
-    if (m) {
-      address = m[1].trim().replace(/\n.*$/, '').trim();
-      break;
-    }
-  }
-
-  // 正則抓不到 → AI fallback（Gemini Flash via 後端 proxy）
   let aiCountry: string | null = null;
   let aiCity: string | null = null;
   let aiDistrict: string | null = null;
-  if (!address && addrText.length > 10) {
+  const addrText = [description, title].filter(Boolean).join('\n');
+
+  if (addrText.length > 10) {
     try {
       const aiRes = await fetch('https://api.relaygo.pro/api/ai/extract-address', {
         method: 'POST',
@@ -239,7 +214,7 @@ async function extractMetadata(url: string, platform: string) {
         console.log('[Extract] AI result:', JSON.stringify(aiData));
       }
     } catch (e) {
-      console.log('[Extract] AI fallback error:', e);
+      console.log('[Extract] AI error:', e);
     }
   }
 

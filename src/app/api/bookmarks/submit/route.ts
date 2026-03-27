@@ -135,15 +135,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields: url, platform, city_slug, category' }, { status: 400 });
     }
 
-    // 地址擷取：客戶端 → 正則 → AI fallback
+    // 地址擷取：客戶端傳的 → AI（Gemini Flash）
     const addrText = [description, title].filter(Boolean).join('\n');
-    let address = clientAddress || extractAddress(addrText);
+    let address = clientAddress || null;
 
-    // 正則抓不到 → AI fallback（Gemini Flash）
-    let aiResult: { address: string | null; country: string | null; city: string | null; district: string | null } | null = null;
+    // 沒有客戶端地址 → 用 AI 擷取
     if (!address && addrText.length > 10) {
-      console.log('[Submit] Regex found no address, trying AI...');
-      aiResult = await extractAddressWithAI(addrText);
+      const aiResult = await extractAddressWithAI(addrText);
       if (aiResult?.address) {
         address = aiResult.address;
         console.log('[Submit] AI extracted address:', address);
