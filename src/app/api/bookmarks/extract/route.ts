@@ -291,8 +291,28 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
     }
 
-    const platform = detectPlatform(url);
-    const { title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, latitude, longitude, og_data } = await extractMetadata(url, platform);
+    // Google Maps 短網址（maps.app.goo.gl）需先 resolve 成完整 URL
+    let resolvedUrl = url;
+    let platform = detectPlatform(url);
+    if (platform === 'google_maps' && url.includes('goo.gl')) {
+      try {
+        const redirectRes = await fetch(url, {
+          method: 'HEAD',
+          redirect: 'follow',
+          headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RelayGoBot/1.0)' },
+          signal: AbortSignal.timeout(8000),
+        });
+        if (redirectRes.url && redirectRes.url !== url) {
+          resolvedUrl = redirectRes.url;
+          platform = detectPlatform(resolvedUrl);
+          console.log('[Extract] Resolved short URL:', resolvedUrl.slice(0, 120));
+        }
+      } catch (e) {
+        console.log('[Extract] Short URL resolve failed:', e);
+      }
+    }
+
+    const { title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, latitude, longitude, og_data } = await extractMetadata(resolvedUrl, platform);
 
     return NextResponse.json({ platform, title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, latitude, longitude, og_data });
   } catch (error) {
