@@ -206,8 +206,12 @@ export default function SubmitBookmarkModal({ isOpen, onClose, lang, onSubmitted
         if (data.address && !address) {
           setAddress(data.address);
         }
-        // Auto-fill country/city/district from address
-        if (data.address) {
+        // Auto-fill country/city/district：優先 AI 回傳，fallback 正則解析
+        if (data.aiCountry && !country) { setCountry(data.aiCountry); setAutoFilled(true); }
+        if (data.aiCity && !city) { setCity(data.aiCity); setAutoFilled(true); }
+        if (data.aiDistrict && !district) { setDistrict(data.aiDistrict); setAutoFilled(true); }
+        // fallback: 如果 AI 沒回但有地址，用正則
+        if (!data.aiCountry && data.address) {
           const parsed = parseAddress(data.address);
           if (parsed.country && !country) setCountry(parsed.country);
           if (parsed.city && !city) setCity(parsed.city);
