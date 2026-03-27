@@ -218,12 +218,40 @@ async function extractMetadata(url: string, platform: string) {
     }
   }
 
+  // 正則抓不到 → AI fallback（Gemini Flash via 後端 proxy）
+  let aiCountry: string | null = null;
+  let aiCity: string | null = null;
+  let aiDistrict: string | null = null;
+  if (!address && addrText.length > 10) {
+    try {
+      const aiRes = await fetch('https://api.relaygo.pro/api/ai/extract-address', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: addrText.slice(0, 2000) }),
+        signal: AbortSignal.timeout(10000),
+      });
+      if (aiRes.ok) {
+        const aiData = await aiRes.json() as Record<string, any>;
+        if (aiData.address) address = aiData.address;
+        if (aiData.country) aiCountry = aiData.country;
+        if (aiData.city) aiCity = aiData.city;
+        if (aiData.district) aiDistrict = aiData.district;
+        console.log('[Extract] AI result:', JSON.stringify(aiData));
+      }
+    } catch (e) {
+      console.log('[Extract] AI fallback error:', e);
+    }
+  }
+
   return {
     title: title || null,
     description: description || null,
     thumbnail_url: thumbnail_url || null,
     author: author || null,
     address,
+    aiCountry,
+    aiCity,
+    aiDistrict,
     og_data,
   };
 }
@@ -245,9 +273,9 @@ export async function POST(req: Request) {
     }
 
     const platform = detectPlatform(url);
-    const { title, description, thumbnail_url, author, address, og_data } = await extractMetadata(url, platform);
+    const { title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, og_data } = await extractMetadata(url, platform);
 
-    return NextResponse.json({ platform, title, description, thumbnail_url, author, address, og_data });
+    return NextResponse.json({ platform, title, description, thumbnail_url, author, address, aiCountry, aiCity, aiDistrict, og_data });
   } catch (error) {
     console.error('Extract API error:', error);
     return NextResponse.json({ error: 'Failed to extract metadata' }, { status: 500 });

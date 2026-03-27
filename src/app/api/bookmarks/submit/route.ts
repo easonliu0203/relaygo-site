@@ -95,6 +95,31 @@ function extractAddress(text: string): string | null {
   return null;
 }
 
+/** AI 地址擷取 fallback — 走後端 Gemini proxy */
+async function extractAddressWithAI(text: string): Promise<{
+  address: string | null;
+  country: string | null;
+  city: string | null;
+  district: string | null;
+} | null> {
+  if (!text) return null;
+  try {
+    const res = await fetch('https://api.relaygo.pro/api/ai/extract-address', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text.slice(0, 2000) }),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) return null;
+    const data = await res.json() as Record<string, any>;
+    if (data.address || data.country || data.city) return data as any;
+    return null;
+  } catch (e) {
+    console.error('[AI Extract] Error:', e);
+    return null;
+  }
+}
+
 export async function POST(req: Request) {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
   if (!key) {
@@ -110,9 +135,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields: url, platform, city_slug, category' }, { status: 400 });
     }
 
-    // 地址擷取：優先使用客戶端傳來的，否則從 description/title 自動擷取
+    // 地址擷取：客戶端 → 正則 → AI fallback
     const addrText = [description, title].filter(Boolean).join('\n');
-    const address = clientAddress || extractAddress(addrText);
+    let address = clientAddress || extractAddress(addrText);
+
+    // 正則抓不到 → AI fallback（Gemini Flash）
+    let aiResult: { address: string | null; country: string | null; city: string | null; district: string | null } | null = null;
+    if (!address && addrText.length > 10) {
+      console.log('[Submit] Regex found no address, trying AI...');
+      aiResult = await extractAddressWithAI(addrText);
+      if (aiResult?.address) {
+        address = aiResult.address;
+        console.log('[Submit] AI extracted address:', address);
+      }
+    }
 
     // Geocode address → 座標
     let latitude: number | null = null;
