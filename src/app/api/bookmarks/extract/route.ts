@@ -179,18 +179,9 @@ async function extractMetadata(url: string, platform: string) {
     }
   }
 
-  // ── 地址擷取（國際化）──
-  // 目前能正確提取的語言/格式：
-  //   ✅ 繁體中文（台灣）：台北市中山區民生東路一段41號
-  //   ✅ 簡體中文（中國）：北京市朝阳区建国路XX号
-  //   ✅ 日文：東京都渋谷区神宮前1-2-3
-  //   ✅ 韓文：서울시 강남구 역삼동 123-45
-  //   ✅ 英文：123 Main Street, City
-  //   ✅ 通用前綴：📍/🗺️/地址/Address/住所/ที่อยู่/주소/Alamat
-  //   ⚠️ 泰文：僅支援有前綴（ที่อยู่）的格式
-  //   ⚠️ 越南/馬來/印尼：僅支援有 Address/Alamat 前綴的格式
-  // 不在上述格式的地址無法自動擷取，需使用者手動填入
-  // 用 AI（Gemini Flash）擷取地址
+  // ── 地址擷取（AI，無語言限制）──
+  // 使用 Gemini Flash AI 從貼文內容擷取地址，支援所有語言
+  // 回傳：address（完整地址）、country（中文國家名）、city、district
   let address: string | null = null;
   let aiCountry: string | null = null;
   let aiCity: string | null = null;
