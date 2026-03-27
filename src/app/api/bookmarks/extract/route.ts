@@ -153,6 +153,16 @@ async function extractMetadata(url: string, platform: string) {
     }
   }
 
+  // Google Maps: 過濾通用 OG 資料（不是具體地點資訊）
+  if (platform === 'google_maps') {
+    if (description === 'Find local businesses, view maps and get driving directions in Google Maps.') {
+      description = undefined;
+    }
+    if (thumbnail_url?.includes('maps.google.com/maps/api/staticmap') || thumbnail_url?.includes('maps.gstatic.com')) {
+      thumbnail_url = undefined;
+    }
+  }
+
   // Decode HTML entities FIRST, then extract caption & author
   if (title) title = decodeHTMLEntities(title);
   if (description) description = decodeHTMLEntities(description);

@@ -128,7 +128,7 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { url, platform, title, description, thumbnail_url, country_slug, city_slug, district, category, og_data, author, created_by, address: clientAddress } = body;
+    const { url, platform, title, description, thumbnail_url, country_slug, city_slug, district, category, og_data, author, created_by, address: clientAddress, latitude: clientLat, longitude: clientLng } = body;
 
     // Validation
     if (!url || !platform || !city_slug || !category) {
@@ -148,10 +148,10 @@ export async function POST(req: Request) {
       }
     }
 
-    // Geocode address → 座標
-    let latitude: number | null = null;
-    let longitude: number | null = null;
-    if (address) {
+    // 座標：優先用客戶端傳的（Google Maps URL 解析的），否則 geocode
+    let latitude: number | null = typeof clientLat === 'number' ? clientLat : null;
+    let longitude: number | null = typeof clientLng === 'number' ? clientLng : null;
+    if (!latitude && !longitude && address) {
       const coords = await geocodeAddress(address);
       if (coords) {
         latitude = coords.lat;
