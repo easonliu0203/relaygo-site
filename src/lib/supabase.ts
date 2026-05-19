@@ -1,4 +1,5 @@
 const SUPABASE_URL = 'https://vlyhwegpvpnjyocqmfqc.supabase.co/rest/v1';
+const FETCH_TIMEOUT_MS = 8000;
 
 function getHeaders() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -7,6 +8,24 @@ function getHeaders() {
     Authorization: `Bearer ${key}`,
     'Content-Type': 'application/json',
   };
+}
+
+async function safeJson<T>(url: string, fallback: T): Promise<T> {
+  const ctrl = new AbortController();
+  const timeoutId = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, {
+      headers: getHeaders(),
+      next: { revalidate: 3600 },
+      signal: ctrl.signal,
+    });
+    if (!res.ok) return fallback;
+    return (await res.json()) as T;
+  } catch {
+    return fallback;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 export interface TourGuide {
@@ -27,30 +46,24 @@ export interface TourGuide {
 }
 
 export async function getPublishedGuides(): Promise<TourGuide[]> {
-  const res = await fetch(
+  return safeJson<TourGuide[]>(
     `${SUPABASE_URL}/tour_guides?is_published=eq.true&order=sort_order.asc,created_at.desc&select=*`,
-    { headers: getHeaders(), next: { revalidate: 3600 } }
+    []
   );
-  if (!res.ok) return [];
-  return res.json();
 }
 
 export async function getGuideBySlug(slug: string): Promise<TourGuide | null> {
-  const res = await fetch(
+  const data = await safeJson<TourGuide[]>(
     `${SUPABASE_URL}/tour_guides?slug=eq.${encodeURIComponent(slug)}&is_published=eq.true&select=*`,
-    { headers: getHeaders(), next: { revalidate: 3600 } }
+    []
   );
-  if (!res.ok) return null;
-  const data = await res.json();
   return data[0] || null;
 }
 
 export async function getAllGuideSlugs(): Promise<string[]> {
-  const res = await fetch(
+  const data = await safeJson<{ slug: string }[]>(
     `${SUPABASE_URL}/tour_guides?is_published=eq.true&select=slug`,
-    { headers: getHeaders(), next: { revalidate: 3600 } }
+    []
   );
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.map((r: { slug: string }) => r.slug);
+  return data.map((r) => r.slug);
 }

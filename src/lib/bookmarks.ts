@@ -1,4 +1,5 @@
 const SUPABASE_URL = 'https://vlyhwegpvpnjyocqmfqc.supabase.co/rest/v1';
+const FETCH_TIMEOUT_MS = 8000;
 
 function getHeaders() {
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
@@ -7,6 +8,24 @@ function getHeaders() {
     Authorization: `Bearer ${key}`,
     'Content-Type': 'application/json',
   };
+}
+
+async function safeJson<T>(url: string, fallback: T): Promise<T> {
+  const ctrl = new AbortController();
+  const timeoutId = setTimeout(() => ctrl.abort(), FETCH_TIMEOUT_MS);
+  try {
+    const res = await fetch(url, {
+      headers: getHeaders(),
+      next: { revalidate: 3600 },
+      signal: ctrl.signal,
+    });
+    if (!res.ok) return fallback;
+    return (await res.json()) as T;
+  } catch {
+    return fallback;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 export interface TravelBookmark {
@@ -31,49 +50,39 @@ export interface TravelBookmark {
 }
 
 export async function getPublishedBookmarks(limit = 50): Promise<TravelBookmark[]> {
-  const res = await fetch(
+  return safeJson<TravelBookmark[]>(
     `${SUPABASE_URL}/travel_bookmarks?is_published=eq.true&order=created_at.desc&limit=${limit}&select=*`,
-    { headers: getHeaders(), next: { revalidate: 3600 } }
+    []
   );
-  if (!res.ok) return [];
-  return res.json();
 }
 
 export async function getBookmarksByCountry(countrySlug: string, limit = 50): Promise<TravelBookmark[]> {
-  const res = await fetch(
+  return safeJson<TravelBookmark[]>(
     `${SUPABASE_URL}/travel_bookmarks?is_published=eq.true&country_slug=eq.${encodeURIComponent(countrySlug)}&order=created_at.desc&limit=${limit}&select=*`,
-    { headers: getHeaders(), next: { revalidate: 3600 } }
+    []
   );
-  if (!res.ok) return [];
-  return res.json();
 }
 
 export async function getBookmarksByCity(countrySlug: string, citySlug: string, limit = 50): Promise<TravelBookmark[]> {
-  const res = await fetch(
+  return safeJson<TravelBookmark[]>(
     `${SUPABASE_URL}/travel_bookmarks?is_published=eq.true&country_slug=eq.${encodeURIComponent(countrySlug)}&city_slug=eq.${encodeURIComponent(citySlug)}&order=created_at.desc&limit=${limit}&select=*`,
-    { headers: getHeaders(), next: { revalidate: 3600 } }
+    []
   );
-  if (!res.ok) return [];
-  return res.json();
 }
 
 export async function getBookmarksByCityAndCategory(countrySlug: string, citySlug: string, category: string, limit = 50): Promise<TravelBookmark[]> {
-  const res = await fetch(
+  return safeJson<TravelBookmark[]>(
     `${SUPABASE_URL}/travel_bookmarks?is_published=eq.true&country_slug=eq.${encodeURIComponent(countrySlug)}&city_slug=eq.${encodeURIComponent(citySlug)}&category=like.*${encodeURIComponent(category)}*&order=created_at.desc&limit=${limit}&select=*`,
-    { headers: getHeaders(), next: { revalidate: 3600 } }
+    []
   );
-  if (!res.ok) return [];
-  return res.json();
 }
 
 /** Get distinct country+city+category combos that have bookmarks (for sitemap) */
 export async function getBookmarkCombinations(): Promise<Array<{ country_slug: string; city_slug: string; category: string }>> {
-  const res = await fetch(
+  const rows = await safeJson<Array<{ country_slug: string; city_slug: string; category: string }>>(
     `${SUPABASE_URL}/travel_bookmarks?is_published=eq.true&select=country_slug,city_slug,category`,
-    { headers: getHeaders(), next: { revalidate: 3600 } }
+    []
   );
-  if (!res.ok) return [];
-  const rows: Array<{ country_slug: string; city_slug: string; category: string }> = await res.json();
   // Deduplicate
   const seen = new Set<string>();
   return rows.filter((r) => {
