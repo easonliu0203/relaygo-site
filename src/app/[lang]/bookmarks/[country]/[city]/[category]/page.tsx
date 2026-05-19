@@ -33,13 +33,10 @@ export async function generateMetadata({ params }: { params: { lang: string; cou
   const title = `${city}${cat} | RelayGo 旅遊書籤`;
   const desc = `${city}（${country}）${cat}推薦 — 來自 Instagram、TikTok 的旅遊靈感收藏`;
 
-  const bookmarks = await getBookmarksByCityAndCategory(params.country, params.city, params.category, 1);
-  const hasContent = bookmarks.length > 0;
-
   return {
     title,
     description: desc,
-    robots: hasContent ? { index: true, follow: true } : { index: false, follow: true },
+    robots: { index: false, follow: true },
     openGraph: { title, description: desc, type: 'website', url: canonical, locale: locale.replace('-', '_') },
     alternates: { canonical },
   };

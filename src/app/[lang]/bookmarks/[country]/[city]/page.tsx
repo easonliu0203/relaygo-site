@@ -29,13 +29,10 @@ export async function generateMetadata({ params }: { params: { lang: string; cou
   const title = `${city} 旅遊書籤 | RelayGo`;
   const desc = `${city}（${country}）旅遊靈感 — 美食、景點、咖啡、秘境等社群推薦`;
 
-  const bookmarks = await getBookmarksByCity(params.country, params.city, 1);
-  const hasContent = bookmarks.length > 0;
-
   return {
     title,
     description: desc,
-    robots: hasContent ? { index: true, follow: true } : { index: false, follow: true },
+    robots: { index: true, follow: true },
     openGraph: { title, description: desc, type: 'website', url: canonical, locale: locale.replace('-', '_') },
     alternates: { canonical },
   };

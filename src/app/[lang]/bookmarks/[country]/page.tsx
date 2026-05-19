@@ -26,14 +26,10 @@ export async function generateMetadata({ params }: { params: { lang: string; cou
   const title = `${country} 旅遊書籤 | RelayGo`;
   const desc = `${country} 旅遊靈感收藏 — 美食、景點、咖啡、秘境等社群推薦`;
 
-  // Check if this page has content — noindex empty pages
-  const bookmarks = await getBookmarksByCountry(params.country, 1);
-  const hasContent = bookmarks.length > 0;
-
   return {
     title,
     description: desc,
-    robots: hasContent ? { index: true, follow: true } : { index: false, follow: true },
+    robots: { index: true, follow: true },
     openGraph: { title, description: desc, type: 'website', url: canonical, locale: locale.replace('-', '_') },
     alternates: { canonical },
   };
