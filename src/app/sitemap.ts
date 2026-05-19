@@ -74,15 +74,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       });
     }
-
-    for (const bm of bmCombos) {
-      entries.push({
-        url: `${base}${prefix}/bookmarks/${bm.country_slug}/${bm.city_slug}/${bm.category}`,
-        lastModified: new Date(),
-        changeFrequency: 'weekly',
-        priority: 0.6,
-      });
-    }
   }
 
   return entries;

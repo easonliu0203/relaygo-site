@@ -6,6 +6,10 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
+        disallow: [
+          '/bookmarks/*/*/*',
+          '/*/bookmarks/*/*/*',
+        ],
       },
     ],
     sitemap: 'https://relaygo.pro/sitemap.xml',
