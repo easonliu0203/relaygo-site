@@ -141,7 +141,14 @@ export const I18N: Record<string, Record<string, string>> = {
         pricing_8h: '8 小時',
         pricing_overtime: '超時 / 小時',
         pricing_note: '實際費用依上車地點與目的地計算，下載 App 即可查看精確報價。',
-        pricing_cta: '下載 App 查看報價'
+        pricing_cta: '下載 App 查看報價',
+        trust_label: '金流安全保障',
+        trust_title: '刷卡消費 安心有保障',
+        trust_partner_prefix: '特約合作金流商',
+        trust_desc: '透過台灣合法金流公司處理所有信用卡交易，您的支付資訊與消費權益受到完整保障。',
+        trust_tag_legal: '合法金流公司',
+        trust_tag_partner: '特約合作商',
+        trust_tag_secure: '加密交易保護'
       },
       'zh-CN': {
         nav_services: '服务项目',
@@ -284,7 +291,14 @@ export const I18N: Record<string, Record<string, string>> = {
         pricing_8h: '8 小时',
         pricing_overtime: '超时 / 小时',
         pricing_note: '实际费用依上车地点与目的地计算，下载 App 即可查看精确报价。',
-        pricing_cta: '下载 App 查看报价'
+        pricing_cta: '下载 App 查看报价',
+        trust_label: '资金流安全保障',
+        trust_title: '刷卡消费 安心有保障',
+        trust_partner_prefix: '特约合作金流商',
+        trust_desc: '通过台湾合法资金流公司处理所有信用卡交易，您的支付信息与消费权益受到完整保障。',
+        trust_tag_legal: '合法金流公司',
+        trust_tag_partner: '特约合作商',
+        trust_tag_secure: '加密交易保护'
       },
       'en': {
         nav_services: 'Services',
@@ -428,7 +442,14 @@ export const I18N: Record<string, Record<string, string>> = {
         pricing_8h: '8 Hours',
         pricing_overtime: 'Overtime / hr',
         pricing_note: 'Actual fares are calculated based on pickup location and destination. Download the app for exact pricing.',
-        pricing_cta: 'Get a Quote in App'
+        pricing_cta: 'Get a Quote in App',
+        trust_label: 'Secure Payment Guarantee',
+        trust_title: 'Pay with Confidence',
+        trust_partner_prefix: 'Authorized payment partner of',
+        trust_desc: 'All card transactions are processed through a licensed Taiwan payment provider, so your payment data and consumer rights are fully protected.',
+        trust_tag_legal: 'Licensed Payment Provider',
+        trust_tag_partner: 'Authorized Partner Merchant',
+        trust_tag_secure: 'Encrypted Transactions'
       },
       'ja': {
         nav_services: 'サービス',
@@ -572,7 +593,14 @@ export const I18N: Record<string, Record<string, string>> = {
         pricing_8h: '8時間',
         pricing_overtime: '延長 / 時間',
         pricing_note: '実際の料金は乗車地と目的地により異なります。アプリで正確な見積もりをご確認ください。',
-        pricing_cta: 'アプリで見積もり'
+        pricing_cta: 'アプリで見積もり',
+        trust_label: '決済の安全性',
+        trust_title: 'カード決済を安心してご利用ください',
+        trust_partner_prefix: '加盟する正規決済代行会社',
+        trust_desc: '台湾の正規認可を受けた決済代行会社を通じてすべてのクレジットカード取引を処理しています。お支払い情報と消費者の権利はしっかりと保護されます。',
+        trust_tag_legal: '正規決済代行会社',
+        trust_tag_partner: '加盟特約店',
+        trust_tag_secure: '暗号化通信で安全'
       },
       'ko': {
         nav_services: '서비스',
@@ -716,7 +744,14 @@ export const I18N: Record<string, Record<string, string>> = {
         pricing_8h: '8시간',
         pricing_overtime: '초과 / 시간',
         pricing_note: '실제 요금은 탑승 장소와 목적지에 따라 다릅니다. 앱에서 정확한 견적을 확인하세요.',
-        pricing_cta: '앱에서 견적 확인'
+        pricing_cta: '앱에서 견적 확인',
+        trust_label: '결제 안전 보장',
+        trust_title: '카드 결제, 안심하고 이용하세요',
+        trust_partner_prefix: '제휴 결제 대행사',
+        trust_desc: '대만의 합법 결제 대행 회사를 통해 모든 신용카드 거래가 처리되며, 결제 정보와 소비자 권리가 완벽하게 보호됩니다.',
+        trust_tag_legal: '합법 결제 회사',
+        trust_tag_partner: '공식 제휴 가맹점',
+        trust_tag_secure: '암호화 거래 보호'
       },
       'th': {
         nav_services: 'บริการ',
@@ -860,7 +895,14 @@ export const I18N: Record<string, Record<string, string>> = {
         pricing_8h: '8 ชั่วโมง',
         pricing_overtime: 'ค่าเกินเวลา / ชม.',
         pricing_note: 'ค่าบริการจริงคำนวณตามจุดรับและจุดหมาย ดาวน์โหลดแอปเพื่อดูราคาที่แม่นยำ',
-        pricing_cta: 'ดูราคาในแอป'
+        pricing_cta: 'ดูราคาในแอป',
+        trust_label: 'ความปลอดภัยในการชำระเงิน',
+        trust_title: 'รูดบัตรอย่างสบายใจ ปลอดภัยทุกธุรกรรม',
+        trust_partner_prefix: 'ผู้ให้บริการรับชำระเงินคู่สัญญา',
+        trust_desc: 'ทุกธุรกรรมบัตรเครดิตดำเนินการผ่านบริษัทรับชำระเงินที่ได้รับอนุญาตในไต้หวัน ข้อมูลการชำระเงินและสิทธิ์ผู้บริโภคของคุณได้รับการคุ้มครองอย่างเต็มที่',
+        trust_tag_legal: 'บริษัทรับชำระเงินถูกกฎหมาย',
+        trust_tag_partner: 'ร้านค้าคู่สัญญา',
+        trust_tag_secure: 'การเข้ารหัสธุรกรรม'
       },
       'vi': {
         nav_services: 'Dịch vụ',
@@ -1004,7 +1046,14 @@ export const I18N: Record<string, Record<string, string>> = {
         pricing_8h: '8 tiếng',
         pricing_overtime: 'Phụ trội / giờ',
         pricing_note: 'Giá thực tế được tính theo điểm đón và điểm đến. Tải ứng dụng để xem báo giá chính xác.',
-        pricing_cta: 'Xem giá trong ứng dụng'
+        pricing_cta: 'Xem giá trong ứng dụng',
+        trust_label: 'Đảm bảo an toàn thanh toán',
+        trust_title: 'Thanh toán thẻ, hoàn toàn yên tâm',
+        trust_partner_prefix: 'Đối tác cổng thanh toán',
+        trust_desc: 'Mọi giao dịch thẻ tín dụng đều được xử lý qua công ty cổng thanh toán hợp pháp tại Đài Loan, thông tin thanh toán và quyền lợi của bạn được bảo vệ trọn vẹn.',
+        trust_tag_legal: 'Cổng thanh toán hợp pháp',
+        trust_tag_partner: 'Đối tác chính thức',
+        trust_tag_secure: 'Giao dịch mã hoá an toàn'
       },
       'ms': {
         nav_services: 'Perkhidmatan',
@@ -1148,7 +1197,14 @@ export const I18N: Record<string, Record<string, string>> = {
         pricing_8h: '8 Jam',
         pricing_overtime: 'Lebih masa / jam',
         pricing_note: 'Tambang sebenar dikira berdasarkan lokasi ambil dan destinasi. Muat turun app untuk sebut harga tepat.',
-        pricing_cta: 'Dapatkan Sebut Harga di App'
+        pricing_cta: 'Dapatkan Sebut Harga di App',
+        trust_label: 'Jaminan Keselamatan Pembayaran',
+        trust_title: 'Bayar dengan Kad, Selamat Tanpa Risau',
+        trust_partner_prefix: 'Rakan kongsi rasmi pemproses pembayaran',
+        trust_desc: 'Semua transaksi kad kredit diproses melalui syarikat pemproses pembayaran berlesen di Taiwan, memastikan maklumat pembayaran dan hak pengguna anda dilindungi sepenuhnya.',
+        trust_tag_legal: 'Pemproses Berlesen',
+        trust_tag_partner: 'Peniaga Rakan Rasmi',
+        trust_tag_secure: 'Transaksi Disulitkan'
       },
       id: {
   nav_services: 'Layanan',
@@ -1284,6 +1340,13 @@ export const I18N: Record<string, Record<string, string>> = {
   pricing_overtime: 'Biaya Lembur',
   pricing_note: '* Harga sudah termasuk tol dan parkir. Harga ditampilkan dalam TWD.',
   pricing_cta: 'Pesan Sekarang',
+  trust_label: 'Jaminan Keamanan Pembayaran',
+  trust_title: 'Bayar dengan Kartu, Tenang Tanpa Khawatir',
+  trust_partner_prefix: 'Mitra resmi penyedia layanan pembayaran',
+  trust_desc: 'Semua transaksi kartu kredit diproses melalui perusahaan payment gateway berlisensi di Taiwan, sehingga informasi pembayaran dan hak konsumen Anda terlindungi sepenuhnya.',
+  trust_tag_legal: 'Penyedia Berlisensi',
+  trust_tag_partner: 'Merchant Mitra Resmi',
+  trust_tag_secure: 'Transaksi Terenkripsi',
 },
       fil: {
   nav_services: 'Mga Serbisyo',
@@ -1419,6 +1482,13 @@ export const I18N: Record<string, Record<string, string>> = {
   pricing_overtime: 'Karagdagang Bayad',
   pricing_note: '* Kasama na ang toll at parking sa presyo. Ang presyo ay ipinapakita sa TWD.',
   pricing_cta: 'Mag-book Ngayon',
+  trust_label: 'Garantisadong Ligtas na Pagbabayad',
+  trust_title: 'Magbayad gamit ang Card, Walang Alalahanin',
+  trust_partner_prefix: 'Opisyal na partner na payment processor',
+  trust_desc: 'Lahat ng credit card transaction ay pinoproseso sa pamamagitan ng lisensyadong payment gateway company sa Taiwan, kaya protektado ang inyong payment information at consumer rights.',
+  trust_tag_legal: 'Lisensyadong Provider',
+  trust_tag_partner: 'Opisyal na Partner Merchant',
+  trust_tag_secure: 'Encrypted na Transaksyon',
 }
     };
 

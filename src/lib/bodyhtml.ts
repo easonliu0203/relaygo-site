@@ -207,6 +207,29 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
     </div>
   </div>
 
+  <!-- Payment Trust Badge -->
+  <section class="trust-section" id="payment-trust" aria-label="Secure Payment">
+    <div class="trust-inner fade-up">
+      <div class="trust-shield" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <div class="trust-body">
+        <div class="trust-label" data-i18n="trust_label">金流安全保障</div>
+        <h2 class="trust-title" data-i18n="trust_title">刷卡消費 安心有保障</h2>
+        <div class="trust-partner-row">
+          <span class="trust-partner-prefix" data-i18n="trust_partner_prefix">特約合作金流商</span>
+          <strong class="trust-partner-name">台灣萬事達金流股份有限公司</strong>
+        </div>
+        <p class="trust-desc" data-i18n="trust_desc">透過台灣合法金流公司處理所有信用卡交易，您的支付資訊與消費權益受到完整保障。</p>
+        <div class="trust-tags">
+          <span class="trust-tag" data-i18n="trust_tag_legal">合法金流公司</span>
+          <span class="trust-tag" data-i18n="trust_tag_partner">特約合作商</span>
+          <span class="trust-tag" data-i18n="trust_tag_secure">加密交易保護</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Featured Guides -->
   <section class="featured-guides-section" id="guides-preview">
     <div class="section-inner">
