@@ -86,7 +86,13 @@ export default function CasesContent({ cases, locale, langPrefix, labels }: Prop
               return (
                 <div key={c.id} className="case-card fade-up">
                   <div className="case-img-wrap">
-                    <img src={c.photo_url} alt={c.alt_text || caption} loading="lazy" />
+                    <img
+                      src={c.photo_url}
+                      alt={c.alt_text || caption}
+                      loading="lazy"
+                      draggable={false}
+                      onContextMenu={(e) => e.preventDefault()}
+                    />
                   </div>
                   <div className="case-caption">{caption}</div>
                 </div>
