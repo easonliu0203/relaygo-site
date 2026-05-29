@@ -82,6 +82,18 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       canonical,
       languages: buildCasesAlternates(),
     },
+    // Page text is still indexable; only the images are opted out.
+    robots: {
+      index: true,
+      follow: true,
+      noimageindex: true,
+      'max-image-preview': 'none',
+    },
+    other: {
+      // Google AI / image opt-out signals (additional <meta name="robots"> tag)
+      // Combined with robots.txt user-agent blocks for actual enforcement.
+      robots: 'noai, noimageai',
+    },
   };
 }
 
