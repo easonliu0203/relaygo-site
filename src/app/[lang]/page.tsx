@@ -222,12 +222,40 @@ export default function HomePage() {
       })
       .catch(() => {});
 
+    // Fetch real service cases preview (homepage section)
+    fetch('/api/cases?limit=6')
+      .then((res) => res.json())
+      .then((data) => {
+        const grid = document.getElementById('casesGrid');
+        if (!grid || !Array.isArray(data?.cases) || data.cases.length === 0) return;
+        const pickCaption = (caps: Record<string, string>): string =>
+          caps?.[locale] || caps?.['en'] || caps?.['zh-TW'] || '';
+        const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (m) =>
+          ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m] as string)
+        );
+        const linkPrefix = langPrefix || '';
+        type RawCase = { id: string; photo_url: string; captions: Record<string, string>; alt_text?: string | null };
+        grid.innerHTML = (data.cases as RawCase[])
+          .map((c) => {
+            const caption = pickCaption(c.captions);
+            const alt = c.alt_text || caption;
+            return `<a href="${linkPrefix}/cases" class="case-card">
+              <div class="case-img-wrap"><img src="${escapeHtml(c.photo_url)}" alt="${escapeHtml(alt)}" loading="lazy" /></div>
+              <div class="case-caption">${escapeHtml(caption)}</div>
+            </a>`;
+          })
+          .join('');
+        // Re-apply fade-up visibility for the freshly injected cards
+        grid.querySelectorAll('.case-card').forEach((el) => el.classList.add('visible'));
+      })
+      .catch(() => {});
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
       statsObserver.disconnect();
     };
-  }, [applyLang, locale, mountKey]);
+  }, [applyLang, locale, langPrefix, mountKey]);
 
   // Firebase auth state → update nav login/logout UI
   useEffect(() => {

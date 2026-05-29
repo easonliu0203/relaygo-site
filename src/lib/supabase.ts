@@ -67,3 +67,23 @@ export async function getAllGuideSlugs(): Promise<string[]> {
   );
   return data.map((r) => r.slug);
 }
+
+export interface ServiceCase {
+  id: string;
+  photo_url: string;
+  captions: Record<string, string>;
+  alt_text: string | null;
+  sort_order: number;
+}
+
+export async function getServiceCases(limit?: number): Promise<ServiceCase[]> {
+  const cap = typeof limit === 'number' ? `&limit=${limit}` : '';
+  return safeJson<ServiceCase[]>(
+    `${SUPABASE_URL}/service_cases?is_published=eq.true&order=sort_order.asc,created_at.desc&select=id,photo_url,captions,alt_text,sort_order${cap}`,
+    []
+  );
+}
+
+export function localizedCaption(c: ServiceCase, lang: string): string {
+  return c.captions[lang] || c.captions['en'] || c.captions['zh-TW'] || '';
+}

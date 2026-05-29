@@ -779,6 +779,109 @@
       font-weight: 800;
     }
 
+    /* ===== Service Cases Section ===== */
+    .cases-section {
+      padding: 80px 24px;
+      background: var(--white);
+    }
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 32px;
+    }
+    .case-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+      box-shadow: 0 4px 16px -8px rgba(22, 33, 62, 0.12);
+      transition: transform 0.25s, box-shadow 0.25s;
+      text-decoration: none;
+      color: inherit;
+    }
+    .case-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px -12px rgba(108, 99, 255, 0.3);
+    }
+    .case-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: var(--gray-100);
+      overflow: hidden;
+    }
+    .case-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .case-card:hover .case-img-wrap img { transform: scale(1.04); }
+    .case-caption {
+      padding: 16px 18px 20px;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--gray-700);
+      font-weight: 500;
+      min-height: 60px;
+    }
+    .case-card.skeleton .case-img-wrap {
+      background: linear-gradient(90deg, var(--gray-100) 0%, #eef0f5 50%, var(--gray-100) 100%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.4s infinite ease-in-out;
+    }
+    .case-card.skeleton .case-caption {
+      height: 60px;
+      background: linear-gradient(90deg, var(--gray-100) 0%, #eef0f5 50%, var(--gray-100) 100%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.4s infinite ease-in-out;
+    }
+    @keyframes skeleton-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .cases-view-all {
+      display: inline-block;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 10px 20px;
+      border: 2px solid var(--primary);
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .cases-view-all:hover {
+      background: var(--primary);
+      color: var(--white);
+    }
+    /* /cases page-specific */
+    .cases-page-section { padding: 100px 24px 80px; background: linear-gradient(180deg, #f8f9ff 0%, #fff 100%); }
+    .cases-page-section .cases-grid { grid-template-columns: repeat(3, 1fr); }
+    .cases-page-header { max-width: 760px; margin: 0 auto 48px; text-align: center; }
+    .cases-page-header h1 { font-size: 38px; font-weight: 800; color: var(--gray-900); margin: 0 0 16px; font-family: var(--heading-font); line-height: 1.2; }
+    .cases-page-header p { font-size: 16px; line-height: 1.7; color: var(--gray-600); margin: 0; }
+    .cases-page-header .privacy-note {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--accent-dark);
+      background: rgba(0, 214, 143, 0.12);
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .cases-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--gray-500);
+      font-size: 15px;
+    }
+
     /* ===== Features Section ===== */
     .features-section {
       padding: 100px 24px;
@@ -1531,6 +1634,12 @@
       .trust-title { font-size: 18px; }
       .trust-partner-name { font-size: 15px; }
       .trust-desc { font-size: 13px; }
+      .cases-section { padding: 50px 16px; }
+      .cases-grid { grid-template-columns: 1fr; gap: 16px; }
+      .cases-page-section { padding: 70px 16px 50px; }
+      .cases-page-section .cases-grid { grid-template-columns: 1fr; }
+      .cases-page-header h1 { font-size: 28px; }
+      .case-caption { font-size: 13px; padding: 14px 14px 18px; }
       .features-grid { grid-template-columns: 1fr; }
       .services-grid { grid-template-columns: 1fr; }
       .fleet-grid { grid-template-columns: 1fr; }
