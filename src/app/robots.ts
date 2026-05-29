@@ -38,6 +38,12 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: [
+          // Customer-only booking flow — not for search indexing
+          '/booking',
+          '/booking/*',
+          '/*/booking',
+          '/*/booking/*',
+          // Deep bookmark URLs (≥3 layers) — keep crawl budget for top pages
           '/bookmarks/*/*/*',
           '/*/bookmarks/*/*/*',
         ],
