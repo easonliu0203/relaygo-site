@@ -4,6 +4,10 @@ import CasesContent from './CasesContent';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
 import { I18N } from '@/lib/i18n';
 
+// Re-render at most once per minute so admin updates show up promptly.
+// Combined with on-demand revalidation via /api/revalidate-cases when admin saves.
+export const revalidate = 60;
+
 export function generateStaticParams() {
   return locales.map((l) => ({
     lang: l === 'zh-TW' ? 'zh-TW' : l === 'zh-CN' ? 'zh-cn' : l,

@@ -78,10 +78,23 @@ export interface ServiceCase {
 
 export async function getServiceCases(limit?: number): Promise<ServiceCase[]> {
   const cap = typeof limit === 'number' ? `&limit=${limit}` : '';
-  return safeJson<ServiceCase[]>(
-    `${SUPABASE_URL}/service_cases?is_published=eq.true&order=sort_order.asc,created_at.desc&select=id,photo_url,captions,alt_text,sort_order${cap}`,
-    []
-  );
+  const url = `${SUPABASE_URL}/service_cases?is_published=eq.true&order=sort_order.asc,created_at.desc&select=id,photo_url,captions,alt_text,sort_order${cap}`;
+  // Short revalidate so admin edits show up within 60s; also tag for on-demand revalidation.
+  const ctrl = new AbortController();
+  const timeoutId = setTimeout(() => ctrl.abort(), 8000);
+  try {
+    const res = await fetch(url, {
+      headers: { apikey: process.env.SUPABASE_SERVICE_ROLE_KEY || '', Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY || ''}` },
+      next: { revalidate: 60, tags: ['service-cases'] },
+      signal: ctrl.signal,
+    });
+    if (!res.ok) return [];
+    return (await res.json()) as ServiceCase[];
+  } catch {
+    return [];
+  } finally {
+    clearTimeout(timeoutId);
+  }
 }
 
 export function localizedCaption(c: ServiceCase, lang: string): string {
