@@ -150,13 +150,34 @@ export default function LangLayout({ children, params }: Props) {
         />
       </head>
       <body>
+        {/* WebSite JSON-LD — binds the domain to the brand name + alternateName,
+            reinforces "relaygo" and "Relay Go" both as the same entity. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              '@id': 'https://relaygo.pro/#website',
+              url: 'https://relaygo.pro',
+              name: 'RelayGo',
+              alternateName: ['Relay Go', 'relaygo', 'RELAYGO', 'relaygo.pro'],
+              inLanguage: locale,
+              publisher: { '@id': 'https://relaygo.pro/#organization' },
+            }),
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org',
               '@type': 'Organization',
+              '@id': 'https://relaygo.pro/#organization',
               name: 'RelayGo',
+              // Tell Google these are all the same brand — fixes "relaygo" (no space) not matching
+              alternateName: ['Relay Go', 'relaygo', 'RELAYGO', 'relaygo.pro'],
+              legalName: 'RelayGo',
               url: 'https://relaygo.pro',
               logo: 'https://relaygo.pro/og-image.png',
               description: orgDesc,

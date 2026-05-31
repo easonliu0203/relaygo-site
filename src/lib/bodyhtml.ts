@@ -669,6 +669,11 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         <span>&copy; 2025 RelayGo. All rights reserved.</span>
         <span data-i18n="footer_made">用心打造於台灣</span>
       </div>
+      <!-- Brand variations for search engines: keep "relaygo" / "Relay Go" / "RelayGo" as plain text
+           so Googlebot tokenizes all spellings as the same entity. -->
+      <p class="footer-brand-tokens" aria-hidden="false" style="text-align:center;font-size:11px;color:var(--gray-500);margin:16px 0 0;letter-spacing:0.5px">
+        RelayGo · relaygo · Relay Go · relaygo.pro · RelayGo Taiwan
+      </p>
     </div>
   </footer>`;
 
