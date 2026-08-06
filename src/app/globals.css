@@ -434,7 +434,9 @@
       margin: 0 auto;
       padding: 120px 24px 80px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      /* Visual column is wider than the text column so the phone mockup and
+         the reel both fit at full size (subtitle is capped at 480px anyway) */
+      grid-template-columns: 1fr 1.2fr;
       gap: 60px;
       align-items: center;
       position: relative;
@@ -535,7 +537,7 @@
     }
     /* ===== Hero reel (YouTube facade: poster until clicked) ===== */
     .hero-reel {
-      flex: 0 1 200px;
+      flex: 0 1 260px;
       min-width: 0;
       aspect-ratio: 9 / 16;
       position: relative;
@@ -1651,7 +1653,7 @@
          it's the reason people are here */
       .hero-phone-wrap { display: none; }
       .hero-visual { margin-top: 44px; }
-      .hero-reel { flex: 0 0 auto; width: min(260px, 68vw); }
+      .hero-reel { flex: 0 0 auto; width: min(338px, 84vw); }
       .hero h1 { font-size: 42px; }
       .stats-inner { grid-template-columns: repeat(2, 1fr); }
       .features-grid { grid-template-columns: repeat(2, 1fr); }
