@@ -132,6 +132,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
       </div>
       <div class="hero-visual">
+        <div class="hero-phone-wrap">
         <div class="phone-mockup">
           <div class="phone-notch"></div>
           <div class="phone-app-logo">Relay<span class="go">Go</span></div>
@@ -182,6 +183,16 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
             <div class="float-text" data-i18n="float_tracking">即時追蹤</div>
             <div class="float-subtext" data-i18n="float_eta">預計 5 分鐘</div>
           </div>
+        </div>
+        </div>
+        <div class="hero-reel" id="heroReel">
+          <button type="button" class="hero-reel-btn" data-video="TSQbBuJmVjw" data-i18n-aria="reel_play" aria-label="播放影片">
+            <img class="hero-reel-poster" src="https://vlyhwegpvpnjyocqmfqc.supabase.co/storage/v1/object/public/site-media/reels/reel-poster.webp" alt="" width="720" height="1280" loading="lazy" decoding="async">
+            <span class="hero-reel-play" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#1A1A2E"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+            <span class="hero-reel-caption" data-i18n="reel_title">台灣旅行 vlog</span>
+          </button>
         </div>
       </div>
     </div>

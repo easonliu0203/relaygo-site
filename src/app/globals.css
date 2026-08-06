@@ -523,6 +523,90 @@
       justify-content: center;
       align-items: center;
       position: relative;
+      /* Wider than .float-card.right's -30px overhang so the badge
+         never collides with the reel */
+      gap: 44px;
+    }
+    /* Wraps the phone + its floating badges so they anchor to the phone,
+       leaving room for the reel beside them */
+    .hero-phone-wrap {
+      position: relative;
+      flex: 0 0 auto;
+    }
+    /* ===== Hero reel (YouTube facade: poster until clicked) ===== */
+    .hero-reel {
+      flex: 0 1 200px;
+      min-width: 0;
+      aspect-ratio: 9 / 16;
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 3px solid rgba(255,255,255,0.12);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+      background: #1A1A2E;
+    }
+    .hero-reel-btn {
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+      position: relative;
+    }
+    .hero-reel-poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Scrim so the caption stays legible over any frame */
+    .hero-reel-btn::after {
+      content: '';
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 45%;
+      background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+      pointer-events: none;
+    }
+    .hero-reel-play {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+    .hero-reel-play svg { margin-left: 3px; }
+    .hero-reel-btn:hover .hero-reel-play {
+      transform: translate(-50%, -50%) scale(1.12);
+      background: #fff;
+    }
+    .hero-reel-caption {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+      z-index: 1;
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 600;
+      text-align: left;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .hero-reel-iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
     }
     .phone-mockup {
       position: relative;
@@ -1563,7 +1647,11 @@
       .hero-inner { grid-template-columns: 1fr; text-align: center; }
       .hero-subtitle { margin-left: auto; margin-right: auto; }
       .hero-actions { justify-content: center; }
-      .hero-visual { display: none; }
+      /* Phone mockup is dropped on narrow screens, but the reel stays —
+         it's the reason people are here */
+      .hero-phone-wrap { display: none; }
+      .hero-visual { margin-top: 44px; }
+      .hero-reel { flex: 0 0 auto; width: min(260px, 68vw); }
       .hero h1 { font-size: 42px; }
       .stats-inner { grid-template-columns: repeat(2, 1fr); }
       .features-grid { grid-template-columns: repeat(2, 1fr); }

@@ -52,6 +52,13 @@ export default function HomePage() {
       }
     });
 
+    document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+      const key = el.getAttribute('data-i18n-aria') || '';
+      if (dict[key] !== undefined) {
+        el.setAttribute('aria-label', dict[key]);
+      }
+    });
+
     document.title = LANG_TITLES[lang] || LANG_TITLES['en'];
 
     const labelEl = document.getElementById('langLabel');
@@ -104,6 +111,27 @@ export default function HomePage() {
       return;
     }
 
+    // Hero reel click → swap the poster for the YouTube player and autoplay.
+    // The iframe is only created here, so a visitor who never clicks pays nothing for it.
+    const reelBtn = target.closest('.hero-reel-btn');
+    if (reelBtn) {
+      const wrap = reelBtn.closest('.hero-reel');
+      const videoId = reelBtn.getAttribute('data-video');
+      if (wrap && videoId) {
+        const iframe = document.createElement('iframe');
+        iframe.className = 'hero-reel-iframe';
+        iframe.src =
+          `https://www.youtube-nocookie.com/embed/${videoId}` +
+          '?autoplay=1&playsinline=1&rel=0&modestbranding=1';
+        iframe.title = I18N[locale]?.reel_title || 'RelayGo';
+        iframe.allow =
+          'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        wrap.replaceChildren(iframe);
+      }
+      return;
+    }
+
     // Pricing tab click
     const pricingTab = target.closest('.pricing-tab');
     if (pricingTab) {
@@ -118,7 +146,7 @@ export default function HomePage() {
 
     // Click anywhere else → close lang dropdown
     containerRef.current?.querySelector('#langDropdown')?.classList.remove('open');
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     applyLang(locale);
