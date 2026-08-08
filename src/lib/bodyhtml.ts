@@ -186,13 +186,36 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
         </div>
         <div class="hero-reel" id="heroReel">
-          <button type="button" class="hero-reel-btn" data-video="TSQbBuJmVjw" data-i18n-aria="reel_play" aria-label="播放影片">
-            <img class="hero-reel-poster" src="https://vlyhwegpvpnjyocqmfqc.supabase.co/storage/v1/object/public/site-media/reels/reel-poster.webp" alt="" width="720" height="1280" loading="lazy" decoding="async">
-            <span class="hero-reel-play" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="#1A1A2E"><path d="M8 5v14l11-7z"/></svg>
-            </span>
-            <span class="hero-reel-caption" data-i18n="reel_title">台灣旅行 vlog</span>
+          <div class="hero-reel-track" id="heroReelTrack">
+            <div class="hero-reel-slide" data-video="TSQbBuJmVjw">
+              <button type="button" class="hero-reel-btn" data-i18n-aria="reel_play" aria-label="播放影片">
+                <img class="hero-reel-poster" src="https://vlyhwegpvpnjyocqmfqc.supabase.co/storage/v1/object/public/site-media/reels/reel-poster.webp" alt="" width="720" height="1280" loading="lazy" decoding="async">
+                <span class="hero-reel-play" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="#1A1A2E"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+                <span class="hero-reel-caption" data-i18n="reel_title">台灣旅行 vlog</span>
+              </button>
+            </div>
+            <div class="hero-reel-slide" data-video="DRvl1vvBhfw">
+              <button type="button" class="hero-reel-btn" data-i18n-aria="reel_play" aria-label="播放影片">
+                <img class="hero-reel-poster" src="https://vlyhwegpvpnjyocqmfqc.supabase.co/storage/v1/object/public/site-media/reels/reel2-poster.webp" alt="" width="720" height="1280" loading="lazy" decoding="async">
+                <span class="hero-reel-play" aria-hidden="true">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="#1A1A2E"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+                <span class="hero-reel-caption" data-i18n="reel2_title">台日友好・為熊本祈福</span>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="hero-reel-nav prev" data-dir="-1" data-i18n-aria="reel_prev" aria-label="上一支影片">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
+          <button type="button" class="hero-reel-nav next" data-dir="1" data-i18n-aria="reel_next" aria-label="下一支影片">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <div class="hero-reel-dots" id="heroReelDots">
+            <button type="button" class="hero-reel-dot active" data-index="0" aria-label="1"></button>
+            <button type="button" class="hero-reel-dot" data-index="1" aria-label="2"></button>
+          </div>
         </div>
       </div>
     </div>

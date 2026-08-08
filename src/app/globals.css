@@ -547,6 +547,26 @@
       box-shadow: 0 40px 80px rgba(0,0,0,0.4);
       background: #1A1A2E;
     }
+    /* Native scroll-snap carousel — touch swipe works without any JS */
+    .hero-reel-track {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .hero-reel-track::-webkit-scrollbar { display: none; }
+    .hero-reel-slide {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 100%;
+      scroll-snap-align: center;
+      position: relative;
+    }
     .hero-reel-btn {
       display: block;
       width: 100%;
@@ -596,7 +616,7 @@
       position: absolute;
       left: 14px;
       right: 14px;
-      bottom: 14px;
+      bottom: 36px; /* clears the dot row */
       z-index: 1;
       color: var(--white);
       font-size: 13px;
@@ -605,10 +625,76 @@
       text-shadow: 0 2px 8px rgba(0,0,0,0.5);
     }
     .hero-reel-iframe {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       border: 0;
       display: block;
+      z-index: 2;
+    }
+    /* Arrows: pointer devices only — touch users swipe */
+    .hero-reel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease, background 0.2s ease;
+    }
+    .hero-reel-nav.prev { left: 8px; }
+    .hero-reel-nav.next { right: 8px; }
+    .hero-reel-nav:hover { background: rgba(0,0,0,0.7); }
+    @media (hover: hover) {
+      .hero-reel:hover .hero-reel-nav { opacity: 1; }
+    }
+    /* Touch devices: keep arrows visible. Once a player is open the iframe
+       swallows swipes, so arrows/dots are the only way out of a slide. */
+    @media (hover: none) {
+      .hero-reel-nav { opacity: 0.85; }
+    }
+    .hero-reel-nav:focus-visible { opacity: 1; outline: 2px solid var(--accent); }
+    .hero-reel-dots {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 14px;
+      z-index: 3;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+    .hero-reel-dot {
+      position: relative;
+      width: 6px;
+      height: 6px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.45);
+      cursor: pointer;
+      transition: background 0.2s ease, width 0.2s ease;
+    }
+    /* 6px dots are far below a usable tap target — widen the hit area only */
+    .hero-reel-dot::after {
+      content: '';
+      position: absolute;
+      inset: -9px -5px;
+    }
+    .hero-reel-dot.active {
+      width: 18px;
+      border-radius: 3px;
+      background: var(--white);
     }
     .phone-mockup {
       position: relative;

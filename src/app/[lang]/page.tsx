@@ -111,23 +111,41 @@ export default function HomePage() {
       return;
     }
 
-    // Hero reel click → swap the poster for the YouTube player and autoplay.
+    // Hero reel play → lay the YouTube player over that slide's poster.
     // The iframe is only created here, so a visitor who never clicks pays nothing for it.
+    // It's appended (not replacing the facade) so removing it restores the poster.
     const reelBtn = target.closest('.hero-reel-btn');
     if (reelBtn) {
-      const wrap = reelBtn.closest('.hero-reel');
-      const videoId = reelBtn.getAttribute('data-video');
-      if (wrap && videoId) {
+      const slide = reelBtn.closest('.hero-reel-slide');
+      const videoId = slide?.getAttribute('data-video');
+      if (slide && videoId && !slide.querySelector('.hero-reel-iframe')) {
         const iframe = document.createElement('iframe');
         iframe.className = 'hero-reel-iframe';
         iframe.src =
           `https://www.youtube-nocookie.com/embed/${videoId}` +
           '?autoplay=1&playsinline=1&rel=0&modestbranding=1';
-        iframe.title = I18N[locale]?.reel_title || 'RelayGo';
+        iframe.title = slide.querySelector('.hero-reel-caption')?.textContent || 'RelayGo';
         iframe.allow =
           'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
         iframe.allowFullscreen = true;
-        wrap.replaceChildren(iframe);
+        slide.appendChild(iframe);
+      }
+      return;
+    }
+
+    // Hero reel arrows / dots
+    const reelNav = target.closest('.hero-reel-nav');
+    const reelDot = target.closest('.hero-reel-dot');
+    if (reelNav || reelDot) {
+      const track = document.getElementById('heroReelTrack');
+      if (track && track.clientWidth) {
+        if (reelNav) {
+          const dir = Number(reelNav.getAttribute('data-dir')) || 1;
+          track.scrollBy({ left: dir * track.clientWidth, behavior: 'smooth' });
+        } else {
+          const idx = Number(reelDot!.getAttribute('data-index')) || 0;
+          track.scrollTo({ left: idx * track.clientWidth, behavior: 'smooth' });
+        }
       }
       return;
     }
@@ -278,10 +296,32 @@ export default function HomePage() {
       })
       .catch(() => {});
 
+    // Hero reel carousel: keep dots in sync, and tear down any player that
+    // scrolls out of view so a hidden video can't keep playing audio.
+    const reelTrack = document.getElementById('heroReelTrack');
+    let reelSettleTimer: ReturnType<typeof setTimeout>;
+    const syncReel = () => {
+      if (!reelTrack || !reelTrack.clientWidth) return;
+      const idx = Math.round(reelTrack.scrollLeft / reelTrack.clientWidth);
+      document
+        .querySelectorAll('.hero-reel-dot')
+        .forEach((d, i) => d.classList.toggle('active', i === idx));
+      document.querySelectorAll('.hero-reel-slide').forEach((s, i) => {
+        if (i !== idx) s.querySelector('.hero-reel-iframe')?.remove();
+      });
+    };
+    const onReelScroll = () => {
+      clearTimeout(reelSettleTimer);
+      reelSettleTimer = setTimeout(syncReel, 120);
+    };
+    reelTrack?.addEventListener('scroll', onReelScroll, { passive: true });
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
       statsObserver.disconnect();
+      reelTrack?.removeEventListener('scroll', onReelScroll);
+      clearTimeout(reelSettleTimer);
     };
   }, [applyLang, locale, langPrefix, mountKey]);
 
