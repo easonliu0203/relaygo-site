@@ -1751,6 +1751,23 @@
       .footer-top { grid-template-columns: 1fr; }
     }
 
+    /* Mobile-only quick entry: 價格方案 */
+    .nav-pricing-mobile {
+      display: none;
+      align-items: center;
+      padding: 7px 16px;
+      border-radius: 20px;
+      background: var(--accent);
+      color: var(--white) !important;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+      line-height: 1;
+      box-shadow: 0 2px 10px rgba(0,214,143,0.35);
+    }
+    .nav-pricing-mobile:active { transform: translateY(1px); }
+
     /* Hamburger menu button */
     .hamburger {
       display: none;
@@ -1823,6 +1840,8 @@
     @media (max-width: 640px) {
       .nav-links { display: none; }
       .hamburger { display: flex; }
+      .nav-pricing-mobile { display: inline-flex; }
+      .nav-right { gap: 12px; }
       .mobile-menu { display: flex; }
       .featured-guides-section { padding: 50px 16px; }
       .featured-guide-card { flex: 0 0 220px; }
@@ -1857,6 +1876,13 @@
       .cta-section h2 { font-size: 28px; }
       .pricing-tabs { flex-direction: column; align-items: center; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    /* 極小螢幕：導覽列縮排，確保價格方案快捷鈕不擠壓 */
+    @media (max-width: 380px) {
+      .navbar .nav-inner { padding: 0 14px; }
+      .nav-right { gap: 10px; }
+      .nav-pricing-mobile { padding: 6px 12px; font-size: 12px; }
     }
 
     /* ===== Animations ===== */

@@ -33,6 +33,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
             </div>
           </li>
         </ul>
+        <a href="#pricing" class="nav-pricing-mobile" data-i18n="nav_pricing">價格方案</a>
         <button class="hamburger" id="hamburger" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
@@ -527,11 +528,11 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         <p class="section-desc" data-i18n="pricing_desc">無隱藏費用，價格公開透明。下載 App 即可查看精確報價。</p>
       </div>
       <div class="pricing-tabs fade-up">
-        <button class="pricing-tab active" data-panel="airport" data-i18n="pricing_tab_airport">機場接送</button>
-        <button class="pricing-tab" data-panel="charter" data-i18n="pricing_tab_charter">包車旅遊</button>
+        <button class="pricing-tab" data-panel="airport" data-i18n="pricing_tab_airport">機場接送</button>
+        <button class="pricing-tab active" data-panel="charter" data-i18n="pricing_tab_charter">包車旅遊</button>
       </div>
       <!-- Airport Panel -->
-      <div class="pricing-panel active fade-up" id="panel-airport">
+      <div class="pricing-panel fade-up" id="panel-airport">
         <div class="pricing-table-wrap">
           <table class="pricing-table">
             <thead>
@@ -572,7 +573,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
       </div>
       <!-- Charter Panel -->
-      <div class="pricing-panel fade-up" id="panel-charter">
+      <div class="pricing-panel active fade-up" id="panel-charter">
         <div class="pricing-table-wrap">
           <table class="pricing-table">
             <thead>
