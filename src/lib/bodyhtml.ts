@@ -280,6 +280,9 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         <div class="case-card skeleton"><div class="case-img-wrap"></div><div class="case-caption"></div></div>
         <div class="case-card skeleton"><div class="case-img-wrap"></div><div class="case-caption"></div></div>
         <div class="case-card skeleton"><div class="case-img-wrap"></div><div class="case-caption"></div></div>
+        <div class="case-card skeleton"><div class="case-img-wrap"></div><div class="case-caption"></div></div>
+        <div class="case-card skeleton"><div class="case-img-wrap"></div><div class="case-caption"></div></div>
+        <div class="case-card skeleton"><div class="case-img-wrap"></div><div class="case-caption"></div></div>
       </div>
       <div style="text-align:center;margin-top:32px">
         <a href="${langPrefix}/cases" class="cases-view-all" data-i18n="cases_view_all">查看更多案例 →</a>

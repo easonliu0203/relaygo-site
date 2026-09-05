@@ -70,6 +70,56 @@ export default function HomePage() {
 
   }, []);
 
+  // Scroll to a section and hold it there while the page is still settling.
+  // The element's document position is re-measured on a short poll: whenever it
+  // moves (late-loading content above it), we re-issue the scroll. Any manual
+  // scroll input from the visitor cancels the correction immediately.
+  const scrollToSection = useCallback((id: string) => {
+    const navbar = document.getElementById('navbar');
+    const started = Date.now();
+    let lastTop = NaN;
+    let settled = 0;
+    let cancelled = false;
+
+    const cancel = () => { cancelled = true; };
+    window.addEventListener('wheel', cancel, { passive: true });
+    window.addEventListener('touchstart', cancel, { passive: true });
+    window.addEventListener('keydown', cancel);
+
+    const cleanup = () => {
+      window.removeEventListener('wheel', cancel);
+      window.removeEventListener('touchstart', cancel);
+      window.removeEventListener('keydown', cancel);
+    };
+
+    const step = () => {
+      const el = document.getElementById(id);
+      if (cancelled || !el) { cleanup(); return; }
+      const offset = (navbar?.offsetHeight || 64) + 12;
+      const top = Math.max(0, el.getBoundingClientRect().top + window.scrollY - offset);
+
+      if (Number.isNaN(lastTop) || Math.abs(top - lastTop) > 2) {
+        // Target moved (or first run) → aim again.
+        window.scrollTo({ top, behavior: 'smooth' });
+        lastTop = top;
+        settled = 0;
+      } else {
+        settled++;
+      }
+
+      // Keep watching for at least 1.8s even once stable: the cases grid swaps
+      // its skeletons for API data well after the scroll animation finishes.
+      const elapsed = Date.now() - started;
+      if ((settled < 4 || elapsed < 1800) && elapsed < 3000) {
+        setTimeout(step, 150);
+      } else {
+        cleanup();
+      }
+    };
+
+    step();
+  }, []);
+
   // Event delegation: handle all clicks on innerHTML elements via the wrapper div
   const handleContainerClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.target as HTMLElement;
@@ -100,6 +150,26 @@ export default function HomePage() {
       hamburger?.classList.toggle('open');
       mobileMenu?.classList.toggle('open');
       return;
+    }
+
+    // In-page anchor (#pricing / #fleet / #download ...) → offset for the fixed
+    // navbar, and keep re-targeting while the layout settles. Content above the
+    // target still grows after the click (the cases grid swaps skeletons for API
+    // data, lazy images decode), which otherwise leaves the visitor short of the
+    // section they asked for.
+    const anchor = target.closest('a[href^="#"]') as HTMLAnchorElement | null;
+    if (anchor) {
+      const id = (anchor.getAttribute('href') || '').slice(1);
+      const el = id ? document.getElementById(id) : null;
+      if (el) {
+        e.preventDefault();
+        // Any in-page anchor may live inside the mobile menu → close it first,
+        // so its height is out of the way before we measure.
+        containerRef.current?.querySelector('#hamburger')?.classList.remove('open');
+        containerRef.current?.querySelector('#mobileMenu')?.classList.remove('open');
+        scrollToSection(id);
+        return;
+      }
     }
 
     // Mobile menu link click → close menu
@@ -164,10 +234,17 @@ export default function HomePage() {
 
     // Click anywhere else → close lang dropdown
     containerRef.current?.querySelector('#langDropdown')?.classList.remove('open');
-  }, [locale]);
+  }, [locale, scrollToSection]);
 
   useEffect(() => {
     applyLang(locale);
+
+    // Landing on /#pricing (shared link, back button) hits the same problem the
+    // click handler solves — the browser jumps before late content lands.
+    if (window.location.hash.length > 1) {
+      const id = window.location.hash.slice(1);
+      if (document.getElementById(id)) scrollToSection(id);
+    }
 
     // Scroll handler for navbar
     const navbar = document.getElementById('navbar');
@@ -323,7 +400,7 @@ export default function HomePage() {
       reelTrack?.removeEventListener('scroll', onReelScroll);
       clearTimeout(reelSettleTimer);
     };
-  }, [applyLang, locale, langPrefix, mountKey]);
+  }, [applyLang, locale, langPrefix, mountKey, scrollToSection]);
 
   // Firebase auth state → update nav login/logout UI
   useEffect(() => {
