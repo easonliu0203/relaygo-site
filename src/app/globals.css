@@ -1814,18 +1814,18 @@
        good once the visitor has opened the menu (.nudged), and never runs for
        anyone who asked for reduced motion. */
     @keyframes hamburger-wiggle {
-      0%, 62%, 100% { transform: rotate(0deg) scale(1); }
-      66% { transform: rotate(-11deg) scale(1.06); }
-      70% { transform: rotate(9deg) scale(1.06); }
-      74% { transform: rotate(-7deg) scale(1.04); }
-      78% { transform: rotate(5deg) scale(1.02); }
-      82% { transform: rotate(-3deg) scale(1.01); }
-      86% { transform: rotate(0deg) scale(1); }
+      0%, 60% { transform: rotate(0deg) scale(1); }
+      66.7% { transform: rotate(-11deg) scale(1.06); }
+      73.3% { transform: rotate(9deg) scale(1.06); }
+      80% { transform: rotate(-7deg) scale(1.04); }
+      86.7% { transform: rotate(5deg) scale(1.02); }
+      93.3% { transform: rotate(-3deg) scale(1.01); }
+      100% { transform: rotate(0deg) scale(1); }
     }
     @keyframes hamburger-bar-squish {
-      0%, 62%, 100% { width: 24px; }
-      70% { width: 15px; }
-      82% { width: 24px; }
+      0%, 60%, 100% { width: 24px; }
+      73.3% { width: 15px; }
+      90% { width: 24px; }
     }
     .hamburger:active { animation: none; transform: scale(0.92); }
     .hamburger.open,
@@ -1887,10 +1887,10 @@
       .hamburger {
         display: flex;
         transform-origin: 50% 50%;
-        animation: hamburger-wiggle 5s ease-in-out 1.8s infinite;
+        animation: hamburger-wiggle 3s ease-in-out 1.8s infinite;
       }
       .hamburger span:nth-child(2) {
-        animation: hamburger-bar-squish 5s ease-in-out 1.8s infinite;
+        animation: hamburger-bar-squish 3s ease-in-out 1.8s infinite;
       }
       .nav-pricing-mobile { display: inline-flex; }
       .nav-right { gap: 12px; }
