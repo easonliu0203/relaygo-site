@@ -9,6 +9,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getBookmarkCombinations(),
   ]);
   const base = 'https://relaygo.pro';
+  // Static pages get a fixed date, bumped by hand when their copy actually
+  // changes. Using `new Date()` told Google every page changed on every deploy,
+  // which trains it to ignore our lastmod entirely.
+  const staticLastMod = new Date('2026-09-05');
 
   const entries: MetadataRoute.Sitemap = [];
 
@@ -17,28 +21,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     entries.push({
       url: `${base}${prefix || '/'}`,
-      lastModified: new Date(),
+      lastModified: staticLastMod,
       changeFrequency: 'daily',
       priority: locale === 'zh-TW' ? 1.0 : 0.9,
     });
 
     entries.push({
       url: `${base}${prefix}/guides`,
-      lastModified: new Date(),
+      lastModified: staticLastMod,
       changeFrequency: 'weekly',
       priority: 0.8,
     });
 
     entries.push({
+      url: `${base}${prefix}/pricing`,
+      lastModified: staticLastMod,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    });
+
+    entries.push({
       url: `${base}${prefix}/faq`,
-      lastModified: new Date(),
+      lastModified: staticLastMod,
       changeFrequency: 'monthly',
       priority: 0.7,
     });
 
     entries.push({
       url: `${base}${prefix}/cases`,
-      lastModified: new Date(),
+      lastModified: staticLastMod,
       changeFrequency: 'weekly',
       priority: 0.7,
     });
@@ -55,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Bookmarks main page
     entries.push({
       url: `${base}${prefix}/bookmarks`,
-      lastModified: new Date(),
+      lastModified: staticLastMod,
       changeFrequency: 'daily',
       priority: 0.8,
     });
@@ -67,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const country of countrySlugs) {
       entries.push({
         url: `${base}${prefix}/bookmarks/${country}`,
-        lastModified: new Date(),
+        lastModified: staticLastMod,
         changeFrequency: 'weekly',
         priority: 0.7,
       });
@@ -76,7 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const combo of cityCombos) {
       entries.push({
         url: `${base}${prefix}/bookmarks/${combo}`,
-        lastModified: new Date(),
+        lastModified: staticLastMod,
         changeFrequency: 'weekly',
         priority: 0.7,
       });

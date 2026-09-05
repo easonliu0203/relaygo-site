@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import type { TourGuide } from '@/lib/supabase';
+import type { TourGuide, TourGuideSummary } from '@/lib/supabase';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import { localizedCity } from '@/lib/city-names';
 
@@ -102,7 +102,7 @@ function renderMarkdown(md: string): string {
     .replace(/<p><\/p>/g, '');
 }
 
-export default function GuideContent({ guide, initialLang, relatedGuides = [] }: { guide: TourGuide; initialLang: Locale; relatedGuides?: TourGuide[] }) {
+export default function GuideContent({ guide, initialLang, relatedGuides = [] }: { guide: TourGuide; initialLang: Locale; relatedGuides?: TourGuideSummary[] }) {
   const lang = initialLang as LangCode;
   const [copied, setCopied] = useState(false);
   const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';

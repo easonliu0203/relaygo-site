@@ -370,7 +370,7 @@ export default function HomePage() {
         grid.innerHTML = (data.cases as RawCase[])
           .map((c) => {
             const caption = pickCaption(c.captions);
-            const alt = c.alt_text || caption;
+            const alt = caption || c.alt_text || 'RelayGo';
             return `<a href="${linkPrefix}/cases" class="case-card">
               <div class="case-img-wrap"><img src="${escapeHtml(c.photo_url)}" alt="${escapeHtml(alt)}" loading="lazy" draggable="false" oncontextmenu="return false;" /></div>
               <div class="case-caption">${escapeHtml(caption)}</div>

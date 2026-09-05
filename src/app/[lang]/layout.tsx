@@ -187,6 +187,13 @@ export default function LangLayout({ children, params }: Props) {
                 name: 'Taiwan',
               },
               knowsLanguage: ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms', 'id', 'fil'],
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                email: 'support@relaygo.pro',
+                areaServed: 'TW',
+                availableLanguage: ['zh-TW', 'zh-CN', 'en', 'ja', 'ko', 'th', 'vi', 'ms', 'id', 'fil'],
+              },
               serviceType: [
                 '機場接送', '包車旅遊', '商務用車',
                 'Airport Transfer', 'Charter Tour', 'Business Transportation',
@@ -278,7 +285,7 @@ export default function LangLayout({ children, params }: Props) {
                 ],
               },
               sameAs: [
-                'https://apps.apple.com/app/relaygo/id6670425865',
+                'https://apps.apple.com/tw/app/relay-go/id6756459981',
                 'https://play.google.com/store/apps/details?id=com.relaygo.customer',
                 'https://www.instagram.com/relaygo.official',
               ],

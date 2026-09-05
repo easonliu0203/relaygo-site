@@ -88,7 +88,7 @@ export default function CasesContent({ cases, locale, langPrefix, labels }: Prop
                   <div className="case-img-wrap">
                     <img
                       src={c.photo_url}
-                      alt={c.alt_text || caption}
+                      alt={caption || c.alt_text || 'RelayGo'}
                       loading="lazy"
                       draggable={false}
                       onContextMenu={(e) => e.preventDefault()}

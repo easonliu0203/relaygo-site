@@ -1,9 +1,42 @@
 import { I18N } from './i18n';
+import { FAQS, type LangCode } from './faq-data';
 
 export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): string {
   const dict = I18N[lang] || I18N['zh-TW'];
   // Helper: translate by key, fallback to zh-TW, then to raw fallback
   const t = (key: string, fallback: string) => dict[key] ?? I18N['zh-TW']?.[key] ?? fallback;
+
+  // Top 5 FAQs, rendered server-side in the visitor's language. The same five
+  // feed the FAQPage JSON-LD below so the schema never claims copy the page
+  // doesn't show.
+  const esc = (v: string) =>
+    v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const faqLang = (lang as LangCode);
+  const homeFaqs = FAQS.slice(0, 5).map((f) => ({
+    q: f.question[faqLang] || f.question['zh-TW'] || f.question.en || '',
+    a: f.answer[faqLang] || f.answer['zh-TW'] || f.answer.en || '',
+  })).filter((f) => f.q && f.a);
+
+  const homeFaqHtml = homeFaqs
+    .map(
+      (f) => `        <details class="home-faq-item">
+          <summary class="home-faq-q">${esc(f.q)}</summary>
+          <div class="home-faq-a">${esc(f.a)}</div>
+        </details>`
+    )
+    .join('\n');
+
+  const homeFaqJsonLd = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    '@id': `https://relaygo.pro${langPrefix || ''}/#faq`,
+    inLanguage: lang,
+    mainEntity: homeFaqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  }).replace(/</g, '\\u003c');
 
   let html = `<!-- Navigation -->
   <nav class="navbar" id="navbar">
@@ -13,7 +46,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         <ul class="nav-links">
           <li><a href="#services" data-i18n="nav_services">服務項目</a></li>
           <li><a href="#fleet" data-i18n="nav_fleet">車型介紹</a></li>
-          <li><a href="#pricing" data-i18n="nav_pricing">價格方案</a></li>
+          <li><a href="${langPrefix}/pricing" data-i18n="nav_pricing">價格方案</a></li>
           <li><a href="${langPrefix}/guides" data-i18n="nav_guides">行程攻略</a></li>
           <li><a href="${langPrefix}/cases" data-i18n="nav_cases">實際案例</a></li>
           <li><a href="${langPrefix}/faq" data-i18n="nav_faq">常見問題</a></li>
@@ -33,14 +66,14 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
             </div>
           </li>
         </ul>
-        <a href="#pricing" class="nav-pricing-mobile" data-i18n="nav_pricing">價格方案</a>
+        <a href="${langPrefix}/pricing" class="nav-pricing-mobile" data-i18n="nav_pricing">價格方案</a>
         <button class="hamburger" id="hamburger" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
         <div class="mobile-menu" id="mobileMenu">
           <a href="#services" data-i18n="nav_services" class="mobile-menu-link">服務項目</a>
           <a href="#fleet" data-i18n="nav_fleet" class="mobile-menu-link">車型介紹</a>
-          <a href="#pricing" data-i18n="nav_pricing" class="mobile-menu-link">價格方案</a>
+          <a href="${langPrefix}/pricing" data-i18n="nav_pricing" class="mobile-menu-link">價格方案</a>
           <a href="${langPrefix}/guides" data-i18n="nav_guides" class="mobile-menu-link">行程攻略</a>
           <a href="${langPrefix}/cases" data-i18n="nav_cases" class="mobile-menu-link">實際案例</a>
           <a href="${langPrefix}/faq" data-i18n="nav_faq" class="mobile-menu-link">常見問題</a>
@@ -301,7 +334,8 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
       </div>
       <div class="featured-guides-scroll">
         <a href="${langPrefix}/guide/taipei-classic" class="featured-guide-card fade-up">
-          <div class="featured-guide-img" style="background-image:url(https://images.unsplash.com/photo-1662720262802-91f9373dcac6?w=600&q=80)">
+          <div class="featured-guide-img">
+            <img src="https://images.unsplash.com/photo-1662720262802-91f9373dcac6?w=600&q=80" alt="${t('guides_card_1_title', '台北經典一日遊')}" loading="lazy" decoding="async" width="600" height="400">
             <span class="featured-guide-badge">🏙️ ${t('guides_card_city_taipei', '台北')}</span>
           </div>
           <div class="featured-guide-body">
@@ -310,7 +344,8 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           </div>
         </a>
         <a href="${langPrefix}/guide/taipei-jiufen-shifen" class="featured-guide-card fade-up">
-          <div class="featured-guide-img" style="background-image:url(https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80)">
+          <div class="featured-guide-img">
+            <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=600&q=80" alt="${t('guides_card_2_title', '九份十分一日遊')}" loading="lazy" decoding="async" width="600" height="400">
             <span class="featured-guide-badge">🏮 ${t('guides_card_city_xinbei', '新北')}</span>
           </div>
           <div class="featured-guide-body">
@@ -319,7 +354,8 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           </div>
         </a>
         <a href="${langPrefix}/guide/tainan-heritage" class="featured-guide-card fade-up">
-          <div class="featured-guide-img" style="background-image:url(https://images.unsplash.com/photo-1677607223752-aa6ae7e582ae?w=600&q=80)">
+          <div class="featured-guide-img">
+            <img src="https://images.unsplash.com/photo-1677607223752-aa6ae7e582ae?w=600&q=80" alt="${t('guides_card_3_title', '台南古蹟巡禮')}" loading="lazy" decoding="async" width="600" height="400">
             <span class="featured-guide-badge">🏯 ${t('guides_card_city_tainan', '台南')}</span>
           </div>
           <div class="featured-guide-body">
@@ -328,7 +364,8 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           </div>
         </a>
         <a href="${langPrefix}/guide/kaohsiung-port-art" class="featured-guide-card fade-up">
-          <div class="featured-guide-img" style="background-image:url(https://images.unsplash.com/photo-1677607221983-630ffb5ea1d8?w=600&q=80)">
+          <div class="featured-guide-img">
+            <img src="https://images.unsplash.com/photo-1677607221983-630ffb5ea1d8?w=600&q=80" alt="${t('guides_card_4_title', '高雄港都一日遊')}" loading="lazy" decoding="async" width="600" height="400">
             <span class="featured-guide-badge">🌊 ${t('guides_card_city_kaohsiung', '高雄')}</span>
           </div>
           <div class="featured-guide-body">
@@ -530,7 +567,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
   <section class="pricing-section" id="pricing">
     <div class="section-inner">
       <div class="section-header fade-up">
-        <div class="section-label" data-i18n="pricing_label">價格方案</div>
+        <a href="${langPrefix}/pricing" class="section-label section-label-link" data-i18n="pricing_label">價格方案</a>
         <h2 class="section-title" data-i18n="pricing_title">透明合理的價格</h2>
         <p class="section-desc" data-i18n="pricing_desc">無隱藏費用，價格公開透明。下載 App 即可查看精確報價。</p>
       </div>
@@ -659,6 +696,25 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
       </div>
     </div>
   </section>
+
+  <!-- FAQ (top 5) — visible copy plus FAQPage schema. Google only grants FAQ
+       rich results when the answers are actually on the page, so the markup and
+       the JSON-LD are generated from the same source. -->
+  <section class="home-faq-section" id="faq-preview">
+    <div class="section-inner">
+      <div class="section-header fade-up">
+        <a href="${langPrefix}/faq" class="section-label section-label-link" data-i18n="nav_faq">常見問題</a>
+        <h2 class="section-title" data-i18n="home_faq_title">常見問題解答</h2>
+      </div>
+      <div class="home-faq-list fade-up">
+${homeFaqHtml}
+      </div>
+      <div style="text-align:center;margin-top:32px">
+        <a href="${langPrefix}/faq" class="guides-view-all" data-i18n="home_faq_more">看完整 21 則問答 →</a>
+      </div>
+    </div>
+  </section>
+  <script type="application/ld+json">${homeFaqJsonLd}</script>
 
   <!-- CTA Section -->
   <section class="cta-section" id="download">

@@ -1,6 +1,6 @@
 'use client';
 
-import type { TourGuide } from '@/lib/supabase';
+import type { TourGuideSummary } from '@/lib/supabase';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import { localizedCity } from '@/lib/city-names';
 
@@ -64,7 +64,7 @@ function t(obj: Record<string, string>, lang: LangCode): string {
   return obj[lang] || obj['zh-TW'] || obj['en'] || '';
 }
 
-function GuideCard({ guide, langPrefix, lang }: { guide: TourGuide; langPrefix: string; lang: LangCode }) {
+function GuideCard({ guide, langPrefix, lang }: { guide: TourGuideSummary; langPrefix: string; lang: LangCode }) {
   return (
     <a href={`${langPrefix}/guide/${guide.slug}`} className="guide-card">
       <div
@@ -100,12 +100,12 @@ function GuideCard({ guide, langPrefix, lang }: { guide: TourGuide; langPrefix: 
   );
 }
 
-export default function GuidesListContent({ guides, initialLang }: { guides: TourGuide[]; initialLang: Locale }) {
+export default function GuidesListContent({ guides, initialLang }: { guides: TourGuideSummary[]; initialLang: Locale }) {
   const lang = initialLang as LangCode;
   const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
 
   // Group guides by region
-  const grouped = guides.reduce<Record<string, TourGuide[]>>((acc, guide) => {
+  const grouped = guides.reduce<Record<string, TourGuideSummary[]>>((acc, guide) => {
     const region = REGION_MAP[guide.city] ?? 'north';
     if (!acc[region]) acc[region] = [];
     acc[region].push(guide);
