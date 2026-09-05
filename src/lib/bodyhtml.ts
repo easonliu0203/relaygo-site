@@ -337,6 +337,9 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           </div>
         </a>
       </div>
+      <div style="text-align:center;margin-top:32px">
+        <a href="${langPrefix}/guides" class="guides-view-all" data-i18n="guides_view_all">查看全部攻略 →</a>
+      </div>
     </div>
   </section>
 

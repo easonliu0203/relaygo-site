@@ -149,6 +149,9 @@ export default function HomePage() {
       const mobileMenu = containerRef.current?.querySelector('#mobileMenu');
       hamburger?.classList.toggle('open');
       mobileMenu?.classList.toggle('open');
+      // The attention wiggle has done its job once it's been tapped — retire it
+      // so it doesn't keep pulling focus for the rest of the visit.
+      hamburger?.classList.add('nudged');
       return;
     }
 
