@@ -244,9 +244,15 @@ export default function HomePage() {
 
     // Landing on /#pricing (shared link, back button) hits the same problem the
     // click handler solves — the browser jumps before late content lands.
+    // The hash is then dropped from the URL: it has served its purpose, and
+    // leaving it there makes every later F5 re-jump to that section instead of
+    // reloading where the visitor actually is.
     if (window.location.hash.length > 1) {
       const id = window.location.hash.slice(1);
-      if (document.getElementById(id)) scrollToSection(id);
+      if (document.getElementById(id)) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+        scrollToSection(id);
+      }
     }
 
     // Scroll handler for navbar

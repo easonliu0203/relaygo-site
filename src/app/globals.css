@@ -528,6 +528,47 @@
       transform: translateY(-3px) scale(1.02);
       box-shadow: 0 12px 35px rgba(0,0,0,0.25);
     }
+
+    /* Store buttons draw attention on the same 3s rhythm as the hamburger:
+       a small hop plus an accent ring rippling outward. The two buttons are
+       offset slightly so they read as a wave, not a twitch. */
+    @keyframes btn-store-hop {
+      0%, 66%, 100% { transform: translateY(0) scale(1); }
+      74% { transform: translateY(-6px) scale(1.03); }
+      82% { transform: translateY(0) scale(1); }
+      88% { transform: translateY(-2px) scale(1.01); }
+      94% { transform: translateY(0) scale(1); }
+    }
+    @keyframes btn-store-ring {
+      0%, 66% { box-shadow: 0 0 0 0 rgba(0,214,143,0.5); }
+      88% { box-shadow: 0 0 0 14px rgba(0,214,143,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,214,143,0); }
+    }
+    .btn-store {
+      position: relative;
+      animation: btn-store-hop 3s ease-in-out 1.8s infinite;
+    }
+    .btn-store::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      animation: btn-store-ring 3s ease-out 1.8s infinite;
+    }
+    .btn-store + .btn-store,
+    .btn-store + .btn-store::before { animation-delay: 2.05s; }
+    /* Hand control back to :hover / :active so the pointer states stay crisp. */
+    .btn-store:hover,
+    .btn-store:active,
+    .btn-store:focus-visible,
+    .btn-store:hover::before,
+    .btn-store:active::before,
+    .btn-store:focus-visible::before { animation: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .btn-store, .btn-store::before { animation: none !important; }
+    }
     .btn-store svg { flex-shrink: 0; }
     .btn-store .store-info { text-align: left; }
     .btn-store .store-label { font-size: 11px; color: var(--gray-500); font-weight: 400; display: block; }
