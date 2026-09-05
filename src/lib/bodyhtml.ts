@@ -131,6 +131,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
             </div>
           </a>
         </div>
+        <p class="store-support-hint" data-i18n="store_support_hint">有疑問？下載 App，即可在 App 內與客服聯繫</p>
       </div>
       <div class="hero-visual">
         <div class="hero-phone-wrap">
@@ -677,6 +678,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           </div>
         </a>
       </div>
+      <p class="store-support-hint store-support-hint-cta" data-i18n="store_support_hint">有疑問？下載 App，即可在 App 內與客服聯繫</p>
       <a href="${langPrefix}/guides" class="cta-guides-link" data-i18n="guides_view_all">查看全部攻略 →</a>
     </div>
   </section>
