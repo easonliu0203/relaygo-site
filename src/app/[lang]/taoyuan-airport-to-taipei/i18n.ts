@@ -6,7 +6,7 @@ export const PAGE_TITLES: L = {
   'zh-TW': '桃園機場到台北怎麼去？機捷・客運・計程車・包車價格與時間比較 | RelayGo',
   'zh-CN': '桃园机场到台北怎么去？机场捷运・大巴・出租车・专车价格与时间对比 | RelayGo',
   en: 'Taoyuan Airport to Taipei: MRT vs Bus vs Taxi vs Private Transfer (Prices & Times) | RelayGo',
-  ja: '桃園空港から台北への行き方｜MRT・バス・タクシー・送迎の料金と時間を比較 | RelayGo',
+  ja: '桃園空港から台北への行き方｜MRT・タクシー・送迎の料金比較 | RelayGo',
   ko: '타오위안 공항에서 타이베이 가는 법｜MRT・버스・택시・픽업 요금과 시간 비교 | RelayGo',
   th: 'จากสนามบินเถาหยวนไปไทเปยังไง｜เทียบราคาและเวลา MRT รถบัส แท็กซี่ รถรับส่ง | RelayGo',
   vi: 'Từ sân bay Đào Viên về Đài Bắc: so sánh giá và thời gian MRT, xe buýt, taxi, xe đưa đón | RelayGo',

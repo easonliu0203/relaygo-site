@@ -22,7 +22,7 @@ const LOCALE_DESCRIPTIONS: Record<Locale, string> = {
   'zh-TW': 'RelayGo 提供專業包車服務，安全可靠的司機、即時追蹤、多元支付方式。立即下載 App 開始預約！',
   'zh-CN': 'RelayGo 提供专业包车服务，安全可靠的司机、即时追踪、多元支付方式。立即下载 App 开始预约！',
   en: 'RelayGo offers professional charter car service in Taiwan. Safe drivers, real-time tracking, multiple payment options. Download the app to book now!',
-  ja: 'RelayGoは台湾の専門チャーターサービスです。安全なドライバー、リアルタイム追跡、多様な決済方法。アプリをダウンロードして予約しましょう！',
+  ja: 'RelayGoは、台湾の空港送迎と貸切チャーターを日本語アプリで予約できるサービスです。ドライバーとのチャットは自動で日本語に翻訳。料金は予約時に確定し、高速代・ガソリン代込み。九份や日月潭など人気ルートの貸切観光にも対応します。',
   ko: 'RelayGo는 대만 전문 차터 서비스입니다. 안전한 기사, 실시간 추적, 다양한 결제 방식. 앱을 다운로드하여 예약하세요!',
   th: 'RelayGo ให้บริการรถเหมามืออาชีพในไต้หวัน คนขับปลอดภัย ติดตามแบบเรียลไทม์ หลายช่องทางชำระเงิน ดาวน์โหลดแอปเพื่อจองเลย!',
   vi: 'RelayGo cung cấp dịch vụ thuê xe riêng chuyên nghiệp tại Đài Loan. Tài xế an toàn, theo dõi thời gian thực, nhiều phương thức thanh toán. Tải ứng dụng để đặt xe ngay!',
@@ -48,7 +48,7 @@ const OG_DESCRIPTIONS: Record<Locale, string> = {
   'zh-TW': '安全可靠的專業包車服務，即時追蹤、多元支付、AI 旅遊規劃',
   'zh-CN': '安全可靠的专业包车服务，即时追踪、多元支付、AI 旅游规划',
   en: 'Safe & reliable charter service with real-time tracking, multiple payment options & AI travel planning',
-  ja: '安全で信頼できるチャーターサービス。リアルタイム追跡・多様な決済・AI旅行プランニング',
+  ja: '日本語アプリで予約、ドライバーとは自動翻訳チャット。台湾の空港送迎・貸切チャーターならRelayGo',
   ko: '안전하고 신뢰할 수 있는 차터 서비스. 실시간 추적, 다양한 결제, AI 여행 플래닝',
   th: 'บริการรถเหมาปลอดภัยและเชื่อถือได้ ติดตามแบบเรียลไทม์ หลายช่องทางชำระเงิน และ AI วางแผนเที่ยว',
   vi: 'Dịch vụ xe riêng an toàn và đáng tin cậy, theo dõi thời gian thực, nhiều phương thức thanh toán & AI lên kế hoạch du lịch',
@@ -80,7 +80,9 @@ export async function generateMetadata({ params }: { params: { lang: string } })
   const description = LOCALE_DESCRIPTIONS[locale];
   const ogDesc = OG_DESCRIPTIONS[locale];
   const seg = localePathMap[locale];
-  const canonical = seg ? `https://relaygo.pro/${seg}/` : 'https://relaygo.pro/';
+  // No trailing slash on locale homes: /ja/ 308-redirects to /ja, and hreflang
+  // + sitemap already use /ja — a slashed canonical sent Google mixed signals.
+  const canonical = seg ? `https://relaygo.pro/${seg}` : 'https://relaygo.pro/';
 
   return {
     title,
