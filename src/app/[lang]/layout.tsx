@@ -181,7 +181,7 @@ export default function LangLayout({ children, params }: Props) {
               alternateName: ['Relay Go', 'relaygo', 'RELAYGO', 'relaygo.pro'],
               legalName: 'RelayGo',
               url: 'https://relaygo.pro',
-              logo: 'https://relaygo.pro/og-image.png',
+              logo: 'https://relaygo.pro/icon-192.png', // square brand mark (Google: >=112px); og-image is a 1200x630 photo
               description: orgDesc,
               foundingDate: '2024',
               areaServed: {

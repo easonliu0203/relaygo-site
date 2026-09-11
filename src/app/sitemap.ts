@@ -13,6 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // changes. Using `new Date()` told Google every page changed on every deploy,
   // which trains it to ignore our lastmod entirely.
   const staticLastMod = new Date('2026-09-05');
+  // Pages whose copy/metadata changed on 2026-09-11 (ja SEO pass).
+  const copyLastMod = new Date('2026-09-11');
 
   const entries: MetadataRoute.Sitemap = [];
 
@@ -21,35 +23,35 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     entries.push({
       url: `${base}${prefix || '/'}`,
-      lastModified: staticLastMod,
+      lastModified: copyLastMod,
       changeFrequency: 'daily',
       priority: locale === 'zh-TW' ? 1.0 : 0.9,
     });
 
     entries.push({
       url: `${base}${prefix}/guides`,
-      lastModified: staticLastMod,
+      lastModified: copyLastMod,
       changeFrequency: 'weekly',
       priority: 0.8,
     });
 
     entries.push({
       url: `${base}${prefix}/pricing`,
-      lastModified: staticLastMod,
+      lastModified: copyLastMod,
       changeFrequency: 'monthly',
       priority: 0.9,
     });
 
     entries.push({
       url: `${base}${prefix}/taoyuan-airport-to-taipei`,
-      lastModified: new Date('2026-09-11'),
+      lastModified: copyLastMod,
       changeFrequency: 'monthly',
       priority: 0.8,
     });
 
     entries.push({
       url: `${base}${prefix}/faq`,
-      lastModified: staticLastMod,
+      lastModified: copyLastMod,
       changeFrequency: 'monthly',
       priority: 0.7,
     });
