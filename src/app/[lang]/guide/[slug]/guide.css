@@ -840,6 +840,38 @@
   font-weight: 500;
 }
 
+/* Translated-chat callout (top of article) */
+.guide-chat-callout {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: linear-gradient(135deg, rgba(0, 214, 143, 0.08) 0%, rgba(108, 99, 255, 0.06) 100%);
+  border: 1px solid rgba(0, 214, 143, 0.22);
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+}
+
+.guide-chat-callout-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.guide-chat-callout strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--dark);
+  margin-bottom: 4px;
+}
+
+.guide-chat-callout p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: var(--gray-700);
+}
+
 /* Photo Credit */
 .guide-photo-credit {
   text-align: center;

@@ -199,6 +199,9 @@ export default async function PricingPage({ params }: { params: { lang: string }
             </table>
           </div>
           <p className="pricing-page-note">{t('airportNote')}</p>
+          <p className="pricing-page-note">
+            <a href={`${langPrefix}/taoyuan-airport-to-taipei`}>{t('compareLink')}</a>
+          </p>
 
           <h2 className="pricing-page-h2">{t('charterH2')}</h2>
           <div className="pricing-table-wrap">

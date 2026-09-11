@@ -19,6 +19,19 @@ const UI: Record<string, Record<LangCode, string>> = {
   copy: { 'zh-TW': '複製連結', 'zh-CN': '复制链接', en: 'Copy Link', ja: 'リンクコピー', ko: '링크 복사', th: 'คัดลอกลิงก์', vi: 'Sao chép liên kết', ms: 'Salin pautan', id: 'Salin Tautan', fil: 'Kopyahin ang Link' },
   copied: { 'zh-TW': '已複製！', 'zh-CN': '已复制！', en: 'Copied!', ja: 'コピー済み！', ko: '복사됨!', th: 'คัดลอกแล้ว!', vi: 'Đã sao chép!', ms: 'Disalin!', id: 'Tersalin!', fil: 'Nakopya na!' },
   relatedGuides: { 'zh-TW': '其他攻略推薦', 'zh-CN': '其他攻略推荐', en: 'More Guides', ja: '他のガイド', ko: '다른 가이드', th: 'ไกด์อื่นๆ', vi: 'Hướng dẫn khác', ms: 'Panduan lain', id: 'Panduan Lainnya', fil: 'Iba Pang Gabay' },
+  chatTitle: { 'zh-TW': 'APP 內建翻譯聊天', 'zh-CN': 'App 内置翻译聊天', en: 'Chat with your driver — auto-translated', ja: 'ドライバーとのチャットは自動翻訳', ko: '기사님과의 채팅은 자동 번역', th: 'แชทกับคนขับ แปลภาษาอัตโนมัติ', vi: 'Chat với tài xế, dịch tự động', ms: 'Sembang dengan pemandu, diterjemah secara automatik', id: 'Chat dengan sopir, diterjemahkan otomatis', fil: 'Auto-translated ang chat mo sa driver' },
+  chatDesc: {
+    'zh-TW': '帶外國親友來台也不怕溝通：對方用自己的語言傳訊息，司機看到的是中文，司機的回覆也會自動翻成對方的語言。',
+    'zh-CN': '带外国亲友来台湾也不怕沟通：对方用自己的语言发消息，司机看到的是中文，司机的回复也会自动翻译成对方的语言。',
+    en: "Message your driver in English — they read it in Chinese, and their replies appear in English. Voice input is supported, and the app's interpreter mode reads translations aloud for face-to-face conversations.",
+    ja: '日本語で送ったメッセージはドライバーに中国語で届き、返信は日本語で表示されます。音声入力にも対応。対面での会話は、アプリの通訳機能で翻訳結果を読み上げられます。',
+    ko: '한국어로 보낸 메시지는 기사님께 중국어로 전달되고, 답장은 한국어로 표시됩니다. 음성 입력도 지원하며, 대면 대화는 앱의 통역 기능이 번역 결과를 읽어 줍니다.',
+    th: 'ส่งข้อความเป็นภาษาไทยได้เลย คนขับจะเห็นเป็นภาษาจีน และข้อความตอบกลับจะแสดงเป็นภาษาไทย รองรับการพูดแทนการพิมพ์ และโหมดล่ามในแอปยังอ่านคำแปลออกเสียงให้เวลาคุยกันต่อหน้าด้วย',
+    vi: 'Nhắn tin bằng tiếng Việt, tài xế sẽ đọc bằng tiếng Trung và câu trả lời hiển thị bằng tiếng Việt. Hỗ trợ nhập bằng giọng nói, và chế độ phiên dịch trong app sẽ đọc to bản dịch khi bạn nói chuyện trực tiếp.',
+    ms: 'Hantar mesej dalam Bahasa Melayu — pemandu membacanya dalam bahasa Cina, dan balasannya dipaparkan dalam Bahasa Melayu. Input suara disokong, dan mod jurubahasa dalam aplikasi membacakan terjemahan semasa berbual secara bersemuka.',
+    id: 'Kirim pesan dalam Bahasa Indonesia — sopir membacanya dalam bahasa Mandarin, dan balasannya muncul dalam Bahasa Indonesia. Mendukung input suara, dan mode penerjemah di aplikasi membacakan hasil terjemahan saat mengobrol langsung.',
+    fil: 'Mag-message sa driver sa sarili mong wika — Chinese ang mababasa niya, at lalabas sa wika mo ang sagot niya. May voice input din, at binabasa nang malakas ng interpreter mode ng app ang translation kapag harapang nag-uusap kayo.',
+  },
   itineraryNote: {
     'zh-TW': '行程完全由您自訂，可以自由新增與刪除。網站上的景點路線僅供參考，司機會按照您的路線行駛，路線不順時也會提供專業建議以節省交通時間。',
     'zh-CN': '行程完全由您自定，可以自由新增与删除。网站上的景点路线仅供参考，司机会按照您的路线行驶，路线不顺时也会提供专业建议以节省交通时间。',
@@ -156,6 +169,13 @@ export default function GuideContent({ guide, initialLang, relatedGuides = [] }:
       {/* Content */}
       <div className="guide-body">
         <div className="guide-main">
+          <div className="guide-chat-callout">
+            <span className="guide-chat-callout-icon" aria-hidden="true">💬</span>
+            <div>
+              <strong>{UI.chatTitle[lang]}</strong>
+              <p>{UI.chatDesc[lang]}</p>
+            </div>
+          </div>
           <article
             className="guide-article"
             dangerouslySetInnerHTML={{ __html: contentHtml }}

@@ -1749,6 +1749,38 @@
       .pricing-page-intro { font-size: 15px; }
     }
 
+    /* ===== Taoyuan Airport → Taipei comparison ===== */
+    .transfer-compare-table { min-width: 720px; }
+    .transfer-compare-table td { font-size: 14px; }
+    .transfer-best { text-align: left !important; color: var(--gray-700); }
+    .transfer-row-highlight td { background: rgba(0, 214, 143, 0.07); }
+    .transfer-row-highlight td:first-child { color: var(--primary); }
+    .transfer-group-wrap { margin-top: 18px; }
+    .transfer-sub { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+    .transfer-points { list-style: none; margin: 0; padding: 0; }
+    .transfer-points li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--gray-700);
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-300);
+    }
+    .transfer-points li:last-child { border-bottom: none; }
+    .transfer-points li span { font-size: 1.2rem; flex-shrink: 0; }
+    .transfer-faq details {
+      border: 1px solid var(--gray-300);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      background: var(--white);
+    }
+    .transfer-faq summary { cursor: pointer; font-weight: 600; color: var(--dark); font-size: 15px; }
+    .transfer-faq p { margin: 10px 0 0; font-size: 14px; line-height: 1.8; color: var(--gray-700); }
+    .transfer-disclaimer { margin-top: 32px; }
+
     /* ===== Homepage FAQ ===== */
     .home-faq-section {
       padding: 80px 24px;

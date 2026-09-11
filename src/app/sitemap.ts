@@ -41,6 +41,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
 
     entries.push({
+      url: `${base}${prefix}/taoyuan-airport-to-taipei`,
+      lastModified: new Date('2026-09-11'),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+
+    entries.push({
       url: `${base}${prefix}/faq`,
       lastModified: staticLastMod,
       changeFrequency: 'monthly',

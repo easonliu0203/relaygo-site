@@ -140,6 +140,29 @@ export async function getPricingTables(): Promise<PricingTables> {
   return { airport, charter };
 }
 
+// Taoyuan (TPE) ⇄ Taipei City transfer prices per vehicle type — the cheapest
+// Taipei district, used as the "from" price on the airport comparison page.
+export type TaipeiTpePrices = Record<'S' | 'M' | 'L' | 'XL', number>;
+
+const TAIPEI_TPE_FALLBACK: TaipeiTpePrices = { S: 1300, M: 1500, L: 2100, XL: 1900 };
+
+export async function getTaipeiTpePrices(): Promise<TaipeiTpePrices> {
+  const rows = await safeJson<{ vehicle_type: string; tpe_price: number }[]>(
+    `${SUPABASE_URL}/airport_transfer_pricing?is_active=eq.true&region=like.${encodeURIComponent('台北*')}&select=vehicle_type,tpe_price`,
+    []
+  );
+  if (!rows.length) return TAIPEI_TPE_FALLBACK;
+  const out = { ...TAIPEI_TPE_FALLBACK };
+  const seen = new Set<string>();
+  for (const r of rows) {
+    const vt = r.vehicle_type as keyof TaipeiTpePrices;
+    if (!(vt in out)) continue;
+    out[vt] = seen.has(vt) ? Math.min(out[vt], r.tpe_price) : r.tpe_price;
+    seen.add(vt);
+  }
+  return out;
+}
+
 export async function getGuideBySlug(slug: string): Promise<TourGuide | null> {
   const data = await safeJson<TourGuide[]>(
     `${SUPABASE_URL}/tour_guides?slug=eq.${encodeURIComponent(slug)}&is_published=eq.true&select=*`,

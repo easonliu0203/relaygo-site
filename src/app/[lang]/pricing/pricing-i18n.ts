@@ -238,6 +238,18 @@ export const UI: Record<string, L> = {
     fil:
       'Ang unang 50 km ng day tour ay walang cross-region fee; ang lampas lang doon ang siningil kada kilometro. Magdagdag ng airport transfer sa parehong booking at libre na ang cross-region fee.',
   },
+  compareLink: {
+    'zh-TW': '→ 桃園機場到台北：機捷、客運、計程車、接送怎麼選？',
+    'zh-CN': '→ 桃园机场到台北：机场捷运、大巴、出租车、接送怎么选？',
+    en: '→ Taoyuan Airport to Taipei: MRT, bus, taxi or transfer — which is best?',
+    ja: '→ 桃園空港から台北へ：MRT・バス・タクシー・送迎を比較',
+    ko: '→ 타오위안 공항→타이베이: MRT・버스・택시・픽업 비교',
+    th: '→ สนามบินเถาหยวนไปไทเป: เทียบ MRT รถบัส แท็กซี่ และรถรับส่ง',
+    vi: '→ Sân bay Đào Viên về Đài Bắc: so sánh MRT, xe buýt, taxi và xe đưa đón',
+    ms: '→ Taoyuan ke Taipei: bandingkan MRT, bas, teksi dan transfer',
+    id: '→ Bandara Taoyuan ke Taipei: bandingkan MRT, bus, taksi, dan antar jemput',
+    fil: '→ Taoyuan Airport papuntang Taipei: ihambing ang MRT, bus, taxi at transfer',
+  },
   thAirport: {
     'zh-TW': '機場', 'zh-CN': '机场', en: 'Airport', ja: '空港', ko: '공항',
     th: 'สนามบิน', vi: 'Sân bay', ms: 'Lapangan Terbang', id: 'Bandara', fil: 'Paliparan',
