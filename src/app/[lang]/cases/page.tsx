@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { getServiceCases } from '@/lib/supabase';
 import CasesContent from './CasesContent';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
+import { ogImage } from '@/lib/og';
 import { I18N } from '@/lib/i18n';
 
 // Re-render at most once per minute so admin updates show up promptly.
@@ -77,6 +78,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       type: 'website',
       url: canonical,
       locale: locale.replace('-', '_'),
+      images: [ogImage(locale)],
     },
     alternates: {
       canonical,

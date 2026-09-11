@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { getTaipeiTpePrices } from '@/lib/supabase';
 import { locales, localePathMap, resolveLocale } from '@/lib/i18n-config';
+import { ogImage } from '@/lib/og';
 import { PAGE_TITLES, PAGE_DESCS, PAGE_KEYWORDS, UI } from './i18n';
 
 // RelayGo prices come from the same table as /pricing; third-party fares are
@@ -43,13 +44,13 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       url: canonical,
       siteName: 'RelayGo',
       locale: locale.replace('-', '_'),
-      images: [{ url: 'https://relaygo.pro/og-image.png', width: 1200, height: 630 }],
+      images: [ogImage(locale)],
     },
     twitter: {
       card: 'summary_large_image',
       title: PAGE_TITLES[locale],
       description: PAGE_DESCS[locale],
-      images: ['https://relaygo.pro/og-image.png'],
+      images: [ogImage(locale).url],
     },
     alternates: { canonical, languages: buildAlternates() },
   };

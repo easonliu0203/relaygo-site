@@ -12,6 +12,7 @@ import {
   type Locale,
 } from '@/lib/i18n-config';
 import { LANG_TITLES } from '@/lib/i18n';
+import { ogImage } from '@/lib/og';
 
 interface Props {
   params: { lang: string };
@@ -95,20 +96,13 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       url: canonical,
       siteName: 'RelayGo',
       locale: locale.replace('-', '_'),
-      images: [
-        {
-          url: 'https://relaygo.pro/og-image.png',
-          width: 1200,
-          height: 630,
-          alt: title,
-        },
-      ],
+      images: [ogImage(locale, title)],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description: ogDesc,
-      images: ['https://relaygo.pro/og-image.png'],
+      images: [ogImage(locale).url],
     },
     metadataBase: new URL('https://relaygo.pro'),
     icons: {

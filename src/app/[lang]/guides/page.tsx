@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { getPublishedGuides } from '@/lib/supabase';
 import GuidesListContent from './GuidesListContent';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
+import { ogImage } from '@/lib/og';
 
 const GUIDES_DESCS: Record<Locale, string> = {
   'zh-TW': '精選台灣旅遊路線攻略，九份、日月潭、清境、墾丁、花蓮太魯閣等熱門景點。包車行程、在地美食推薦、大眾運輸自由行路線一次搞定。',
@@ -66,6 +67,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       type: 'website',
       url: canonical,
       locale: locale.replace('-', '_'),
+      images: [ogImage(locale)],
     },
     alternates: {
       canonical,

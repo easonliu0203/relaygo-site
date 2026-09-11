@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import FAQContent from './FAQContent';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
+import { ogImage } from '@/lib/og';
 import { FAQS, type LangCode } from '@/lib/faq-data';
 
 const FAQ_TITLES: Record<Locale, string> = {
@@ -63,6 +64,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       type: 'website',
       url: canonical,
       locale: locale.replace('-', '_'),
+      images: [ogImage(locale)],
     },
     alternates: {
       canonical,

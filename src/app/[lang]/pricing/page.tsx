@@ -6,6 +6,7 @@ import {
   resolveLocale,
   type Locale,
 } from '@/lib/i18n-config';
+import { ogImage } from '@/lib/og';
 import {
   PRICING_TITLES,
   PRICING_DESCS,
@@ -52,13 +53,13 @@ export async function generateMetadata({
       url: canonical,
       siteName: 'RelayGo',
       locale: locale.replace('-', '_'),
-      images: [{ url: 'https://relaygo.pro/og-image.png', width: 1200, height: 630 }],
+      images: [ogImage(locale)],
     },
     twitter: {
       card: 'summary_large_image',
       title: PRICING_TITLES[locale],
       description: PRICING_DESCS[locale],
-      images: ['https://relaygo.pro/og-image.png'],
+      images: [ogImage(locale).url],
     },
     alternates: { canonical, languages: buildAlternates('/pricing') },
   };

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { getPublishedBookmarks } from '@/lib/bookmarks';
 import BookmarksContent from './BookmarksContent';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
+import { ogImage } from '@/lib/og';
 
 const TITLES: Record<Locale, string> = {
   'zh-TW': '旅遊書籤 | RelayGo — 收藏社群旅遊靈感',
@@ -72,6 +73,7 @@ export async function generateMetadata({ params }: { params: { lang: string } })
       type: 'website',
       url: canonical,
       locale: locale.replace('-', '_'),
+      images: [ogImage(locale)],
     },
     alternates: {
       canonical,
