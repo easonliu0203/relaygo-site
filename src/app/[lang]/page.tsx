@@ -242,6 +242,12 @@ export default function HomePage() {
   useEffect(() => {
     applyLang(locale);
 
+    // Limited-time campaign banner: self-retires once the promo window
+    // closes, so an expired offer can't linger on the homepage.
+    if (Date.now() > new Date('2027-04-01T00:00:00+08:00').getTime()) {
+      document.getElementById('promoBanner')?.remove();
+    }
+
     // Landing on /#pricing (shared link, back button) hits the same problem the
     // click handler solves — the browser jumps before late content lands.
     // The hash is then dropped from the URL: it has served its purpose, and

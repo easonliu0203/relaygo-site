@@ -146,6 +146,23 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           <span class="dot"></span>
           <span data-i18n="hero_badge">iOS & Android 雙平台上架</span>
         </div>
+        <a class="promo-banner" id="promoBanner" href="https://www.instagram.com/p/DdG5aqHBtYB/" target="_blank" rel="noopener">
+          <span class="promo-line">
+            <span class="promo-flag" data-i18n="promo_tag">限時優惠</span>
+            <span class="promo-deal" data-i18n="promo_deal">九人座包車 8 小時</span>
+          </span>
+          <span class="promo-line">
+            <span class="promo-price">NT$5,110</span>
+            <span class="promo-old">NT$7,300</span>
+            <span class="promo-off" data-i18n="promo_off">約 7 折</span>
+          </span>
+          <span class="promo-sub">
+            <span data-i18n="promo_how">IG 貼文留言「RG」索取優惠碼</span>
+            <span class="promo-sep">·</span>
+            <span data-i18n="promo_until">活動至 2027/3/31</span>
+          </span>
+          <span class="promo-cta" data-i18n="promo_cta">前往 IG 領優惠碼 →</span>
+        </a>
         <h1 data-i18n-html="hero_title">專業包車服務<br><span class="highlight">輕鬆預約</span></h1>
         <p class="hero-subtitle" data-i18n="hero_subtitle">預約專業司機，享受機場接送、城市觀光、商務出行。僅需支付少額訂金，即可完成預約。安全可靠，輕鬆無憂。</p>
         <div class="hero-actions">
@@ -644,7 +661,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
               <tr>
                 <td data-i18n="pricing_l">九人座休旅車</td>
                 <td><span data-price="charter-L-6h" class="price-na">—</span></td>
-                <td><span class="price-val" data-price="charter-L-8h">NT$7,500</span></td>
+                <td><span class="price-val" data-price="charter-L-8h">NT$7,500</span><span class="price-promo" data-i18n="promo_table_tag">活動價 NT$5,110</span></td>
                 <td><span class="price-val" data-price="charter-L-ot">NT$600</span></td>
               </tr>
               <tr>

@@ -394,6 +394,116 @@
     .lang-option:hover { background: var(--gray-100); }
     .lang-option.active { color: var(--primary); font-weight: 600; }
 
+    /* ===== 限時活動 Banner（IG 留言領優惠碼）===== */
+    .promo-banner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      max-width: 520px;
+      margin: 0 0 26px;
+      padding: 14px 18px 16px;
+      border-radius: 18px;
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(255,184,0,0.16) 0%, rgba(255,107,53,0.12) 100%);
+      border: 1px solid rgba(255,184,0,0.45);
+      box-shadow: 0 10px 30px rgba(255,140,0,0.16);
+      animation: promoBreathe 3.2s ease-in-out infinite;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .promo-banner:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(255,140,0,0.3);
+    }
+    @keyframes promoBreathe {
+      0%, 100% { box-shadow: 0 10px 30px rgba(255,140,0,0.14); }
+      50% { box-shadow: 0 12px 38px rgba(255,140,0,0.32); }
+    }
+    .promo-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .promo-flag {
+      display: inline-block;
+      padding: 4px 11px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #FFB800 0%, #FF6B35 100%);
+      color: #1A1A2E;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+    .promo-deal {
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .promo-price {
+      color: #FFD466;
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+    .promo-old {
+      color: rgba(255,255,255,0.5);
+      font-size: 14px;
+      text-decoration: line-through;
+    }
+    .promo-off {
+      padding: 2px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,184,0,0.5);
+      color: #FFB800;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .promo-sub {
+      color: rgba(255,255,255,0.78);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .promo-sep { margin: 0 6px; opacity: 0.5; }
+    .promo-cta {
+      display: inline-flex;
+      align-items: center;
+      margin-top: 6px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #FFB800 0%, #FF6B35 100%);
+      color: #1A1A2E;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    /* 價格表上的活動標籤 */
+    .price-promo {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #FF6B35;
+      white-space: nowrap;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .promo-banner { animation: none; }
+    }
+    @media (max-width: 640px) {
+      .promo-banner {
+        width: 100%;
+        max-width: none;
+        padding: 12px 14px 14px;
+        margin-bottom: 20px;
+      }
+      .promo-deal { font-size: 14px; }
+      .promo-price { font-size: 22px; }
+      .promo-sub { font-size: 12px; }
+      .promo-cta { width: 100%; justify-content: center; }
+    }
+
     /* ===== Hero Section ===== */
     .hero {
       position: relative;
