@@ -448,6 +448,13 @@
       line-height: 1.1;
       letter-spacing: -0.5px;
     }
+    .promo-fx {
+      color: rgba(255,255,255,0.92);
+      font-size: 16px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .promo-fx[hidden], .promo-fx-note[hidden] { display: none; }
     .promo-old {
       color: rgba(255,255,255,0.5);
       font-size: 14px;
@@ -500,6 +507,7 @@
       }
       .promo-deal { font-size: 14px; }
       .promo-price { font-size: 22px; }
+      .promo-fx { font-size: 14px; }
       .promo-sub { font-size: 12px; }
       .promo-cta { width: 100%; justify-content: center; }
     }

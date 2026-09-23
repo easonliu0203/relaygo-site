@@ -153,6 +153,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           </span>
           <span class="promo-line">
             <span class="promo-price">NT$5,110</span>
+            <span class="promo-fx" id="promoFx" hidden></span>
             <span class="promo-old">NT$7,300</span>
             <span class="promo-off" data-i18n="promo_off">約 7 折</span>
           </span>
@@ -160,6 +161,10 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
             <span data-i18n="promo_how">IG 貼文留言「RG」索取優惠碼</span>
             <span class="promo-sep">·</span>
             <span data-i18n="promo_until">活動至 2027/3/31</span>
+            <span class="promo-fx-note" id="promoFxNote" hidden>
+              <span class="promo-sep">·</span>
+              <span data-i18n="promo_fx_note">外幣為當日匯率參考價</span>
+            </span>
           </span>
           <span class="promo-cta" data-i18n="promo_cta">前往 IG 領優惠碼 →</span>
         </a>

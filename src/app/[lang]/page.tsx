@@ -320,6 +320,49 @@ export default function HomePage() {
     }, { threshold: 0.5 });
     statNumbers.forEach((el) => statsObserver.observe(el));
 
+    // Secondary price in the visitor's own currency. Reference only: every
+    // booking is charged in TWD, so a stale or missing rate simply hides it.
+    const FX_BY_LOCALE: Partial<Record<LangCode, { currency: string; numberLocale: string }>> = {
+      'zh-CN': { currency: 'CNY', numberLocale: 'zh-CN' },
+      en: { currency: 'USD', numberLocale: 'en-US' },
+      ja: { currency: 'JPY', numberLocale: 'ja-JP' },
+      ko: { currency: 'KRW', numberLocale: 'ko-KR' },
+      th: { currency: 'THB', numberLocale: 'th-TH' },
+      vi: { currency: 'VND', numberLocale: 'vi-VN' },
+      ms: { currency: 'MYR', numberLocale: 'ms-MY' },
+      id: { currency: 'IDR', numberLocale: 'id-ID' },
+      fil: { currency: 'PHP', numberLocale: 'en-PH' },
+    };
+    const fx = FX_BY_LOCALE[locale];
+    // Read the amount off the banner itself, so changing the promo price is a
+    // one-line edit in bodyhtml.ts rather than two places that can drift.
+    const promoTwd = Number(
+      (document.querySelector('.promo-price')?.textContent || '').replace(/[^0-9]/g, '')
+    );
+    if (fx && promoTwd > 0) {
+      fetch('/api/fx')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          const rate = Number(data?.rates?.[fx.currency]);
+          if (!Number.isFinite(rate) || rate <= 0) return;
+          // Round to roughly three significant digits so it reads as an estimate.
+          const raw = promoTwd * rate;
+          const step = raw >= 100000 ? 1000 : raw >= 10000 ? 100 : raw >= 1000 ? 10 : 1;
+          const amount = new Intl.NumberFormat(fx.numberLocale, {
+            style: 'currency',
+            currency: fx.currency,
+            maximumFractionDigits: 0,
+          }).format(Math.round(raw / step) * step);
+          const fxEl = document.getElementById('promoFx');
+          if (fxEl) {
+            fxEl.textContent = '\u2248 ' + amount;
+            fxEl.removeAttribute('hidden');
+          }
+          document.getElementById('promoFxNote')?.removeAttribute('hidden');
+        })
+        .catch(() => {});
+    }
+
     // Fetch dynamic pricing from Supabase
     fetch('/api/pricing')
       .then((res) => res.json())
