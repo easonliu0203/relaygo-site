@@ -75,9 +75,9 @@ const PRICING_FALLBACK: PricingTables = {
     L: { tpe: 1800, tsa: 1800, rmq: 4600, khh: 8500 },
   },
   charter: {
-    S: { h6: 3000, h8: 3900, overtime: 350 },
-    M: { h6: null, h8: 4500, overtime: 450 },
-    L: { h6: null, h8: 7500, overtime: 600 },
+    S: { h6: null, h8: 3900, overtime: 350 },
+    M: { h6: null, h8: 4800, overtime: 400 },
+    L: { h6: null, h8: 7300, overtime: 500 },
     XL: { h6: null, h8: 10000, overtime: 800 },
   },
 };

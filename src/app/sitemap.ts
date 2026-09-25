@@ -49,6 +49,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     });
 
+    // Korean-only keyword landing page ("예스진지 택시투어").
+    if (locale === 'ko') {
+      entries.push({
+        url: `${base}/ko/yehliu-shifen-jiufen-taxi-tour`,
+        lastModified: copyLastMod,
+        changeFrequency: 'monthly',
+        priority: 0.8,
+      });
+    }
+
     entries.push({
       url: `${base}${prefix}/faq`,
       lastModified: copyLastMod,

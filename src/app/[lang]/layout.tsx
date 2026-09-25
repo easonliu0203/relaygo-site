@@ -199,7 +199,7 @@ function offerCatalog(locale: Locale) {
       {
         '@type': 'OfferCatalog',
         name: SVC.charter[locale],
-        itemListElement: [charterOffer('S', '3900'), charterOffer('M', '4500'), charterOffer('L', '7500')],
+        itemListElement: [charterOffer('S', '3900'), charterOffer('M', '4800'), charterOffer('L', '7300')],
       },
       {
         '@type': 'Offer',
