@@ -7,9 +7,9 @@ import { FAQS, type LangCode } from '@/lib/faq-data';
 const FAQ_TITLES: Record<Locale, string> = {
   'zh-TW': '常見問題 FAQ | RelayGo 包車服務',
   'zh-CN': '常见问题 FAQ | RelayGo 包车服务',
-  en: 'FAQ | RelayGo Charter Service',
+  en: 'Taiwan Private Driver & Airport Transfer FAQ | RelayGo',
   ja: '台湾の空港送迎・貸切チャーター よくある質問 | RelayGo',
-  ko: '자주 묻는 질문 | RelayGo 차터 서비스',
+  ko: '대만 택시투어・공항 픽업 자주 묻는 질문 | RelayGo',
   th: 'คำถามที่พบบ่อย | RelayGo บริการรถเหมา',
   vi: 'Câu hỏi thường gặp | RelayGo Dịch vụ xe riêng',
   ms: 'Soalan Lazim | RelayGo Perkhidmatan Sewa Kenderaan',
@@ -20,9 +20,9 @@ const FAQ_TITLES: Record<Locale, string> = {
 const FAQ_DESCS: Record<Locale, string> = {
   'zh-TW': '包車旅遊常見問題：到府接送、司機素質、車輛合法性、費用說明、行程自訂、預約方式等。',
   'zh-CN': '包车旅游常见问题：上门接送、司机素质、车辆合法性、费用说明、行程自定、预约方式等。',
-  en: 'Charter service FAQ: door-to-door pickup, driver quality, vehicle legality, pricing, itinerary customization, booking methods.',
+  en: 'Everything to know before booking a private driver or airport transfer in Taiwan: hotel pickup, meeting at Taoyuan Airport, driver and vehicle safety, what the price includes, changing your itinerary, and how to book.',
   ja: '台湾の空港送迎・貸切チャーターに関するよくある質問。ホテル送迎、空港での待ち合わせ、ドライバーや車両の安全性、料金に含まれるもの、行程の変更、予約方法など、ご予約前の疑問にお答えします。',
-  ko: '차터 서비스 FAQ: 숙소 픽업, 기사 품질, 차량 안전, 요금, 일정 맞춤, 예약 방법.',
+  ko: '대만 택시투어・공항 픽업 예약 전 자주 묻는 질문: 호텔 픽업, 타오위안 공항 미팅 방법, 기사님과 차량 안전, 요금 포함 내역, 일정 변경, 예약 방법까지 한눈에 확인하세요.',
   th: 'คำถามที่พบบ่อยเกี่ยวกับบริการรถเหมา: รับ-ส่งถึงที่ คุณภาพคนขับ ความปลอดภัยรถ ค่าบริการ ปรับแต่งเส้นทาง วิธีจอง',
   vi: 'FAQ dịch vụ xe riêng: đón tận nơi, chất lượng tài xế, xe hợp pháp, giá cả, tùy chỉnh lộ trình, cách đặt xe.',
   ms: 'FAQ perkhidmatan charter: jemput dari pintu ke pintu, kualiti pemandu, keselamatan kenderaan, harga, penyesuaian jadual, kaedah tempahan.',

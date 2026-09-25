@@ -1,5 +1,7 @@
 import { I18N } from './i18n';
 import { FAQS, type LangCode } from './faq-data';
+import { AIRPORT_NAMES } from '@/app/[lang]/pricing/pricing-i18n';
+import { resolveLocale } from './i18n-config';
 
 export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): string {
   const dict = I18N[lang] || I18N['zh-TW'];
@@ -12,6 +14,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
   const esc = (v: string) =>
     v.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const faqLang = (lang as LangCode);
+  const loc = resolveLocale(lang);
   const homeFaqs = FAQS.slice(0, 5).map((f) => ({
     q: f.question[faqLang] || f.question['zh-TW'] || f.question.en || '',
     a: f.answer[faqLang] || f.answer['zh-TW'] || f.answer.en || '',
@@ -459,10 +462,10 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
           <h3 data-i18n="svc1_title">機場接送</h3>
           <p data-i18n="svc1_desc">專業司機準時接送，行李協助搬運，航班延誤免費等候。</p>
           <div class="service-tags">
-            <span class="service-tag">TPE 桃園</span>
-            <span class="service-tag">TSA 松山</span>
-            <span class="service-tag">RMQ 台中</span>
-            <span class="service-tag">KHH 高雄</span>
+            <span class="service-tag">${esc(AIRPORT_NAMES.tpe[loc])}</span>
+            <span class="service-tag">${esc(AIRPORT_NAMES.tsa[loc])}</span>
+            <span class="service-tag">${esc(AIRPORT_NAMES.rmq[loc])}</span>
+            <span class="service-tag">${esc(AIRPORT_NAMES.khh[loc])}</span>
           </div>
         </div>
         <div class="service-card fade-up">
@@ -501,7 +504,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
       <div class="fleet-grid">
         <div class="fleet-card fade-up">
           <div class="fleet-img-wrap">
-            <img loading="lazy" decoding="async" src="/images/5人座轎車.webp" alt="五人座轎車">
+            <img loading="lazy" decoding="async" src="/images/5人座轎車.webp" alt="${esc(t('fleet_s_name', ''))} — RelayGo">
             <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
           </div>
           <h3 data-i18n="fleet_s_name">五人座轎車</h3>
@@ -521,7 +524,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
         <div class="fleet-card fade-up">
           <div class="fleet-img-wrap">
-            <img loading="lazy" decoding="async" src="/images/5人座休旅車.webp" alt="五人座休旅車">
+            <img loading="lazy" decoding="async" src="/images/5人座休旅車.webp" alt="${esc(t('fleet_m_name', ''))} — RelayGo">
             <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
           </div>
           <h3 data-i18n="fleet_m_name">五人座休旅車</h3>
@@ -541,7 +544,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
         <div class="fleet-card popular fade-up">
           <div class="fleet-img-wrap">
-            <img loading="lazy" decoding="async" src="/images/9人座.webp" alt="九人座休旅車">
+            <img loading="lazy" decoding="async" src="/images/9人座.webp" alt="${esc(t('fleet_l_name', ''))} — RelayGo">
             <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
           </div>
           <h3 data-i18n="fleet_l_name">九人座休旅車</h3>
@@ -561,7 +564,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): st
         </div>
         <div class="fleet-card fade-up">
           <div class="fleet-img-wrap">
-            <img loading="lazy" decoding="async" src="/images/Toyota Alphard.webp" alt="Toyota Alphard">
+            <img loading="lazy" decoding="async" src="/images/Toyota Alphard.webp" alt="Toyota Alphard — RelayGo">
             <span class="fleet-img-label" data-i18n="fleet_img_label">示意圖</span>
           </div>
           <h3>Toyota Alphard</h3>
@@ -799,9 +802,13 @@ ${homeFaqHtml}
   </footer>`;
 
   // Server-side translate: replace data-i18n="key">text< with translated text
-  html = html.replace(/data-i18n="([^"]+)">([^<]*)<\//g, (_match, key, fallback) => {
-    return `data-i18n="${key}">${t(key, fallback)}</`;
-  });
+  // Attributes may follow data-i18n (e.g. class="mobile-menu-link"), and the
+  // text may contain <br> — both used to slip through untranslated, leaving
+  // Chinese in the crawled HTML of /en, /ja, /ko … until client JS ran.
+  html = html.replace(
+    /data-i18n="([^"]+)"([^>]*)>((?:[^<]|<br\s*\/?>)*)<\//g,
+    (_match, key, attrs, fallback) => `data-i18n="${key}"${attrs}>${t(key, fallback)}</`
+  );
 
   // Server-side translate: replace data-i18n-html="key">html content
   // Only 2 elements use this (hero_title in <h1>, cta_title in <h2>), match up to closing parent tag

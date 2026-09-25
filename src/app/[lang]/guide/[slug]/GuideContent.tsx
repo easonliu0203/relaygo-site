@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import type { TourGuide, TourGuideSummary } from '@/lib/supabase';
+import { tagsForLocale } from '@/lib/guide-tags';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import { localizedCity } from '@/lib/city-names';
 
@@ -159,7 +160,7 @@ export default function GuideContent({ guide, initialLang, relatedGuides = [] }:
           </div>
 
           <div className="guide-meta">
-            {guide.tags?.map((tag) => (
+            {tagsForLocale(guide.tags, lang).map((tag) => (
               <span key={tag} className="guide-tag">{tag}</span>
             ))}
           </div>

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getGuideBySlug, getAllGuideSlugs, getPublishedGuides } from '@/lib/supabase';
+import { tagsForLocale } from '@/lib/guide-tags';
 import GuideContent from './GuideContent';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
 
@@ -63,7 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     keywords: [
       ...GUIDE_META_KEYWORDS[locale],
       title,
-      ...(guide.tags || []),
+      ...tagsForLocale(guide.tags, locale),
     ].join(', '),
     openGraph: {
       title: `${title} | RelayGo`,

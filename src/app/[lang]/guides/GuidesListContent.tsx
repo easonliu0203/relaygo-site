@@ -1,6 +1,7 @@
 'use client';
 
 import type { TourGuideSummary } from '@/lib/supabase';
+import { tagsForLocale } from '@/lib/guide-tags';
 import { localePathMap, type Locale } from '@/lib/i18n-config';
 import { localizedCity } from '@/lib/city-names';
 
@@ -80,7 +81,7 @@ function GuideCard({ guide, langPrefix, lang }: { guide: TourGuideSummary; langP
       </div>
       <div className="guide-card-body">
         <div className="guide-card-tags">
-          {guide.tags?.slice(0, 3).map((tag) => (
+          {tagsForLocale(guide.tags, lang).slice(0, 3).map((tag) => (
             <span key={tag} className="guide-card-tag">{tag}</span>
           ))}
         </div>
