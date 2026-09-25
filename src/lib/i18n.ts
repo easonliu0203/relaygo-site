@@ -1748,7 +1748,7 @@ export const LANG_LABELS: Record<string, string> = { 'zh-TW': '繁中', 'zh-CN':
 export const LANG_TITLES: Record<string, string> = {
   'zh-TW': '台灣包車旅遊・機場接送｜RelayGo 專業包車平台',
   'zh-CN': '台湾包车旅游・机场接送｜RelayGo 专业包车平台',
-  'en': 'Taiwan Private Driver & Airport Transfer | Taipei Day Tours | RelayGo',
+  'en': 'Taiwan Private Driver & Airport Transfer | RelayGo',
   'ja': '台湾 貸切タクシー・空港送迎｜日本語で予約できるチャーター RelayGo',
   'ko': '대만 택시투어・공항 픽업｜예스진지・지우펀 한국어 예약 RelayGo',
   'th': 'เช่ารถพร้อมคนขับไต้หวัน・รับส่งสนามบิน｜RelayGo',

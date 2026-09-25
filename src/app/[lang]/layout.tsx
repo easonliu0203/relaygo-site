@@ -209,6 +209,25 @@ function offerCatalog(locale: Locale) {
   };
 }
 
+// Only the CJK family the page's language actually uses (see globals.css
+// html[lang] rules). Requesting all four made the render-blocking font CSS
+// ~470 KB gzipped on every page; one family is ~95 KB, none is a few KB.
+const CJK_FONT: Partial<Record<Locale, string>> = {
+  'zh-TW': 'Noto+Sans+TC',
+  'zh-CN': 'Noto+Sans+SC',
+  ja: 'Noto+Sans+JP',
+  ko: 'Noto+Sans+KR',
+};
+
+function fontsHref(locale: Locale) {
+  const cjk = CJK_FONT[locale];
+  return (
+    'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800' +
+    (cjk ? `&family=${cjk}:wght@400;500;700;900` : '') +
+    '&display=swap'
+  );
+}
+
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || '';
 
 export default function LangLayout({ children, params }: Props) {
@@ -227,7 +246,7 @@ export default function LangLayout({ children, params }: Props) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+          href={fontsHref(locale)}
           rel="stylesheet"
         />
       </head>

@@ -8,7 +8,7 @@ import { localizedCity } from '@/lib/city-names';
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
 
 const UI: Record<string, Record<LangCode, string>> = {
-  pageTitle: { 'zh-TW': '包車攻略', 'zh-CN': '包车攻略', en: 'Travel Guides', ja: 'チャーターガイド', ko: '차터 가이드', th: 'คู่มือเที่ยวรถเหมา', vi: 'Cẩm nang du lịch', ms: 'Panduan perjalanan', id: 'Panduan Wisata', fil: 'Mga Gabay sa Paglalakbay' },
+  pageTitle: { 'zh-TW': '包車攻略', 'zh-CN': '包车攻略', en: 'Taiwan Day Trips by Private Driver', ja: '台湾 貸切チャーター観光ルート', ko: '대만 택시투어 추천 코스', th: 'คู่มือเที่ยวรถเหมา', vi: 'Cẩm nang du lịch', ms: 'Panduan perjalanan', id: 'Panduan Wisata', fil: 'Mga Gabay sa Paglalakbay' },
   pageSubtitle: {
     'zh-TW': '精選台灣包車旅遊路線，專業司機帶路，行程規劃一次搞定',
     'zh-CN': '精选台湾包车旅游路线，专业司机带路，行程规划一次搞定',

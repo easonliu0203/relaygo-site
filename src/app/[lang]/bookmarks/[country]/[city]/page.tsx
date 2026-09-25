@@ -32,7 +32,9 @@ export async function generateMetadata({ params }: { params: { lang: string; cou
   return {
     title,
     description: desc,
-    robots: { index: true, follow: true },
+    // Sub-page content is user-submitted posts in Chinese; only the zh-TW copy
+    // is indexable so /en, /ja, /ko … aren't seen as thin duplicates.
+    robots: { index: locale === 'zh-TW', follow: true },
     openGraph: { title, description: desc, type: 'website', url: canonical, locale: locale.replace('-', '_') },
     alternates: { canonical },
   };

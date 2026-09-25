@@ -33,7 +33,7 @@ const GUIDES_KEYWORDS: Record<Locale, string> = {
 const GUIDES_TITLES: Record<Locale, string> = {
   'zh-TW': '包車攻略 | RelayGo - 台灣包車旅遊路線推薦',
   'zh-CN': '包车攻略 | RelayGo - 台湾包车旅游路线推荐',
-  en: 'Taiwan Day Trip Itineraries by Private Driver | Jiufen, Sun Moon Lake, Taroko | RelayGo',
+  en: 'Taiwan Day Trips by Private Driver: Jiufen, Taroko | RelayGo',
   ja: '台湾 貸切チャーター観光ルート｜九份・日月潭・太魯閣 | RelayGo',
   ko: '대만 택시투어 코스 추천｜예스진지・르웨탄・타로코 | RelayGo',
   th: 'คู่มือเที่ยวรถเหมา | RelayGo - เส้นทางท่องเที่ยวไต้หวัน',

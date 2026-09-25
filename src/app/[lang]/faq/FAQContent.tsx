@@ -8,9 +8,9 @@ const UI: Record<string, Record<string, string>> = {
   title: {
     'zh-TW': '常見問題',
     'zh-CN': '常见问题',
-    en: 'Frequently Asked Questions',
-    ja: 'よくある質問',
-    ko: '자주 묻는 질문',
+    en: 'Taiwan Private Driver & Airport Transfer FAQ',
+    ja: '台湾の貸切タクシー・空港送迎 よくある質問',
+    ko: '대만 택시투어・공항 픽업 자주 묻는 질문',
     th: 'คำถามที่พบบ่อย',
     vi: 'Câu hỏi thường gặp',
     ms: 'Soalan Lazim',

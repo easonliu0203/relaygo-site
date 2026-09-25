@@ -22,9 +22,9 @@ const BREADCRUMB_GUIDES: Record<Locale, string> = {
 const GUIDE_META_KEYWORDS: Record<Locale, string[]> = {
   'zh-TW': ['包車旅遊', '台灣包車', '台灣美食', '台灣小吃', '台灣自由行', '背包客', '大眾運輸', '台灣一日遊'],
   'zh-CN': ['包车旅游', '台湾包车', '台湾美食', '台湾小吃', '台湾自由行', '背包客', '大众运输', '台湾一日游'],
-  en: ['charter tour', 'Taiwan charter', 'Taiwan food', 'Taiwan street food', 'Taiwan independent travel', 'backpacking Taiwan', 'Taiwan day trip'],
+  en: ['Taiwan private driver', 'private tour', 'Taiwan charter', 'Taiwan food', 'Taiwan street food', 'Taiwan independent travel', 'backpacking Taiwan', 'Taiwan day trip'],
   ja: ['台湾 貸切タクシー', '台北 貸切チャーター', 'チャーターツアー', '台湾チャーター', '台湾グルメ', '台湾自由旅行', '台湾日帰りツアー', '台湾観光'],
-  ko: ['차터 투어', '대만 차터', '대만 맛집', '대만 길거리 음식', '대만 자유여행', '대만 당일치기', '대만 관광'],
+  ko: ['대만 택시투어', '택시투어 코스', '대만 차량 대절','대만 맛집', '대만 길거리 음식', '대만 자유여행', '대만 당일치기', '대만 관광'],
   th: ['ทัวร์รถเหมา', 'เช่ารถไต้หวัน', 'อาหารไต้หวัน', 'สตรีทฟู้ดไต้หวัน', 'เที่ยวไต้หวันด้วยตัวเอง', 'เที่ยวไต้หวันวันเดียว'],
   vi: ['tour charter', 'thuê xe Đài Loan', 'ẩm thực Đài Loan', 'đồ ăn đường phố Đài Loan', 'du lịch tự túc Đài Loan', 'tour trong ngày Đài Loan'],
   ms: ['charter tour', 'sewa kereta Taiwan', 'makanan Taiwan', 'makanan jalanan Taiwan', 'melancong sendiri Taiwan', 'lawatan sehari Taiwan'],
@@ -46,6 +46,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!guide) return { title: 'Not Found' };
 
   const title = guide.title[locale] || guide.title['zh-TW'] || guide.title['en'] || '';
+  // Keyword-first titles run long; past ~55 chars the brand suffix would only
+  // push them over Google's ~60-char cut, so it's dropped there.
+  const fullTitle = title.length > 55 ? title : `${title} | RelayGo`;
   const description = guide.description[locale] || guide.description['zh-TW'] || guide.description['en'] || '';
   const seg = localePathMap[locale];
   const canonical = seg
@@ -59,7 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${title} | RelayGo`,
+    title: fullTitle,
     description,
     keywords: [
       ...GUIDE_META_KEYWORDS[locale],
@@ -67,7 +70,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ...tagsForLocale(guide.tags, locale),
     ].join(', '),
     openGraph: {
-      title: `${title} | RelayGo`,
+      title: fullTitle,
       description,
       type: 'article',
       url: canonical,
@@ -83,6 +86,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 function guideJsonLd(guide: NonNullable<Awaited<ReturnType<typeof getGuideBySlug>>>, locale: Locale) {
   const title = guide.title[locale] || guide.title['zh-TW'] || guide.title['en'] || '';
+  // Keyword-first titles run long; past ~55 chars the brand suffix would only
+  // push them over Google's ~60-char cut, so it's dropped there.
+  const fullTitle = title.length > 55 ? title : `${title} | RelayGo`;
   const desc = guide.description[locale] || guide.description['zh-TW'] || guide.description['en'] || '';
   return {
     '@context': 'https://schema.org',
@@ -248,6 +254,9 @@ export default async function GuidePage({ params }: Props) {
 
   const relatedGuides = allGuides.filter((g) => g.slug !== params.slug).slice(0, 3);
   const title = guide.title[locale] || guide.title['zh-TW'] || guide.title['en'] || '';
+  // Keyword-first titles run long; past ~55 chars the brand suffix would only
+  // push them over Google's ~60-char cut, so it's dropped there.
+  const fullTitle = title.length > 55 ? title : `${title} | RelayGo`;
   const langPrefix = localePathMap[locale] ? `/${localePathMap[locale]}` : '';
   const faqLd = guideFaqJsonLd(params.slug, locale);
 

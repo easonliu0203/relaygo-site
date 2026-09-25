@@ -13,8 +13,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // changes. Using `new Date()` told Google every page changed on every deploy,
   // which trains it to ignore our lastmod entirely.
   const staticLastMod = new Date('2026-09-05');
-  // Pages whose copy/metadata changed on 2026-09-11 (ja SEO pass).
-  const copyLastMod = new Date('2026-09-11');
+  // Pages whose copy/metadata last changed (2026-09-25: en/ko SEO pass).
+  const copyLastMod = new Date('2026-09-25');
 
   const entries: MetadataRoute.Sitemap = [];
 
@@ -80,7 +80,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     });
 
-    // Bookmarks sub-pages based on actual data
+    // Bookmarks sub-pages based on actual data — zh-TW only (other locales are
+    // noindex: the posts themselves are Chinese, see bookmarks/[country]/page.tsx)
+    if (locale !== 'zh-TW') continue;
     const countrySlugs = Array.from(new Set(bmCombos.map((c) => c.country_slug)));
     const cityCombos = Array.from(new Set(bmCombos.map((c) => `${c.country_slug}/${c.city_slug}`)));
 
