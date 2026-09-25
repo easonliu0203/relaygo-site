@@ -833,6 +833,12 @@ function fillPrices(html: string, pricing: PricingTables): string {
     if (!row) return undefined;
     return b === '6h' ? row.h6 : b === '8h' ? row.h8 : row.overtime;
   };
+  // The 6-hour column only shows when at least one vehicle has a 6h rate.
+  if (!Object.values(pricing.charter).some((r) => r.h6)) {
+    html = html
+      .replace(/\s*<th data-i18n="pricing_6h">[^<]*<\/th>/, '')
+      .replace(/\s*<td><span [^>]*data-price="charter-\w+-6h"[^>]*>[^<]*<\/span><\/td>/g, '');
+  }
   return html.replace(/<span [^>]*data-price="([^"]+)"[^>]*>[^<]*<\/span>/g, (match, key: string) => {
     const v = lookup(key);
     if (v === undefined) return match; // unknown key or vehicle: keep as-is

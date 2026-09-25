@@ -81,6 +81,8 @@ export default async function PricingPage({ params }: { params: { lang: string }
   const pricing = await getPricingTables();
   const airportTypes = VEHICLE_ORDER.filter((v) => pricing.airport[v]);
   const charterTypes = VEHICLE_ORDER.filter((v) => pricing.charter[v]);
+  // 6-hour column only when some vehicle actually has a 6h rate.
+  const has6h = charterTypes.some((v) => pricing.charter[v].h6);
 
   // One Offer per airport × vehicle, so a query like "桃園機場接送 五人座 價格"
   // has a machine-readable answer rather than only a rendered table.
@@ -210,7 +212,7 @@ export default async function PricingPage({ params }: { params: { lang: string }
               <thead>
                 <tr>
                   <th>{t('thVehicle')}</th>
-                  <th>{t('th6h')}</th>
+                  {has6h && <th>{t('th6h')}</th>}
                   <th>{t('th8h')}</th>
                   <th>{t('thOvertime')}</th>
                 </tr>
@@ -221,9 +223,11 @@ export default async function PricingPage({ params }: { params: { lang: string }
                   return (
                     <tr key={vt}>
                       <td>{VEHICLE_NAMES[vt][locale]}</td>
-                      <td>
-                        {row.h6 ? <span className="price-val">{nt(row.h6)}</span> : <span className="price-na">—</span>}
-                      </td>
+                      {has6h && (
+                        <td>
+                          {row.h6 ? <span className="price-val">{nt(row.h6)}</span> : <span className="price-na">—</span>}
+                        </td>
+                      )}
                       <td>
                         {row.h8 ? <span className="price-val">{nt(row.h8)}</span> : <span className="price-na">—</span>}
                       </td>
