@@ -984,8 +984,3 @@
     padding: 8px 10px;
   }
 }
-
-/* Callout linking a guide to its keyword landing page (same look as the chat callout) */
-.guide-landing-callout { text-decoration: none; color: inherit; transition: border-color 0.2s; }
-.guide-landing-callout:hover { border-color: rgba(0, 214, 143, 0.55); }
-.guide-landing-callout strong { color: var(--primary); }

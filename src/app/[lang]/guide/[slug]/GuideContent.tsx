@@ -116,23 +116,6 @@ function renderMarkdown(md: string): string {
     .replace(/<p><\/p>/g, '');
 }
 
-// Guides that have a keyword landing page (prices, schedule, comparison) in a
-// given language. Only ko has one so far: "예스진지 택시투어".
-const LANDING_LINKS: Partial<Record<LangCode, Record<string, { href: string; title: string; desc: string }>>> = {
-  ko: {
-    'yehliu-shifen-jiufen': {
-      href: '/ko/yehliu-shifen-jiufen-taxi-tour',
-      title: '예스진지 택시투어 가격・일정 한눈에 보기',
-      desc: '차량별 8시간・10시간 요금, 1인당 비용, 버스투어・대중교통 비교',
-    },
-    'taipei-jiufen-shifen': {
-      href: '/ko/yehliu-shifen-jiufen-taxi-tour',
-      title: '예류・진과스까지 하루에? 예스진지 택시투어',
-      desc: '차량별 요금과 10시간 추천 일정을 확인하세요',
-    },
-  },
-};
-
 export default function GuideContent({ guide, initialLang, relatedGuides = [] }: { guide: TourGuide; initialLang: Locale; relatedGuides?: TourGuideSummary[] }) {
   const lang = initialLang as LangCode;
   const [copied, setCopied] = useState(false);
@@ -194,15 +177,6 @@ export default function GuideContent({ guide, initialLang, relatedGuides = [] }:
               <p>{UI.chatDesc[lang]}</p>
             </div>
           </div>
-          {LANDING_LINKS[lang]?.[guide.slug] && (
-            <a className="guide-chat-callout guide-landing-callout" href={LANDING_LINKS[lang]![guide.slug].href}>
-              <span className="guide-chat-callout-icon" aria-hidden="true">💰</span>
-              <div>
-                <strong>{LANDING_LINKS[lang]![guide.slug].title}</strong>
-                <p>{LANDING_LINKS[lang]![guide.slug].desc}</p>
-              </div>
-            </a>
-          )}
           <article
             className="guide-article"
             dangerouslySetInnerHTML={{ __html: contentHtml }}

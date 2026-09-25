@@ -11,6 +11,16 @@ const nextConfig = {
     ],
   },
   compress: true,
+  async redirects() {
+    return [
+      // Retired ko landing page (2026-09-26) — it duplicated the guide + /pricing.
+      {
+        source: '/ko/yehliu-shifen-jiufen-taxi-tour',
+        destination: '/ko/guide/yehliu-shifen-jiufen',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

@@ -2,8 +2,9 @@ import { I18N } from './i18n';
 import { FAQS, type LangCode } from './faq-data';
 import { AIRPORT_NAMES } from '@/app/[lang]/pricing/pricing-i18n';
 import { resolveLocale } from './i18n-config';
+import type { PricingTables } from './supabase';
 
-export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW'): string {
+export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW', pricing?: PricingTables): string {
   const dict = I18N[lang] || I18N['zh-TW'];
   // Helper: translate by key, fallback to zh-TW, then to raw fallback
   const t = (key: string, fallback: string) => dict[key] ?? I18N['zh-TW']?.[key] ?? fallback;
@@ -816,7 +817,29 @@ ${homeFaqHtml}
     return `data-i18n-html="${key}">${t(key, fallback)}</${tag}>`;
   });
 
+  if (pricing) html = fillPrices(html, pricing);
+
   return html;
+}
+
+// Replace the placeholder numbers in every data-price span with live rates.
+// Keys: airport-{tpe|tsa|rmq|khh}-{S|M|L}, charter-{S|M|L|XL}-{6h|8h|ot}.
+function fillPrices(html: string, pricing: PricingTables): string {
+  const fmt = (n: number) => 'NT$' + Math.round(n).toLocaleString('en-US');
+  const lookup = (key: string): number | null | undefined => {
+    const [kind, a, b] = key.split('-');
+    if (kind === 'airport') return pricing.airport[b]?.[a as 'tpe' | 'tsa' | 'rmq' | 'khh'];
+    const row = pricing.charter[a];
+    if (!row) return undefined;
+    return b === '6h' ? row.h6 : b === '8h' ? row.h8 : row.overtime;
+  };
+  return html.replace(/<span [^>]*data-price="([^"]+)"[^>]*>[^<]*<\/span>/g, (match, key: string) => {
+    const v = lookup(key);
+    if (v === undefined) return match; // unknown key or vehicle: keep as-is
+    return v
+      ? `<span class="price-val" data-price="${key}">${fmt(v)}</span>`
+      : `<span class="price-na" data-price="${key}">—</span>`;
+  });
 }
 
 // Keep backward-compatible export

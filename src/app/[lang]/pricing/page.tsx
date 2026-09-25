@@ -237,11 +237,6 @@ export default async function PricingPage({ params }: { params: { lang: string }
             </table>
           </div>
           <p className="pricing-page-note">{t('charterNote')}</p>
-          {locale === 'ko' && (
-            <p className="pricing-page-note">
-              <a href="/ko/yehliu-shifen-jiufen-taxi-tour">예스진지 택시투어 요금과 추천 일정 보기 →</a>
-            </p>
-          )}
 
           <h2 className="pricing-page-h2">{t('surchargeH2')}</h2>
           <p className="pricing-page-body">{t('surchargeDesc')}</p>
