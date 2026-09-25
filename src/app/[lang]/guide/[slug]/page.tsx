@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getGuideBySlug, getAllGuideSlugs, getPublishedGuides } from '@/lib/supabase';
 import { tagsForLocale } from '@/lib/guide-tags';
 import GuideContent from './GuideContent';
+import { I18N } from '@/lib/i18n';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
 
 interface Props {
@@ -276,7 +277,7 @@ export default async function GuidePage({ params }: Props) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
         />
       )}
-      <GuideContent guide={guide} initialLang={locale} relatedGuides={relatedGuides} />
+      <GuideContent guide={guide} initialLang={locale} relatedGuides={relatedGuides} pricingLabel={I18N[locale].nav_pricing} />
     </>
   );
 }

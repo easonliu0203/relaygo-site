@@ -181,3 +181,22 @@
     font-size: 13px;
   }
 }
+
+/* Links to pricing / guides / airport comparison under the FAQ list */
+.faq-related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 32px;
+}
+.faq-related a {
+  font-size: 14px;
+  color: var(--primary);
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid var(--gray-300);
+  border-radius: 20px;
+  background: var(--white);
+}
+.faq-related a:hover { border-color: var(--primary); }

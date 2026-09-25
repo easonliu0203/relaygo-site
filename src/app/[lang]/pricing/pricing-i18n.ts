@@ -17,25 +17,25 @@ export const PRICING_TITLES: L = {
 
 export const PRICING_DESCS: L = {
   'zh-TW':
-    '公開透明的台灣包車價格：桃園 TPE、松山 TSA、台中 RMQ、高雄 KHH 四大機場接送固定價，以及 6 小時／8 小時包車旅遊報價與超時費率。無隱藏費用，含油資、過路費與司機費。',
+    '公開透明的台灣包車價格：桃園 TPE、松山 TSA、台中 RMQ、高雄 KHH 四大機場接送固定價，以及各車型包車旅遊報價與超時費率。無隱藏費用，含油資、過路費與司機費。',
   'zh-CN':
-    '公开透明的台湾包车价格：桃园 TPE、松山 TSA、台中 RMQ、高雄 KHH 四大机场接送固定价，以及 6 小时／8 小时包车旅游报价与超时费率。无隐藏费用，含油费、过路费与司机费。',
+    '公开透明的台湾包车价格：桃园 TPE、松山 TSA、台中 RMQ、高雄 KHH 四大机场接送固定价，以及各车型包车旅游报价与超时费率。无隐藏费用，含油费、过路费与司机费。',
   en:
-    'Transparent Taiwan charter car pricing: fixed airport transfer rates for Taoyuan (TPE), Songshan (TSA), Taichung (RMQ) and Kaohsiung (KHH), plus 6-hour and 8-hour day tour rates and overtime fees. No hidden costs — fuel, tolls and driver included.',
+    'Transparent Taiwan charter car pricing: fixed airport transfer rates for Taoyuan (TPE), Songshan (TSA), Taichung (RMQ) and Kaohsiung (KHH), plus day tour rates for each vehicle and overtime fees. No hidden costs — fuel, tolls and driver included.',
   ja:
-    '明朗会計の台湾チャーター料金：桃園(TPE)・松山(TSA)・台中(RMQ)・高雄(KHH)の空港送迎の固定料金と、6時間／8時間の貸切観光料金・超過料金をご案内。ガソリン代、高速代、ドライバー料金込みで追加費用はありません。',
+    '明朗会計の台湾チャーター料金：桃園(TPE)・松山(TSA)・台中(RMQ)・高雄(KHH)の空港送迎の固定料金と、車種別の貸切観光料金・超過料金をご案内。ガソリン代、高速代、ドライバー料金込みで追加費用はありません。',
   ko:
-    '투명한 대만 전세차량 요금: 타오위안(TPE), 쑹산(TSA), 타이중(RMQ), 가오슝(KHH) 공항 픽업 고정 요금과 6시간·8시간 일일 투어 요금 및 초과 요금 안내. 유류비, 통행료, 기사비 포함으로 숨은 비용이 없습니다.',
+    '투명한 대만 전세차량 요금: 타오위안(TPE), 쑹산(TSA), 타이중(RMQ), 가오슝(KHH) 공항 픽업 고정 요금과 차종별 일일 투어 요금 및 초과 요금 안내. 유류비, 통행료, 기사비 포함으로 숨은 비용이 없습니다.',
   th:
-    'ราคาเช่ารถไต้หวันแบบโปร่งใส: ค่ารับส่งสนามบินราคาคงที่สำหรับเถาหยวน (TPE) ซงชาน (TSA) ไทจง (RMQ) และเกาสง (KHH) พร้อมราคาทัวร์เหมา 6 และ 8 ชั่วโมง และค่าล่วงเวลา ไม่มีค่าใช้จ่ายแอบแฝง รวมค่าน้ำมัน ค่าทางด่วน และค่าคนขับแล้ว',
+    'ราคาเช่ารถไต้หวันแบบโปร่งใส: ค่ารับส่งสนามบินราคาคงที่สำหรับเถาหยวน (TPE) ซงชาน (TSA) ไทจง (RMQ) และเกาสง (KHH) พร้อมราคาทัวร์เหมาแยกตามประเภทรถ และค่าล่วงเวลา ไม่มีค่าใช้จ่ายแอบแฝง รวมค่าน้ำมัน ค่าทางด่วน และค่าคนขับแล้ว',
   vi:
-    'Bảng giá thuê xe Đài Loan minh bạch: giá cố định đưa đón sân bay Đào Viên (TPE), Tùng Sơn (TSA), Đài Trung (RMQ) và Cao Hùng (KHH), cùng giá tour 6 giờ và 8 giờ và phí ngoài giờ. Không phí ẩn — đã bao gồm xăng, phí cầu đường và tài xế.',
+    'Bảng giá thuê xe Đài Loan minh bạch: giá cố định đưa đón sân bay Đào Viên (TPE), Tùng Sơn (TSA), Đài Trung (RMQ) và Cao Hùng (KHH), cùng giá tour theo từng loại xe và phí ngoài giờ. Không phí ẩn — đã bao gồm xăng, phí cầu đường và tài xế.',
   ms:
-    'Harga sewa kereta Taiwan yang telus: kadar tetap transfer lapangan terbang untuk Taoyuan (TPE), Songshan (TSA), Taichung (RMQ) dan Kaohsiung (KHH), serta kadar tur 6 jam dan 8 jam dan caj lebih masa. Tiada kos tersembunyi — minyak, tol dan pemandu disertakan.',
+    'Harga sewa kereta Taiwan yang telus: kadar tetap transfer lapangan terbang untuk Taoyuan (TPE), Songshan (TSA), Taichung (RMQ) dan Kaohsiung (KHH), serta kadar tur mengikut jenis kenderaan dan caj lebih masa. Tiada kos tersembunyi — minyak, tol dan pemandu disertakan.',
   id:
-    'Harga sewa mobil Taiwan yang transparan: tarif tetap antar jemput bandara Taoyuan (TPE), Songshan (TSA), Taichung (RMQ) dan Kaohsiung (KHH), plus tarif tur 6 jam dan 8 jam serta biaya lembur. Tanpa biaya tersembunyi — bensin, tol dan sopir sudah termasuk.',
+    'Harga sewa mobil Taiwan yang transparan: tarif tetap antar jemput bandara Taoyuan (TPE), Songshan (TSA), Taichung (RMQ) dan Kaohsiung (KHH), plus tarif tur per jenis kendaraan serta biaya lembur. Tanpa biaya tersembunyi — bensin, tol dan sopir sudah termasuk.',
   fil:
-    'Malinaw na presyo ng charter car sa Taiwan: fixed na airport transfer rate para sa Taoyuan (TPE), Songshan (TSA), Taichung (RMQ) at Kaohsiung (KHH), kasama ang 6-oras at 8-oras na day tour rate at overtime fee. Walang hidden cost — kasama na ang gasolina, toll at driver.',
+    'Malinaw na presyo ng charter car sa Taiwan: fixed na airport transfer rate para sa Taoyuan (TPE), Songshan (TSA), Taichung (RMQ) at Kaohsiung (KHH), kasama ang day tour rate ng bawat sasakyan at overtime fee. Walang hidden cost — kasama na ang gasolina, toll at driver.',
 };
 
 export const PRICING_KEYWORDS: L = {

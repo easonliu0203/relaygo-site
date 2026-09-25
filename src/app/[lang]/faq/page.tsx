@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import FAQContent from './FAQContent';
+import { I18N } from '@/lib/i18n';
+import { UI as TRANSFER_UI } from '../taoyuan-airport-to-taipei/i18n';
 import { resolveLocale, localePathMap, locales, type Locale } from '@/lib/i18n-config';
 import { ogImage } from '@/lib/og';
 import { FAQS, type LangCode } from '@/lib/faq-data';
@@ -113,7 +115,14 @@ export default function FAQPage({ params }: { params: { lang: string } }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd(locale)) }}
       />
-      <FAQContent initialLang={locale} />
+      <FAQContent
+        initialLang={locale}
+        links={[
+          { path: '/pricing', label: I18N[locale].nav_pricing },
+          { path: '/guides', label: I18N[locale].nav_guides },
+          { path: '/taoyuan-airport-to-taipei', label: TRANSFER_UI.bcPage[locale] },
+        ]}
+      />
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { I18N } from './i18n';
 import { FAQS, type LangCode } from './faq-data';
-import { AIRPORT_NAMES } from '@/app/[lang]/pricing/pricing-i18n';
+import { AIRPORT_NAMES, UI as PRICING_UI } from '@/app/[lang]/pricing/pricing-i18n';
 import { resolveLocale } from './i18n-config';
 import type { PricingTables } from './supabase';
 
@@ -641,6 +641,7 @@ export function getBodyHTML(langPrefix: string = '', lang: string = 'zh-TW', pri
             </tbody>
           </table>
         </div>
+        <p class="pricing-compare-link"><a href="${langPrefix}/taoyuan-airport-to-taipei">${esc(PRICING_UI.compareLink[loc])}</a></p>
       </div>
       <!-- Charter Panel -->
       <div class="pricing-panel active fade-up" id="panel-charter">

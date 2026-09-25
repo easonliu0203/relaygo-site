@@ -60,7 +60,13 @@ const LANGS: { code: LangCode; label: string }[] = [
   { code: 'fil', label: 'FIL' },
 ];
 
-export default function FAQContent({ initialLang }: { initialLang: Locale }) {
+export default function FAQContent({
+  initialLang,
+  links = [],
+}: {
+  initialLang: Locale;
+  links?: { path: string; label: string }[];
+}) {
   const lang = initialLang as LangCode;
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
@@ -121,6 +127,16 @@ export default function FAQContent({ initialLang }: { initialLang: Locale }) {
           </div>
         ))}
       </div>
+
+      {links.length > 0 && (
+        <nav className="faq-related">
+          {links.map((l) => (
+            <a key={l.path} href={`${langPrefix}${l.path}`}>
+              {l.label} →
+            </a>
+          ))}
+        </nav>
+      )}
 
       <div className="faq-cta">
         <p className="faq-cta-label">{UI.cta[lang]}</p>

@@ -984,3 +984,14 @@
     padding: 8px 10px;
   }
 }
+
+/* Sidebar link to the full price list */
+.guide-pricing-link {
+  display: block;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--primary);
+  text-decoration: none;
+}
+.guide-pricing-link:hover { text-decoration: underline; }

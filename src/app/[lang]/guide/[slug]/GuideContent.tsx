@@ -116,7 +116,7 @@ function renderMarkdown(md: string): string {
     .replace(/<p><\/p>/g, '');
 }
 
-export default function GuideContent({ guide, initialLang, relatedGuides = [] }: { guide: TourGuide; initialLang: Locale; relatedGuides?: TourGuideSummary[] }) {
+export default function GuideContent({ guide, initialLang, relatedGuides = [], pricingLabel }: { guide: TourGuide; initialLang: Locale; relatedGuides?: TourGuideSummary[]; pricingLabel?: string }) {
   const lang = initialLang as LangCode;
   const [copied, setCopied] = useState(false);
   const langPrefix = localePathMap[initialLang] ? `/${localePathMap[initialLang]}` : '';
@@ -211,6 +211,11 @@ export default function GuideContent({ guide, initialLang, relatedGuides = [] }:
             <a href={`${langPrefix}/#download`} className="guide-cta-btn guide-cta-btn-secondary">
               📱 {UI.downloadApp[lang]}
             </a>
+            {pricingLabel && (
+              <a href={`${langPrefix}/pricing`} className="guide-pricing-link">
+                💰 {pricingLabel} →
+              </a>
+            )}
             <div className="guide-share-row">
               <button className="guide-share-btn" onClick={handleCopy}>
                 {copied ? '✅' : '🔗'} {copied ? UI.copied[lang] : UI.copy[lang]}
