@@ -209,24 +209,13 @@ function offerCatalog(locale: Locale) {
   };
 }
 
-// Only the CJK family the page's language actually uses (see globals.css
-// html[lang] rules). Requesting all four made the render-blocking font CSS
-// ~470 KB gzipped on every page; one family is ~95 KB, none is a few KB.
-const CJK_FONT: Partial<Record<Locale, string>> = {
-  'zh-TW': 'Noto+Sans+TC',
-  'zh-CN': 'Noto+Sans+SC',
-  ja: 'Noto+Sans+JP',
-  ko: 'Noto+Sans+KR',
-};
-
-function fontsHref(locale: Locale) {
-  const cjk = CJK_FONT[locale];
-  return (
-    'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800' +
-    (cjk ? `&family=${cjk}:wght@400;500;700;900` : '') +
-    '&display=swap'
-  );
-}
+// Latin web fonts only. CJK text uses the system fonts listed per language in
+// globals.css (PingFang / Hiragino / Apple SD Gothic on Apple, Noto CJK on
+// Android, JhengHei / Yu Gothic / Malgun on Windows). Loading Noto Sans JP/KR/TC
+// as web fonts meant ~40 font files (~800 KB) plus a render-blocking stylesheet
+// on every CJK page — the main cause of the ~8 s mobile first paint.
+const FONTS_HREF =
+  'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap';
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || '';
 
@@ -246,7 +235,7 @@ export default function LangLayout({ children, params }: Props) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href={fontsHref(locale)}
+          href={FONTS_HREF}
           rel="stylesheet"
         />
       </head>

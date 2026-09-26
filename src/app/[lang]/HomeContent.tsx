@@ -4,6 +4,7 @@ import { useEffect, useCallback, useRef, useState } from 'react';
 import { I18N, LANG_LABELS, LANG_TITLES, type LangCode } from '@/lib/i18n';
 import { getBodyHTML } from '@/lib/bodyhtml';
 import type { PricingTables } from '@/lib/supabase';
+import { caseImage, CASE_IMG_SIZES } from '@/lib/case-image';
 import { localePathMap, resolveLocale } from '@/lib/i18n-config';
 import { useParams } from 'next/navigation';
 import { auth, googleProvider, appleProvider } from '@/lib/firebase';
@@ -421,8 +422,10 @@ export default function HomeContent({ pricing }: { pricing: PricingTables }) {
           .map((c) => {
             const caption = pickCaption(c.captions);
             const alt = caption || c.alt_text || 'RelayGo';
+            const img = caseImage(c.photo_url);
+            const srcset = img.srcSet ? ` srcset="${escapeHtml(img.srcSet)}" sizes="${CASE_IMG_SIZES}"` : '';
             return `<a href="${linkPrefix}/cases" class="case-card">
-              <div class="case-img-wrap"><img src="${escapeHtml(c.photo_url)}" alt="${escapeHtml(alt)}" loading="lazy" draggable="false" oncontextmenu="return false;" /></div>
+              <div class="case-img-wrap"><img src="${escapeHtml(img.src)}"${srcset} alt="${escapeHtml(alt)}" loading="lazy" draggable="false" oncontextmenu="return false;" /></div>
               <div class="case-caption">${escapeHtml(caption)}</div>
             </a>`;
           })

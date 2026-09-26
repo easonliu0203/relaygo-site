@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import type { ServiceCase } from '@/lib/supabase';
 import { localizedCaption } from '@/lib/supabase';
+import { caseImage, CASE_IMG_SIZES } from '@/lib/case-image';
 import type { Locale } from '@/lib/i18n-config';
 
 type LangCode = 'zh-TW' | 'zh-CN' | 'en' | 'ja' | 'ko' | 'th' | 'vi' | 'ms' | 'id' | 'fil';
@@ -87,7 +88,8 @@ export default function CasesContent({ cases, locale, langPrefix, labels }: Prop
                 <div key={c.id} className="case-card fade-up">
                   <div className="case-img-wrap">
                     <img
-                      src={c.photo_url}
+                      {...caseImage(c.photo_url)}
+                      sizes={CASE_IMG_SIZES}
                       alt={caption || c.alt_text || 'RelayGo'}
                       loading="lazy"
                       draggable={false}
